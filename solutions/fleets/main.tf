@@ -427,7 +427,7 @@ resource "terraform_data" "create_cos_secret" {
   depends_on = [module.project, module.cos]
   provisioner "local-exec" {
     interpreter = ["/bin/bash"]
-    when        = "create"
+    when        = create
     command     = "../../scripts/create_secrets.sh"
     environment = {
       IBMCLOUD_API_KEY      = var.ibmcloud_api_key
