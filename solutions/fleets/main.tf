@@ -251,21 +251,13 @@ module "fleet_sg" {
   vpc_id              = local.vpc_id
 
   security_group_rules = [
-    # {
-    #   name        = "allow-all-inbound-from-self"
-    #   direction   = "inbound"
-    #   remote      = "0.0.0.0/0"
-    #   # tcp         = { port_min = 0, port_max = 65535 }
-    # },
     {
       name      = "allow-all-outbound"
       direction = "outbound"
       remote    = "0.0.0.0/0"
-      # tcp         = { port_min = 0, port_max = 65535 }
     }
   ]
 }
-
 
 resource "ibm_is_security_group_rule" "example" {
   group     = module.fleet_sg.security_group_id
