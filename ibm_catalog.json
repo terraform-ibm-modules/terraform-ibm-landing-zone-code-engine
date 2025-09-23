@@ -62,7 +62,7 @@
             {
               "role_crns": [
                 "crn:v1:bluemix:public:iam::::serviceRole:Writer",
-                 "crn:v1:bluemix:public:iam::::role:Editor"
+                "crn:v1:bluemix:public:iam::::role:Editor"
               ],
               "service_name": "codeengine",
               "notes": "Required for creating code engine."
