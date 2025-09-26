@@ -76,12 +76,12 @@
               "notes": "Required for creating container registry namespaces."
             },
             {
-              "service_name": "is",
+              "service_name": "is.vpc",
               "role_crns": [
                 "crn:v1:bluemix:public:iam::::serviceRole:Manager",
                 "crn:v1:bluemix:public:iam::::role:Editor"
               ],
-              "notes": "Required for creating Virtual Server Instance and Virtual Private Cloud(VPC)."
+              "notes": "Required to create Virtual Private Cloud(VPC)."
             },
             {
               "role_crns": [
@@ -96,7 +96,7 @@
                 "crn:v1:bluemix:public:iam::::serviceRole:Manager",
                 "crn:v1:bluemix:public:iam::::role:Editor"
               ],
-              "notes": "[Optional] Required if you are enabling Cloud monitoring."
+              "notes": "[Optional] Required to create an instance of Cloud Monitoring."
             },
             {
               "service_name": "logs",
@@ -104,7 +104,7 @@
                 "crn:v1:bluemix:public:iam::::serviceRole:Manager",
                 "crn:v1:bluemix:public:iam::::role:Editor"
               ],
-              "notes": "[Optional] Required if you are enabling Cloud logs."
+              "notes": "[Optional] Required to create an instance of Cloud Logs."
             }
           ],
           "architecture": {
