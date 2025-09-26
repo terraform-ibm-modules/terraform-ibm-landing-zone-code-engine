@@ -61,74 +61,122 @@
             },
             {
               "role_crns": [
-                "crn:v1:bluemix:public:iam::::serviceRole:Writer"
+                "crn:v1:bluemix:public:iam::::role:Administrator"
               ],
-              "service_name": "codeengine"
+              "service_name": "All Account Management services",
+              "notes": "[Optional] Required to create new resource groups when enabling the Account Configuration integration."
             },
             {
               "role_crns": [
+                "crn:v1:bluemix:public:iam::::role:Administrator"
+              ],
+              "service_name": "All Identity and Access enabled services",
+              "notes": "[Optional] Required to create new resource groups with account settings when enabling the Account Configuration integration."
+            },
+            {
+              "service_name": "cloud-object-storage",
+              "role_crns": [
+                "crn:v1:bluemix:public:iam::::serviceRole:Manager",
                 "crn:v1:bluemix:public:iam::::role:Editor"
               ],
-              "service_name": "codeengine"
+              "notes": "[Optional] Required if VPC Flow Logs are enabled."
+            },
+            {
+              "role_crns": [
+                "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                "crn:v1:bluemix:public:iam::::role:Editor"
+              ],
+              "service_name": "hs-crypto",
+              "notes": "[Optional] Required if Hyper Protect Crypto Service is used for encryption."
+            },
+            {
+              "role_crns": [
+                "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                "crn:v1:bluemix:public:iam::::role:Editor"
+              ],
+              "service_name": "kms",
+              "notes": "[Optional] Required if Key Protect is used for encryption."
+            },
+            {
+              "role_crns": [
+                "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                "crn:v1:bluemix:public:iam::::role:Editor"
+              ],
+              "service_name": "sysdig-monitor",
+              "notes": "[Optional] Required to create an instance of Cloud Monitoring."
+            },
+            {
+              "role_crns": [
+                "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                "crn:v1:bluemix:public:iam::::role:Editor"
+              ],
+              "service_name": "logs",
+              "notes": "[Optional] Required to create an instance of Cloud Logs."
             },
             {
               "role_crns": [
                 "crn:v1:bluemix:public:iam::::serviceRole:Writer",
                 "crn:v1:bluemix:public:iam::::role:Editor"
               ],
-              "service_name": "container-registry"
+              "service_name": "atracker",
+              "notes": "[Optional] Required when enabling the Activity Tracker Event Routing."
             },
             {
-              "service_name": "is",
+              "service_name": "sysdig-secure",
               "role_crns": [
                 "crn:v1:bluemix:public:iam::::serviceRole:Manager",
                 "crn:v1:bluemix:public:iam::::role:Editor"
               ],
-              "notes": "Required for creating Virtual Server Instance and Virtual Private Cloud(VPC)."
+              "notes": "[Optional] Required for creating and managing SCC Workload Protection instance."
             },
             {
               "role_crns": [
-                "crn:v1:bluemix:public:iam::::role:Administrator"
+                "crn:v1:bluemix:public:iam::::role:Administrator",
+                "crn:v1:bluemix:public:iam::::serviceRole:Manager"
               ],
-              "service_name": "iam-identity",
-              "notes": "[Optional] Required if Cloud automation for account configuration is enabled."
+              "service_name": "apprapp",
+              "notes": "[Optional] Required to create the App Configuration instance."
             },
             {
-              "service_name": "sysdig-monitor",
               "role_crns": [
-                "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                "crn:v1:bluemix:public:iam::::serviceRole:Writer",
+                 "crn:v1:bluemix:public:iam::::role:Editor"
+              ],
+              "service_name": "codeengine",
+              "notes": "Required to create and manage Code Engine resources."
+            },
+            {
+              "role_crns": [
+                "crn:v1:bluemix:public:iam::::serviceRole:Writer",
                 "crn:v1:bluemix:public:iam::::role:Editor"
               ],
-              "notes": "[Optional] Required if you are consuming Observability deployable architecture which sets up Cloud monitoring."
-            },
-            {
-              "service_name": "logs",
-              "role_crns": [
-                "crn:v1:bluemix:public:iam::::serviceRole:Manager",
-                "crn:v1:bluemix:public:iam::::role:Editor"
-              ],
-              "notes": "[Optional] Required if you are consuming Observability deployable architecture which sets up Cloud logs."
+              "service_name": "container-registry",
+              "notes": "Required to create and manage Container Registry namespaces."
             }
           ],
           "architecture": {
             "features": [
               {
                 "title": " ",
-                "description": "Ideal for users with existing container images who want to quickly deploy applications without rebuilding."
+                "description": "Ideal for users who want to quickly provision a fully configurable IBM Cloud Code Engine project without deploying an app."
               },
               {
                 "title": " ",
-                "description": "Enables fast, simple deployment by using pre-built images to speed up rollout."
+                "description": "Focuses on provisioning the IBM Cloud infrastructure around Code Engine—such as IAM, observability, storage, encryption, and security—while giving users the flexibility to integrate only what they need."
+              },
+              {
+                "title": " ",
+                "description": "Code Engine components (app, build, or function) are configured later by users via UI, CLI, or Terraform, offering full flexibility."
               }
             ],
             "diagrams": [
               {
                 "diagram": {
                   "caption": "IBM Cloud Code Engine Application Topology",
-                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-code-engine/refs/heads/refactor_da/reference-architecture/deployment-architecture-fleets.svg",
+                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/refs/heads/quickstart/reference-architectures/deployment-architecture-quickstart.svg",
                   "type": "image/svg+xml"
                 },
-                "description": "This architecture deploys fleets."
+                "description": "The architecture consists of a central [IBM Cloud Code Engine project](https://cloud.ibm.com/docs/codeengine?topic=codeengine-getting-started), which serves as the primary execution environment for the application. Surrounding this core component is the foundational IBM Cloud configuration, which includes the IBM Cloud account, resource group, account settings, and optionally a trusted profile for secure IAM access.<br><br>Encircling the Code Engine project are a set of optional service surrounds that can be integrated based on the specific use case. These include observability tools such as [Cloud Monitoring](https://www.ibm.com/products/cloud-monitoring), [Cloud Logs](https://www.ibm.com/products/cloud-logs), and Activity Tracker, which provide insight into application performance, logging, and user or system actions. Additional core services may also be incorporated, such as [Cloud Object Storage](https://www.ibm.com/products/cloud-object-storage) for data storage, [Key Protect](https://www.ibm.com/products/key-protect) for encryption key management, App Configuration for externalizing environment-specific settings, and [SCC Workload Protection](https://www.ibm.com/products/security-and-compliance-center) to enforce security and compliance policies at the workload level."
               }
             ]
           },
@@ -526,7 +574,7 @@
               "notes": "Required for creating container registry namespaces."
             },
             {
-              "service_name": "is",
+              "service_name": "is.vpc",
               "role_crns": [
                 "crn:v1:bluemix:public:iam::::serviceRole:Manager",
                 "crn:v1:bluemix:public:iam::::role:Editor"
