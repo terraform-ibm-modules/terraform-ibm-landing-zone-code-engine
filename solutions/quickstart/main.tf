@@ -1,6 +1,7 @@
 locals {
-  prefix                   = var.prefix != null ? trimspace(var.prefix) != "" ? "${var.prefix}-" : "" : ""
-  code_engine_project_name = "${local.prefix}${var.code_engine_project_name}"
+  prefix       = var.prefix != null ? (trimspace(var.prefix) != "" ? "${var.prefix}-" : "") : ""
+  project_name = "${local.prefix}${var.code_engine_project_name}"
+  app_name     = "${local.prefix}${var.app_name}"
 }
 
 ########################################################################################################################
@@ -20,363 +21,89 @@ module "resource_group" {
 module "project" {
   source            = "terraform-ibm-modules/code-engine/ibm//modules/project"
   version           = "4.5.13"
-  name              = local.code_engine_project_name
+  name              = local.project_name
   resource_group_id = module.resource_group.resource_group_id
 }
 
+##############################################################################
+# Code Engine Build
+##############################################################################
+locals {
+  registry_region_result = data.external.container_registry_region.result
+  registry               = lookup(local.registry_region_result, "registry", null)
+  container_registry     = local.registry != null ? "private.${local.registry}" : null
+  registry_region_error  = lookup(local.registry_region_result, "error", null)
 
-# ########################################################################################################################
-# # VPC
-# ########################################################################################################################
+  # This will cause Terraform to fail if "error" is present in the external script output executed as a part of container_registry_region
+  # tflint-ignore: terraform_unused_declarations
+  fail_if_registry_region_error = local.registry_region_error != null ? tobool("Registry region script failed: ${local.registry_region_error}") : null
+}
 
-# module "vpc" {
-#   count             = 0
-#   source            = "terraform-ibm-modules/landing-zone-vpc/ibm"
-#   version           = "8.2.0"
-#   resource_group_id = module.resource_group.resource_group_id
-#   region            = var.region
-#   name              = "vpc"
-#   prefix            = local.prefix
-#   tags              = var.resource_tags
+data "external" "container_registry_region" {
+  program = ["bash", "../../scripts/get-cr-region.sh"]
 
+  query = {
+    RESOURCE_GROUP_ID = module.resource_group.resource_group_id
+    REGION            = var.region
+    IBMCLOUD_API_KEY  = var.ibmcloud_api_key
+  }
+}
 
-#   enable_vpc_flow_logs = false
+##############################################################################
+# Code Engine Secret
+##############################################################################
+locals {
+  registry_secret_name = "${local.prefix}registry-secret"
+  registry_secret = {
+    (local.registry_secret_name) = {
+      format = "registry"
+      "data" = {
+        password = var.ibmcloud_api_key,
+        username = "iamapikey",
+        server   = local.container_registry
+      }
+    }
+  }
+}
 
-#   use_public_gateways = {
-#     zone-1 = true
-#     zone-2 = false
-#     zone-3 = false
-#   }
+module "secret" {
+  source     = "terraform-ibm-modules/code-engine/ibm//modules/secret"
+  version    = "4.5.13"
+  for_each   = nonsensitive(local.registry_secret)
+  project_id = module.project.project_id
+  name       = each.key
+  data       = each.value.data
+  format     = each.value.format
+  # Issue with provider, service_access is not supported at the moment. https://github.com/IBM-Cloud/terraform-provider-ibm/issues/5232
+  # service_access = each.value.service_access
+}
 
-#   subnets = {
-#     zone-1 = [
-#       {
-#         name           = "${local.prefix}subnet"
-#         cidr           = "10.10.10.0/24"
-#         public_gateway = true
-#         acl_name       = "${local.prefix}acl"
-#       }
-#     ]
-#   }
-#   clean_default_sg_acl = true
-#   network_acls         = var.network_acls
-#   # network_acls = [
-#   #   {
-#   #     name                         = "${local.prefix}acl"
-#   #     add_ibm_cloud_internal_rules = true
-#   #     add_vpc_connectivity_rules   = true
-#   #     prepend_ibm_rules            = true
-#   #     rules = [
-#   #       {
-#   #         name        = "allow-all-egress"
-#   #         action      = "allow"
-#   #         direction   = "outbound"
-#   #         source      = "0.0.0.0/0"
-#   #         destination = "0.0.0.0/0"
-#   #       },
-#   #       {
-#   #         name        = "allow-all-ingress"
-#   #         action      = "allow"
-#   #         direction   = "inbound"
-#   #         source      = "0.0.0.0/0"
-#   #         destination = "0.0.0.0/0"
-#   #       }
-#   #     ]
-#   #   }
-#   # ]
-# }
+##############################################################################
+# Code Engine Apps
+##############################################################################
+locals {
+  image_reference = var.app_image_reference
 
-# # data "ibm_is_vpc" "vpc" {
-# #   depends_on = [module.vpc] # Explicit "depends_on" here to wait for the full subnet creations
-# #   identifier = module.vpc.vpc_id
-# # }
+  app_scale_cpu_limit    = tonumber(regex("^([0-9.]+)", var.app_scale_cpu_memory)[0])
+  app_scale_memory_limit = tonumber(regex("/ ([0-9.]+)", var.app_scale_cpu_memory)[0])
+}
 
-# module "fleet_sg" {
-#   source  = "terraform-ibm-modules/security-group/ibm"
-#   version = "2.7.0"
+module "app" {
 
-#   security_group_name = "${local.prefix}sg"
-#   # vpc_id              = module.vpc.vpc_id
-#   vpc_id = var.vpc_id
+  source          = "terraform-ibm-modules/code-engine/ibm//modules/app"
+  version         = "4.5.13"
+  name            = local.app_name
+  image_reference = local.image_reference
+  image_secret    = var.app_image_secret != null ? var.app_image_secret : local.registry_secret_name
+  project_id      = module.project.project_id
 
-#   security_group_rules = [
-#     # {
-#     #   name        = "allow-all-inbound-from-self"
-#     #   direction   = "inbound"
-#     #   remote      = "0.0.0.0/0"
-#     #   # tcp         = { port_min = 0, port_max = 65535 }
-#     # },
-#     {
-#       name      = "allow-all-outbound"
-#       direction = "outbound"
-#       remote    = "0.0.0.0/0"
-#       # tcp         = { port_min = 0, port_max = 65535 }
-#     }
-#   ]
-# }
-
-
-# resource "ibm_is_security_group_rule" "example" {
-#   group     = module.fleet_sg.security_group_id
-#   direction = "inbound"
-#   remote    = module.fleet_sg.security_group_id
-# }
-
-# ########################################################################################################################
-# # VPE
-# ########################################################################################################################
-
-# locals {
-#   cloud_services = concat(
-#     var.existing_cloud_logs_crn != null ? [
-#       {
-#         crn                          = var.existing_cloud_logs_crn
-#         vpe_name                     = "${local.prefix}icl-vpegw"
-#         allow_dns_resolution_binding = false
-#       }
-#     ] : [],
-#     var.existing_cloud_monitoring_crn != null ? [
-#       {
-#         crn                          = var.existing_cloud_monitoring_crn
-#         vpe_name                     = "${local.prefix}sysdig-vpegw"
-#         allow_dns_resolution_binding = false
-#       }
-#     ] : []
-#   )
-# }
-
-# module "vpe_logging" {
-#   count   = length(local.cloud_services) > 0 ? 1 : 0
-#   source  = "terraform-ibm-modules/vpe-gateway/ibm"
-#   version = "4.7.6"
-
-#   region            = var.region
-#   prefix            = "${local.prefix}log"
-#   resource_group_id = module.resource_group.resource_group_id
-#   vpc_id            = var.vpc_id
-#   vpc_name          = var.vpc_name
-#   # vpc_id            = module.vpc.vpc_id
-#   # vpc_name          = module.vpc.vpc_name
-
-
-#   # subnet_zone_list = [
-#   #   {
-#   #     id   = ([for s in module.vpc.vpc_data.subnets : s.id if s.name == "${local.prefix}-vpc-${local.prefix}subnet"])[0]
-#   #     name = "${local.prefix}subnet"
-#   #     zone = "zone-1"
-#   #   }
-#   # ]
-
-#   subnet_zone_list   = [for subnet in local.ex_subnet_zone_list : { id = subnet.id, name = subnet.name, zone = subnet.zone, cidr = subnet.cidr }]
-#   security_group_ids = [module.fleet_sg.security_group_id]
-
-#   cloud_service_by_crn = local.cloud_services
-
-#   service_endpoints = "private"
-# }
-
-# locals {
-#   # ex_subnet_zone_list = jsondecode(var.ex_subnet_zone_list)
-#   #  ex_subnet_zone_list = var.ex_subnet_zone_list
-
-#    ex_subnet_zone_list = flatten([
-#     for zone, subnets in var.ex_subnet_zone_list : [
-#       for name, subnet in subnets : {
-#         name = name
-#         zone = zone
-#         cidr = subnet.cidr
-#         crn  = subnet.crn
-#         id   = subnet.id
-#       }
-#     ]
-#   ])
-# }
-# ########################################################################################################################
-# # Cloud logs
-# ########################################################################################################################
-
-# locals {
-#   icl_name        = "${local.prefix}icl"
-#   cloud_logs_guid = var.existing_cloud_logs_crn != null ? module.existing_cloud_logs_crn[0].service_instance : null
-
-# }
-
-# module "existing_cloud_logs_crn" {
-#   count   = var.existing_cloud_logs_crn != null ? 1 : 0
-#   source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
-#   version = "1.2.0"
-#   crn     = var.existing_cloud_logs_crn
-# }
-
-# module "cloud_logs" {
-#   count             = var.enable_logging ? 1 : 0
-#   depends_on        = [module.cos_buckets]
-#   source            = "terraform-ibm-modules/cloud-logs/ibm"
-#   version           = "1.6.21"
-#   resource_group_id = module.resource_group.resource_group_id
-#   region            = var.region
-
-#   # data_storage = {
-#   #   logs_data = {
-#   #     enabled = false
-#   #     # enabled         = true
-#   #     # bucket_crn      = module.cos_buckets.buckets[local.taskstore_bucket_name].bucket_crn
-#   #     # bucket_endpoint = module.cos_buckets.buckets[local.taskstore_bucket_name].s3_endpoint_public
-#   #   }
-#   #   metrics_data = {
-#   #     enabled = false
-#   #   }
-#   # }
-
-
-#   instance_name = local.icl_name
-#   # cloud_logs_provision        = true
-#   # cloud_logs_plan             = "standard"
-#   # cloud_logs_service_endpoints = "private"
-# }
-
-# resource "ibm_iam_service_id" "logs_service_id" {
-#   count       = var.existing_cloud_logs_crn != null ? 1 : 0
-#   name        = "${local.icl_name}-svc-id"
-#   description = "Service ID to ingest into IBM Cloud Logs instance"
-# }
-
-# # Create IAM Service Policy granting "Sender" role to this service ID on the Cloud Logs instance
-# resource "ibm_iam_service_policy" "logs_policy" {
-#   count          = var.existing_cloud_logs_crn != null ? 1 : 0
-#   iam_service_id = ibm_iam_service_id.logs_service_id[0].id
-#   roles          = ["Sender"]
-#   description    = "Policy for ServiceID to send logs to IBM Cloud Logs instance"
-
-#   resources {
-#     service              = "logs"
-#     resource_instance_id = local.cloud_logs_guid # Cloud Logs instance GUID
-#   }
-# }
-
-
-# # Create an API key for this service ID (to use for ingestion authentication)
-# # resource "ibm_iam_api_key" "cloud_logs_ingestion_apikey" {
-# #   name         = "logs-ingestion-key"
-# #   iam_id = ibm_iam_service_id.logs_service_id[0].iam_id
-# #   description  = "API key to ingest logs into IBM Cloud Logs instance ${module.cloud_logs[0].name}"
-# # }
-
-# ########################################################################################################################
-# # Cloud monitoring
-# ########################################################################################################################
-# locals {
-#   monitoring_name     = "${local.prefix}-sysdig"
-#   monitoring_key_name = "${local.prefix}-sysdig-key"
-# }
-
-# module "cloud_monitoring" {
-#   count             = var.enable_monitoring ? 1 : 0
-#   source            = "terraform-ibm-modules/cloud-monitoring/ibm"
-#   version           = "1.7.1"
-#   region            = var.region
-#   resource_group_id = module.resource_group.resource_group_id
-#   instance_name     = local.monitoring_name
-#   plan              = var.cloud_monitoring_plan
-#   service_endpoints = "public-and-private"
-#   # enable_platform_metrics = false
-#   manager_key_name = local.monitoring_key_name
-# }
-
-
-# ########################################################################################################################
-# # Code Engine Project
-# ########################################################################################################################
-
-# module "project" {
-#   source            = "../../modules/project"
-#   name              = local.project_name
-#   resource_group_id = module.resource_group.resource_group_id
-#   cbr_rules         = var.cbr_rules
-# }
-
-# ##############################################################################
-# # Code Engine Secret
-# ##############################################################################
-# locals {
-#   fleet_cos_secret_name      = "fleet-cos-secret"
-#   fleet_registry_secret_name = "fleet-registry-secret"
-#   fleet_registry_secret = {
-#     (local.fleet_registry_secret_name) = {
-#       format = "registry"
-#       "data" = {
-#         password = var.ibmcloud_api_key,
-#         username = "iamapikey",
-#         server   = "us.icr.io"
-#       }
-#     }
-#   }
-
-#   codeengine_fleet_defaults_name = "codeengine-fleet-defaults"
-#   codeengine_fleet_defaults = {
-#     (local.codeengine_fleet_defaults_name) = {
-#       format = "generic"
-#       data = merge(
-#         {
-#           for idx, subnet in local.ex_subnet_zone_list :
-#           "pool_subnet_crn_${idx + 1}" => subnet.crn
-#         },
-#         {
-#           pool_security_group_crns_1 = data.ibm_is_security_group.example.crn
-#         },
-#         var.existing_cloud_logs_crn != null ? {
-#           logging_ingress_endpoint = var.cloud_logs_ingress_private_endpoint
-#           logging_sender_api_key   = var.ibmcloud_api_key
-#           logging_level_agent      = "debug"
-#           logging_level_worker     = "debug"
-#         } : {},
-#         var.existing_cloud_monitoring_crn != null ? {
-#           monitoring_ingestion_region = var.region
-#           monitoring_ingestion_key    = var.cloud_monitoring_access_key
-#         } : {}
-#       )
-#     }
-#   }
-
-#   secrets = merge(local.fleet_registry_secret, local.codeengine_fleet_defaults)
-# }
-
-# # creation of hmac secret is not supported by code engine provider
-# # terraform_data
-# resource "null_resource" "fleet_cos_secret" {
-#   provisioner "local-exec" {
-#     command = <<EOT
-#       ibmcloud login -r "${var.region}" -g "${module.resource_group.resource_group_name}" --apikey "${var.ibmcloud_api_key}"
-#       ibmcloud ce project select --name ${module.project.name}
-#       ibmcloud ce secret create --name ${local.fleet_cos_secret_name} \
-#       --format hmac \
-#       --access-key-id ${ibm_resource_key.cos_hmac_key.credentials["cos_hmac_keys.access_key_id"]}  \
-#       --secret-access-key ${ibm_resource_key.cos_hmac_key.credentials["cos_hmac_keys.secret_access_key"]}
-#     EOT
-#   }
-# }
-
-
-# data "ibm_is_security_group" "example" {
-#   depends_on = [module.fleet_sg]
-#   name       = "${local.prefix}sg"
-# }
-
-# # locals {
-# #   identifiers = [for subnet in var.ex_subnet_zone_list : subnet.id]
-# # }
-# # data "ibm_is_subnet" "example" {
-# #   # identifier = (([for s in module.vpc.vpc_data.subnets : s.id if s.name == "${local.prefix}-vpc-${local.prefix}subnet"])[0])
-# #   identifier = local.identifiers[0]
-# # }
-
-# module "secret" {
-#   source     = "../../modules/secret"
-#   for_each   = nonsensitive(local.secrets)
-#   project_id = module.project.project_id
-#   name       = each.key
-#   data       = each.value.data
-#   format     = each.value.format
-#   # Issue with provider, service_access is not supported at the moment. https://github.com/IBM-Cloud/terraform-provider-ibm/issues/5232
-#   # service_access = each.value.service_access
-# }
+  image_port                    = var.app_image_port
+  managed_domain_mappings       = var.managed_domain_mappings
+  scale_concurrency             = var.app_scale_concurrency
+  scale_concurrency_target      = var.app_scale_concurrency_target
+  scale_cpu_limit               = var.app_scale_cpu_limit != null ? var.app_scale_cpu_limit : local.app_scale_cpu_limit
+  scale_down_delay              = var.app_scale_down_delay
+  scale_ephemeral_storage_limit = var.app_scale_ephemeral_storage_limit
+  scale_memory_limit            = var.app_scale_memory_limit != null ? var.app_scale_memory_limit : local.app_scale_memory_limit
+  scale_request_timeout         = var.app_scale_request_timeout
+}
