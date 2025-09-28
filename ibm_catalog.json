@@ -140,7 +140,7 @@
             {
               "role_crns": [
                 "crn:v1:bluemix:public:iam::::serviceRole:Writer",
-                 "crn:v1:bluemix:public:iam::::role:Editor"
+                "crn:v1:bluemix:public:iam::::role:Editor"
               ],
               "service_name": "codeengine",
               "notes": "Required to create and manage Code Engine resources."
@@ -272,7 +272,7 @@
               "key": "existing_cos_instance_crn",
               "virtual": true
             },
-           {
+            {
               "key": "logs_routing_tenant_regions",
               "type": "array",
               "default_value": [],
