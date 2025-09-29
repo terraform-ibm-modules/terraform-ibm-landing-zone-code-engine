@@ -1,28 +1,33 @@
-# ########################################################################################################################
-# # Outputs
-# ########################################################################################################################
+########################################################################################################################
+# Outputs
+########################################################################################################################
 
-# output "project_name" {
-#   description = "Name of the project."
-#   value       = module.project.name
-# }
+output "resource_group_name" {
+  description = "The name of the resource group."
+  value       = module.resource_group.resource_group_name
+}
 
-# output "project_id" {
-#   description = "ID of the created code engine project."
-#   value       = module.project.project_id
-# }
+output "project_id" {
+  description = "The name of the created code engine project."
+  value       = module.project.name
+}
 
-# output "secret" {
-#   description = "Configuration of the created code engine secret."
-#   value       = module.secret
-# }
+output "code_engine_project_id" {
+  description = "The ID of the created code engine project."
+  value       = module.project.id
+}
 
-# output "build" {
-#   description = "Configuration of the created code engine build."
-#   value       = module.build
-# }
+output "next_steps_text" {
+  value       = "Now, check your Code Engine project configuration."
+  description = "Next steps text"
+}
 
-# output "app" {
-#   description = "Configuration of the created code engine app."
-#   value       = module.app
-# }
+output "next_step_primary_label" {
+  value       = "Go to Code Engine Project"
+  description = "Primary label"
+}
+
+output "next_step_primary_url" {
+  value       = "https://cloud.ibm.com/containers/serverless/project/${var.region}/${module.project.id}/overview"
+  description = "primary url"
+}
