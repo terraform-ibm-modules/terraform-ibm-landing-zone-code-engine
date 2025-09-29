@@ -36,7 +36,7 @@
         },
         {
           "title": "IBM Cloud Service Integrations",
-          "description": "Seamless integration with [Container Registry](https://www.ibm.com/products/container-registry), Activity Tracker, [IBM Cloud Logs](https://www.ibm.com/products/cloud-logs), [IBM Cloud Monitoring](https://www.ibm.com/products/cloud-monitoring), [SCC Workload Protection](https://www.ibm.com/products/security-and-compliance-center), and App Configuration."
+          "description": "Seamless integration with [Container Registry](https://www.ibm.com/products/container-registry), Activity Tracker, [Cloud Logs](https://www.ibm.com/products/cloud-logs), [Cloud Monitoring](https://www.ibm.com/products/cloud-monitoring), [SCC Workload Protection](https://www.ibm.com/products/security-and-compliance-center), and App Configuration."
         },
         {
           "title": "Simplified Setup with Guided Inputs",
