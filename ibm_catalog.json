@@ -321,32 +321,7 @@
               ]
             },
             {
-              "key": "app_scale_concurrency",
-              "hidden": true
-            },
-            {
-              "key": "app_scale_concurrency_target",
-              "hidden": true
-            },
-            {
-              "key": "app_scale_request_timeout",
-              "hidden": true
-            },
-            {
-              "key": "app_scale_down_delay",
-              "hidden": true
-            },
-            {
-              "key": "app_image_secret",
-              "hidden": true
-            },
-            {
-              "key": "app_scale_memory_limit",
-              "hidden": true
-            },
-            {
-              "key": "app_scale_cpu_limit",
-              "hidden": true
+              "key": "container_registry_api_key"
             },
             {
               "key": "provider_visibility",
@@ -667,78 +642,6 @@
               "optional": true,
               "on_by_default": false,
               "version": "v3.0.7"
-            },
-            {
-              "name": "deploy-arch-ibm-kms",
-              "id": "2cad4789-fa90-4886-9c9e-857081c273ee-global",
-              "description": "Enables managed encryption with your own keys via IBM Cloud Key Protect. If disabled, services will default to IBM-managed encryption. ",
-              "flavors": [
-                "fully-configurable"
-              ],
-              "catalog_id": "7a4d68b4-cf8b-40cd-a3d1-f49aff526eb3",
-              "input_mapping": [
-                {
-                  "dependency_output": "kms_instance_crn",
-                  "version_input": "existing_kms_instance_crn"
-                },
-                {
-                  "dependency_input": "prefix",
-                  "version_input": "prefix",
-                  "reference_version": true
-                },
-                {
-                  "dependency_input": "region",
-                  "version_input": "region",
-                  "reference_version": true
-                },
-                {
-                  "dependency_input": "kms_endpoint_type",
-                  "value": "private"
-                },
-                {
-                  "version_input": "kms_encryption_enabled_bucket",
-                  "value": true
-                },
-                {
-                  "version_input": "enable_vpc_flow_logs",
-                  "value": false
-                }
-              ],
-              "optional": true,
-              "on_by_default": true,
-              "version": "v5.1.19"
-            },
-            {
-              "name": "deploy-arch-ibm-cos",
-              "id": "68921490-2778-4930-ac6d-bae7be6cd958-global",
-              "description": "Sets up an Object Storage instance.",
-              "flavors": [
-                "instance"
-              ],
-              "catalog_id": "7a4d68b4-cf8b-40cd-a3d1-f49aff526eb3",
-              "input_mapping": [
-                {
-                  "dependency_input": "existing_resource_group_name",
-                  "version_input": "existing_resource_group_name",
-                  "reference_version": true
-                },
-                {
-                  "dependency_output": "cos_instance_crn",
-                  "version_input": "existing_cos_instance_crn"
-                },
-                {
-                  "dependency_input": "prefix",
-                  "version_input": "prefix",
-                  "reference_version": true
-                },
-                {
-                  "version_input": "enable_vpc_flow_logs",
-                  "value": false
-                }
-              ],
-              "optional": true,
-              "on_by_default": true,
-              "version": "v10.2.1"
             },
             {
               "name": "deploy-arch-ibm-cloud-logs",

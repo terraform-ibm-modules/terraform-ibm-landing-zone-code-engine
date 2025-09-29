@@ -28,6 +28,7 @@ if ! ibmcloud login -r "${REGION}" -g "${RESOURCE_GROUP_ID}" --quiet > /dev/null
 fi
 
 # extract registry value from text "You are targeting region 'us-south', the registry is 'us.icr.io'."
+# at the moment `ibmcloud cr region` command does not support JSON output.
 registry=$(ibmcloud cr region 2>/dev/null | grep registry | sed -E "s/.*registry is '([^']+)'.*/\1/")
 
 # Validate registry value

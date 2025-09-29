@@ -7,7 +7,7 @@ output "resource_group_name" {
   value       = module.resource_group.resource_group_name
 }
 
-output "project_id" {
+output "code_engine_project_name" {
   description = "The name of the created code engine project."
   value       = module.project.name
 }
@@ -43,7 +43,7 @@ output "next_step_primary_url" {
 }
 
 output "next_step_secondary_label" {
-  value       = "Open the application deployed with your Code Engine project"
+  value       = "Open the application"
   description = "Secondary label"
 }
 

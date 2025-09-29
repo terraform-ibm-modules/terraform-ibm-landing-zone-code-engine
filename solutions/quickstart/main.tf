@@ -10,7 +10,7 @@ locals {
 
 module "resource_group" {
   source                       = "terraform-ibm-modules/resource-group/ibm"
-  version                      = "1.2.1"
+  version                      = "1.3.0"
   existing_resource_group_name = var.existing_resource_group_name
 }
 
@@ -54,7 +54,7 @@ data "external" "container_registry_region" {
 ##############################################################################
 locals {
   registry_secret_name = "${local.prefix}registry-secret"
-  registry_secret = {
+  registry_secret = var.container_registry_api_key != null ? {
     (local.registry_secret_name) = {
       format = "registry"
       "data" = {
@@ -63,9 +63,10 @@ locals {
         server   = local.container_registry
       }
     }
-  }
+  } : {}
 }
 
+# we create secret only in a case when container_registry_api_key is provided.
 module "secret" {
   source     = "terraform-ibm-modules/code-engine/ibm//modules/secret"
   version    = "4.5.13"
@@ -94,16 +95,12 @@ module "app" {
   version         = "4.5.13"
   name            = local.app_name
   image_reference = local.image_reference
-  image_secret    = var.app_image_secret != null ? var.app_image_secret : local.registry_secret_name
+  image_secret    = var.container_registry_api_key != null ? local.registry_secret_name : null
   project_id      = module.project.project_id
 
   image_port                    = var.app_image_port
   managed_domain_mappings       = var.managed_domain_mappings
-  scale_concurrency             = var.app_scale_concurrency
-  scale_concurrency_target      = var.app_scale_concurrency_target
-  scale_cpu_limit               = var.app_scale_cpu_limit != null ? var.app_scale_cpu_limit : local.app_scale_cpu_limit
-  scale_down_delay              = var.app_scale_down_delay
+  scale_cpu_limit               = local.app_scale_cpu_limit
   scale_ephemeral_storage_limit = var.app_scale_ephemeral_storage_limit
-  scale_memory_limit            = var.app_scale_memory_limit != null ? var.app_scale_memory_limit : local.app_scale_memory_limit
-  scale_request_timeout         = var.app_scale_request_timeout
+  scale_memory_limit            = local.app_scale_memory_limit
 }

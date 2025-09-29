@@ -81,12 +81,6 @@ variable "app_image_reference" {
   default     = "icr.io/codeengine/helloworld"
 }
 
-variable "app_image_secret" {
-  description = "The name of the access secret that is used for the image registry."
-  type        = string
-  default     = null
-}
-
 variable "app_scale_cpu_memory" {
   description = "Define the amount of CPU and memory resources for each instance. [Learn more](https://cloud.ibm.com/docs/codeengine?topic=codeengine-mem-cpu-combo)"
   type        = string
@@ -109,18 +103,6 @@ variable "managed_domain_mappings" {
   }
 }
 
-variable "app_scale_cpu_limit" {
-  description = "The number of CPUs to set for the instance of the app."
-  type        = string
-  default     = "1"
-}
-
-variable "app_scale_memory_limit" {
-  description = "The amount of memory set for the instance of the app."
-  type        = string
-  default     = "4G"
-}
-
 variable "app_scale_ephemeral_storage_limit" {
   description = <<EOT
 The amount of ephemeral storage to set for the instance of the app.
@@ -133,26 +115,14 @@ EOT
   default     = "400M"
 }
 
-variable "app_scale_concurrency" {
-  description = "The maximum number of requests that can be processed concurrently per instance."
-  type        = number
-  default     = 100
-}
 
-variable "app_scale_concurrency_target" {
-  description = "The threshold of concurrent requests per instance at which one or more additional instances are created."
-  type        = number
+##############################################################################
+# Container Registry
+##############################################################################
+
+variable "container_registry_api_key" {
+  description = "The API key used to authenticate with the container registry. If set, a Code Engine registry secret will be created using this value."
+  type        = string
+  sensitive   = true
   default     = null
-}
-
-variable "app_scale_request_timeout" {
-  description = "The amount of time in seconds that is allowed for a running app to respond to a request."
-  type        = number
-  default     = 300
-}
-
-variable "app_scale_down_delay" {
-  description = "The amount of time in seconds that delays the scale-down behavior for an app instance."
-  type        = number
-  default     = 0
 }
