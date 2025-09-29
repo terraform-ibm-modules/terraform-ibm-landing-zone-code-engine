@@ -26,7 +26,7 @@ module "project" {
 }
 
 ##############################################################################
-# Container Registry
+# Code Engine Build
 ##############################################################################
 locals {
   registry_region_result = data.external.container_registry_region.result
@@ -37,6 +37,14 @@ locals {
   # This will cause Terraform to fail if "error" is present in the external script output executed as a part of container_registry_region
   # tflint-ignore: terraform_unused_declarations
   fail_if_registry_region_error = local.registry_region_error != null ? tobool("Registry region script failed: ${local.registry_region_error}") : null
+
+  image_container = var.output_image == null && local.container_registry != null ? "${local.container_registry}/${resource.ibm_cr_namespace.my_namespace[0].name}" : ""
+  output_image    = var.output_image != null ? var.output_image : "${local.image_container}/${var.build_name}"
+}
+
+resource "ibm_cr_namespace" "my_namespace" {
+  count = var.output_image == null && var.container_registry_namespace != null ? 1 : 0
+  name  = var.container_registry_namespace
 }
 
 data "external" "container_registry_region" {
@@ -49,28 +57,59 @@ data "external" "container_registry_region" {
   }
 }
 
+module "build" {
+  depends_on                 = [module.secret]
+  source                     = "terraform-ibm-modules/code-engine/ibm//modules/build"
+  version                    = "4.5.13"
+  ibmcloud_api_key           = var.ibmcloud_api_key
+  project_id                 = module.project.project_id
+  name                       = var.build_name
+  output_image               = local.output_image
+  output_secret              = local.registry_secret_name
+  source_url                 = var.source_url
+  strategy_type              = var.strategy_type
+  source_context_dir         = var.source_context_dir
+  source_revision            = var.source_revision
+  source_secret              = var.github_password != null && var.github_username != null ? local.github_secret_name : null
+  timeout                    = var.timeout
+  region                     = var.region
+  existing_resource_group_id = module.resource_group.resource_group_id
+}
+
 ##############################################################################
 # Code Engine Secret
 ##############################################################################
 locals {
+  github_secret_name = "${local.prefix}github-secret"
+  github_secret = var.github_password != null && var.github_username != null ? {
+    (local.github_secret_name) = {
+      format = "generic"
+      "data" = {
+        "password" = var.github_password,
+        username   = var.github_username
+      }
+    }
+  } : {}
+
   registry_secret_name = "${local.prefix}registry-secret"
-  registry_secret = var.container_registry_api_key != null ? {
+  registry_secret = {
     (local.registry_secret_name) = {
       format = "registry"
       "data" = {
-        password = var.ibmcloud_api_key,
+        password = var.container_registry_api_key != null ? var.container_registry_api_key : var.ibmcloud_api_key,
         username = "iamapikey",
         server   = local.container_registry
       }
     }
-  } : {}
+  }
+
+  secrets = merge(local.registry_secret, local.github_secret)
 }
 
-# we create secret only in a case when container_registry_api_key is provided.
 module "secret" {
   source     = "terraform-ibm-modules/code-engine/ibm//modules/secret"
   version    = "4.5.13"
-  for_each   = nonsensitive(local.registry_secret)
+  for_each   = nonsensitive(local.secrets)
   project_id = module.project.project_id
   name       = each.key
   data       = each.value.data
@@ -83,7 +122,7 @@ module "secret" {
 # Code Engine Apps
 ##############################################################################
 locals {
-  image_reference = var.app_image_reference
+  image_reference = var.app_image_reference != null ? var.app_image_reference : module.build.output_image
 
   app_scale_cpu_limit    = tonumber(regex("^([0-9.]+)", var.app_scale_cpu_memory)[0])
   app_scale_memory_limit = tonumber(regex("/ ([0-9.]+)", var.app_scale_cpu_memory)[0])
@@ -95,7 +134,7 @@ module "app" {
   version         = "4.5.13"
   name            = local.app_name
   image_reference = local.image_reference
-  image_secret    = var.container_registry_api_key != null ? local.registry_secret_name : null
+  image_secret    = local.registry_secret_name
   project_id      = module.project.project_id
 
   image_port                    = var.app_image_port

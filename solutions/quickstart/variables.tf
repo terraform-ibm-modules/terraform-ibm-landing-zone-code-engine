@@ -64,6 +64,97 @@ variable "code_engine_project_name" {
   default     = "ce-project"
 }
 
+##############################################################################
+# Code Engine Build
+##############################################################################
+variable "build_name" {
+  description = "The name of the build."
+  type        = string
+  default     = "helloworld"
+}
+
+variable "output_image" {
+  description = <<EOT
+A container image can be identified by a container image reference with the following structure: registry / namespace / repository:tag. [Learn more](https://cloud.ibm.com/docs/codeengine?topic=codeengine-getting-started).
+
+If not provided, the value will be derived from the 'container_registry_namespace' input variable, which must not be null in that case.
+EOT
+
+  type    = string
+  default = null
+}
+
+variable "source_context_dir" {
+  description = "The directory in the repository that contains the buildpacks file or the Dockerfile."
+  type        = string
+  default     = "hello"
+}
+
+variable "source_revision" {
+  description = "Commit, tag, or branch in the source repository to pull."
+  type        = string
+  default     = "main"
+}
+
+variable "source_url" {
+  description = "The URL of the code repository. If the repository is private, you must also provide 'github_username' and 'github_password'."
+  type        = string
+  default     = "https://github.com/IBM/CodeEngine"
+}
+
+variable "strategy_type" {
+  description = "The strategy to use for building the image."
+  type        = string
+  default     = "dockerfile"
+}
+
+variable "timeout" {
+  description = "The maximum amount of time, in seconds, that can pass before the build must succeed or fail."
+  type        = number
+  default     = 600
+}
+
+variable "container_registry_namespace" {
+  description = "The name of the namespace to create in IBM Cloud Container Registry for organizing container images. Must be set if 'output_image' is not set."
+  type        = string
+  default     = "ce-cr-namespace"
+
+  validation {
+    condition     = var.output_image != null || var.container_registry_namespace != null
+    error_message = "'container_registry_namespace' is required if output_image is not set."
+  }
+
+  validation {
+    condition = (
+      (var.output_image != null && var.container_registry_namespace == null) ||
+      (var.output_image == null && var.container_registry_namespace != null)
+    )
+    error_message = "Exactly one of 'output_image' or 'container_registry_namespace' must be set (not both or neither)."
+  }
+}
+
+##############################################################################
+# Github Secret
+##############################################################################
+
+variable "github_password" {
+  description = "GitHub personal access token used as a password when accessing private repositories."
+  type        = string
+  sensitive   = true
+  default     = null
+
+  validation {
+    condition     = (var.github_username == null && var.github_password == null) || (var.github_username != null && var.github_password != null)
+    error_message = "Either both 'github_password' and 'github_username' must be set, or neither."
+  }
+}
+
+variable "github_username" {
+  description = "GitHub username used to authenticate when accessing private repositories.."
+  type        = string
+  default     = null
+}
+
 
 ##############################################################################
 # Code Engine App
@@ -78,7 +169,8 @@ variable "app_name" {
 variable "app_image_reference" {
   description = "A container image can be identified by a container image reference with the following structure: registry / namespace / repository:tag. [Learn more](https://cloud.ibm.com/docs/codeengine?topic=codeengine-getting-started)"
   type        = string
-  default     = "icr.io/codeengine/helloworld"
+  default     = null
+  # default     = "icr.io/codeengine/helloworld"
 }
 
 variable "app_scale_cpu_memory" {

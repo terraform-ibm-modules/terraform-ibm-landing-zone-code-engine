@@ -185,6 +185,37 @@
               ]
             },
             {
+              "key": "build_name"
+            },
+            {
+              "key": "source_url",
+              "required": true
+            },
+            {
+              "key": "source_revision"
+            },
+            {
+              "key": "source_context_dir"
+            },
+            {
+              "key": "strategy_type"
+            },
+            {
+              "key": "output_image"
+            },
+            {
+              "key": "container_registry_namespace"
+            },
+            {
+              "key": "github_password"
+            },
+            {
+              "key": "github_username"
+            },
+            {
+              "key": "timeout"
+            },
+            {
               "key": "app_scale_cpu_memory",
               "options": [
                 {

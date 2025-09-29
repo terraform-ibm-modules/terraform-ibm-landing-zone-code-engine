@@ -1,3 +1,3 @@
-# Landing Zone Code Engine Deployable Architecture ([Experimental] Standard - Integrated setup with configurable services)
+# Cloud automation for Code Engine quickstart
 
 :exclamation: **Important:** This solution is not intended to be called by other modules because it contains a provider configuration and is not compatible with the `for_each`, `count`, and `depends_on` arguments. For more information, see [Providers Within Modules](https://developer.hashicorp.com/terraform/language/modules/develop/providers).
