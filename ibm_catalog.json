@@ -36,7 +36,7 @@
         },
         {
           "title": "IBM Cloud Service Integrations",
-          "description": "Seamless integration with Secrets Manager, Container Registry, Activity Tracker, IBM Cloud Logs, and IBM Cloud Monitoring."
+          "description": "Seamless integration with [Container Registry](https://www.ibm.com/products/container-registry), Activity Tracker, [IBM Cloud Logs](https://www.ibm.com/products/cloud-logs), [IBM Cloud Monitoring](https://www.ibm.com/products/cloud-monitoring), [SCC Workload Protection](https://www.ibm.com/products/security-and-compliance-center), and App Configuration."
         },
         {
           "title": "Simplified Setup with Guided Inputs",
@@ -91,7 +91,7 @@
               {
                 "diagram": {
                   "caption": "IBM Cloud Code Engine Application Topology",
-                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-code-engine/refs/heads/refactor_da/reference-architecture/deployment-architecture-quickstart.svg",
+                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/refs/heads/quickstart_2/reference-architectures/deployment-architecture-quickstart.svg",
                   "type": "image/svg+xml"
                 },
                 "description": "This architecture enables the deployment of serverless applications on IBM Cloud using [IBM Code Engine](https://www.ibm.com/products/code-engine). At its core, the setup includes a [Code Engine project](https://cloud.ibm.com/docs/codeengine?topic=codeengine-getting-started), a containerized application, and a [registry secret](https://www.ibm.com/products/container-registry) used for secure access to a private container registry.<br><br>The registry secret is configured to authenticate with the container registry, allowing Code Engine to pull container images securely during application deployment. Once deployed, the application runs in a fully managed, serverless environment—eliminating the need to manage infrastructure, scale manually, or handle runtime provisioning."
@@ -496,8 +496,8 @@
             "diagrams": [
               {
                 "diagram": {
-                  "caption": "IBM Cloud Code Engine Application Topology",
-                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/refs/heads/quickstart/reference-architectures/deployment-architecture-quickstart.svg",
+                  "caption": "IBM Cloud Code Engine topology - Standard (Integrated setup with configurable services)",
+                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/refs/heads/quickstart_2/reference-architectures/deployment-architecture-fully-configurable.svg",
                   "type": "image/svg+xml"
                 },
                 "description": "The architecture consists of a central [IBM Cloud Code Engine project](https://cloud.ibm.com/docs/codeengine?topic=codeengine-getting-started), which serves as the primary execution environment for the application. Surrounding this core component is the foundational IBM Cloud configuration, which includes the IBM Cloud account, resource group, account settings, and optionally a trusted profile for secure IAM access.<br><br>Encircling the Code Engine project are a set of optional service surrounds that can be integrated based on the specific use case. These include observability tools such as [Cloud Monitoring](https://www.ibm.com/products/cloud-monitoring), [Cloud Logs](https://www.ibm.com/products/cloud-logs), and Activity Tracker, which provide insight into application performance, logging, and user or system actions. Additional core services may also be incorporated, such as [Cloud Object Storage](https://www.ibm.com/products/cloud-object-storage) for data storage, [Key Protect](https://www.ibm.com/products/key-protect) for encryption key management, App Configuration for externalizing environment-specific settings, and [SCC Workload Protection](https://www.ibm.com/products/security-and-compliance-center) to enforce security and compliance policies at the workload level."
@@ -952,7 +952,7 @@
               {
                 "diagram": {
                   "caption": "Fleet-Based Workload Topology with IBM Cloud Code Engine",
-                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-code-engine/refs/heads/refactor_da/reference-architecture/deployment-architecture-fleets.svg",
+                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/refs/heads/quickstart_2/reference-architectures/deployment-architecture-fleets.svg",
                   "type": "image/svg+xml"
                 },
                 "description": "This architecture provides a streamlined setup within an IBM Cloud region to deploy and manage <b>fleet-based workloads using IBM Cloud Code Engine</b>. It introduces a Fleet managed by Code Engine as the core execution environment, with <b>worker instances (VSIs)</b> dynamically provisioned in Code Engine–managed accounts based on a customer-provided VSI image.<br><br><b>A Task State Store</b>, implemented using IBM Cloud Object Storage (COS), <b>handles task and data persistence</b>. Logs generated by the fleet workers are ingested into an IBM Cloud Logs instance, enabling centralized observability and simplified monitoring.<br><br>Designed for scalability and operational efficiency, this Quick Start automates the provisioning of required IBM Cloud services using well-chosen defaults. Users provide minimal input—such as region, availability zones, and service plans—while Code Engine handles the lifecycle of Fleets, Tasks, and Workers.<br><br>This solution accelerates deployment of distributed, container-based workloads without requiring manual setup of networking, storage, or observability components, making it ideal for rapid experimentation and workload execution on IBM Cloud."
