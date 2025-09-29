@@ -115,6 +115,7 @@
             },
             {
               "key": "existing_resource_group_name",
+              "required": true,
               "display_name": "resource_group",
               "default_value": "Default",
               "description": "The name of an existing resource group to provision the resources.",
@@ -137,6 +138,7 @@
             },
             {
               "key": "region",
+              "required": true,
               "options": [
                 {
                   "displayname": "Dallas (us-south)",
@@ -198,6 +200,9 @@
             },
             {
               "key": "container_registry_namespace"
+            },
+            {
+              "key": "container_registry_api_key"
             },
             {
               "key": "github_password"
@@ -343,9 +348,6 @@
                   "value": "local"
                 }
               ]
-            },
-            {
-              "key": "container_registry_api_key"
             },
             {
               "key": "provider_visibility",

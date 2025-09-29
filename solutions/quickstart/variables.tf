@@ -103,12 +103,6 @@ variable "timeout" {
   default     = 600
 }
 
-variable "container_registry_namespace" {
-  description = "The name of the namespace to create in IBM Cloud Container Registry for organizing container images."
-  type        = string
-  default     = "ce-cr-namespace"
-}
-
 ##############################################################################
 # Github Secret
 ##############################################################################
@@ -182,8 +176,14 @@ EOT
 ##############################################################################
 
 variable "container_registry_api_key" {
-  description = "The API key used to authenticate with the container registry. If set, a Code Engine registry secret will be created using this value."
+  description = "The API key used to authenticate with the container registry. If this key is not provided, the IBM Cloud API key will be used instead."
   type        = string
   sensitive   = true
   default     = null
+}
+
+variable "container_registry_namespace" {
+  description = "The name of the namespace to create in IBM Cloud Container Registry for organizing container images. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<container_registry_namespace>` format."
+  type        = string
+  default     = "ce-cr-namespace"
 }
