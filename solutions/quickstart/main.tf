@@ -26,7 +26,7 @@ module "project" {
 }
 
 ##############################################################################
-# Code Engine Build
+# Container Registry
 ##############################################################################
 locals {
   registry_region_result = data.external.container_registry_region.result

@@ -91,10 +91,10 @@
               {
                 "diagram": {
                   "caption": "IBM Cloud Code Engine Application Topology",
-                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-code-engine/refs/heads/refactor_da/reference-architecture/deployment-architecture-application.svg",
+                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-code-engine/refs/heads/refactor_da/reference-architecture/deployment-architecture-quickstart.svg",
                   "type": "image/svg+xml"
                 },
-                "description": "This architecture provides a streamlined setup within an IBM Cloud region to deploy and manage serverless applications using Code Engine. It includes a Code Engine project, application, and registry secret as core components enabling secure container image management and seamless app deployment.<br><br>Optional integrations include observability tools like Cloud Monitoring and Cloud Logs for real-time insights into application performance and health. Additional services such as App Configuration (separate from Code Engine apps), SCC Workload Protection, and Activity Tracker enhance configuration management, security, and auditing.<br><br>Designed for simplicity and flexibility, this solution accelerates the deployment and operational management of scalable, event-driven applications on IBM Cloud."
+                "description": "This architecture enables the deployment of serverless applications on IBM Cloud using [IBM Code Engine](https://www.ibm.com/products/code-engine). At its core, the setup includes a [Code Engine project](https://cloud.ibm.com/docs/codeengine?topic=codeengine-getting-started), a containerized application, and a [registry secret](https://www.ibm.com/products/container-registry) used for secure access to a private container registry.<br><br>The registry secret is configured to authenticate with the container registry, allowing Code Engine to pull container images securely during application deployment. Once deployed, the application runs in a fully managed, serverless environment—eliminating the need to manage infrastructure, scale manually, or handle runtime provisioning."
               }
             ]
           },
@@ -701,7 +701,7 @@
                 },
                 {
                   "version_input": "enable_vpc_flow_logs",
-                  "value": true
+                  "value": false
                 }
               ],
               "optional": true,
