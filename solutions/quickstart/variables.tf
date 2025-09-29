@@ -73,17 +73,6 @@ variable "build_name" {
   default     = "helloworld"
 }
 
-variable "output_image" {
-  description = <<EOT
-A container image can be identified by a container image reference with the following structure: registry / namespace / repository:tag. [Learn more](https://cloud.ibm.com/docs/codeengine?topic=codeengine-getting-started).
-
-If not provided, the value will be derived from the 'container_registry_namespace' input variable, which must not be null in that case.
-EOT
-
-  type    = string
-  default = null
-}
-
 variable "source_context_dir" {
   description = "The directory in the repository that contains the buildpacks file or the Dockerfile."
   type        = string
@@ -115,22 +104,9 @@ variable "timeout" {
 }
 
 variable "container_registry_namespace" {
-  description = "The name of the namespace to create in IBM Cloud Container Registry for organizing container images. Must be set if 'output_image' is not set."
+  description = "The name of the namespace to create in IBM Cloud Container Registry for organizing container images."
   type        = string
   default     = "ce-cr-namespace"
-
-  validation {
-    condition     = var.output_image != null || var.container_registry_namespace != null
-    error_message = "'container_registry_namespace' is required if output_image is not set."
-  }
-
-  validation {
-    condition = (
-      (var.output_image != null && var.container_registry_namespace == null) ||
-      (var.output_image == null && var.container_registry_namespace != null)
-    )
-    error_message = "Exactly one of 'output_image' or 'container_registry_namespace' must be set (not both or neither)."
-  }
 }
 
 ##############################################################################
@@ -164,13 +140,6 @@ variable "app_name" {
   description = "The name of the application to be created and managed. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<app_name>` format. [Learn more](https://cloud.ibm.com/docs/codeengine?topic=codeengine-application-workloads)"
   type        = string
   default     = "my-ce-app"
-}
-
-variable "app_image_reference" {
-  description = "A container image can be identified by a container image reference with the following structure: registry / namespace / repository:tag. [Learn more](https://cloud.ibm.com/docs/codeengine?topic=codeengine-getting-started)"
-  type        = string
-  default     = null
-  # default     = "icr.io/codeengine/helloworld"
 }
 
 variable "app_scale_cpu_memory" {

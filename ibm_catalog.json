@@ -136,10 +136,6 @@
               "required": true
             },
             {
-              "key": "app_image_reference",
-              "required": true
-            },
-            {
               "key": "region",
               "options": [
                 {
@@ -199,9 +195,6 @@
             },
             {
               "key": "strategy_type"
-            },
-            {
-              "key": "output_image"
             },
             {
               "key": "container_registry_namespace"

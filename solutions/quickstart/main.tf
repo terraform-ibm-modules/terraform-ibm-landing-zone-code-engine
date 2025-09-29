@@ -38,13 +38,13 @@ locals {
   # tflint-ignore: terraform_unused_declarations
   fail_if_registry_region_error = local.registry_region_error != null ? tobool("Registry region script failed: ${local.registry_region_error}") : null
 
-  image_container = var.output_image == null && local.container_registry != null ? "${local.container_registry}/${resource.ibm_cr_namespace.my_namespace[0].name}" : ""
-  output_image    = var.output_image != null ? var.output_image : "${local.image_container}/${var.build_name}"
+  image_container = local.container_registry != null ? "${local.container_registry}/${resource.ibm_cr_namespace.my_namespace[0].name}" : ""
+  output_image    = "${local.image_container}/${var.build_name}"
 }
 
 resource "ibm_cr_namespace" "my_namespace" {
-  count = var.output_image == null && var.container_registry_namespace != null ? 1 : 0
-  name  = var.container_registry_namespace
+  count = var.container_registry_namespace != null ? 1 : 0
+  name  = "${local.prefix}${var.container_registry_namespace}"
 }
 
 data "external" "container_registry_region" {
@@ -122,8 +122,6 @@ module "secret" {
 # Code Engine Apps
 ##############################################################################
 locals {
-  image_reference = var.app_image_reference != null ? var.app_image_reference : module.build.output_image
-
   app_scale_cpu_limit    = tonumber(regex("^([0-9.]+)", var.app_scale_cpu_memory)[0])
   app_scale_memory_limit = tonumber(regex("/ ([0-9.]+)", var.app_scale_cpu_memory)[0])
 }
@@ -133,7 +131,7 @@ module "app" {
   source          = "terraform-ibm-modules/code-engine/ibm//modules/app"
   version         = "4.5.13"
   name            = local.app_name
-  image_reference = local.image_reference
+  image_reference = module.build.output_image
   image_secret    = local.registry_secret_name
   project_id      = module.project.project_id
 
