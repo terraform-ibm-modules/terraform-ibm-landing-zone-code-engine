@@ -152,6 +152,7 @@ locals {
   }
 }
 
+# at the moment terraform provider doesn't support PDS https://github.ibm.com/GoldenEye/issues/issues/16264
 resource "terraform_data" "create_pds" {
   depends_on = [module.project, terraform_data.create_cos_secret, module.cos_buckets]
   provisioner "local-exec" {
@@ -374,6 +375,14 @@ resource "ibm_iam_service_policy" "logs_policy" {
   }
 }
 
+# create service key, which is added to codeengine_fleet_defaults_name secret and later used by code engine for sending cloud logs
+resource "ibm_iam_service_api_key" "cloud_logs_api_key" {
+  count          = var.enable_cloud_logs ? 1 : 0
+  name           = "${var.prefix}-logs-ingestion-key"
+  iam_service_id = ibm_iam_service_id.logs_service_id[0].iam_id
+  description    = "API key to ingest logs into IBM Cloud Logs instance: '${module.cloud_logs[0].guid}'"
+}
+
 ########################################################################################################################
 # Cloud monitoring
 ########################################################################################################################
@@ -435,7 +444,7 @@ locals {
         } : {},
         var.enable_cloud_logs ? {
           logging_ingress_endpoint = module.cloud_logs[0].ingress_private_endpoint
-          logging_sender_api_key   = var.ibmcloud_api_key
+          logging_sender_api_key   = resource.ibm_iam_service_api_key.cloud_logs_api_key[0].apikey
           logging_level_agent      = "debug"
           logging_level_worker     = "debug"
         } : {},
@@ -449,6 +458,7 @@ locals {
 }
 
 # creation of hmac secret is not supported by code engine provider
+# https://github.com/IBM-Cloud/terraform-provider-ibm/issues/6485
 resource "terraform_data" "create_cos_secret" {
   depends_on = [module.project, module.cos]
   provisioner "local-exec" {

@@ -10,7 +10,8 @@ import (
 
 // Use existing resource group
 const resourceGroup = "geretain-test-resources"
-const fleetsSolutionsDir = "solutions/fleets"
+const fleetsSolutionsDir = "solutions/fleets-quickstart"
+const terraformVersion = "terraform_v1.10" // This should match the version in the ibm_catalog.json
 
 func TestRunFleetsSolutionInSchematics(t *testing.T) {
 	t.Parallel()
@@ -28,10 +29,10 @@ func TestRunFleetsSolutionInSchematics(t *testing.T) {
 		Tags:                   []string{"test-schematic"},
 		DeleteWorkspaceOnFail:  false,
 		WaitJobCompleteMinutes: 60,
+		TerraformVersion:       terraformVersion,
 	})
 	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
 		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
-		{Name: "existing_resource_group_name", Value: options.ResourceGroup, DataType: "string"},
 		{Name: "prefix", Value: options.Prefix, DataType: "string"},
 	}
 
