@@ -15,8 +15,8 @@
         {
             "scc_rule_id": "rule-0244c010-fde6-4db3-95aa-8952bd292ac3",
             "description": "Check whether permissions for service ID creation are limited and configured in IAM settings for the account owner",
-            "ignore_reason": "Need more exploration (tracking in https://github.ibm.com/workload-eng-services/HPCCluster/issues/3422).",
-            "is_valid": true
+            "ignore_reason": "The reason this fails is because the VPC module is calling the ibm_iam_account_settings data lookup, however its not setting any account settings, so hence its not applicable to this DA and should be ignored",
+            "is_valid": false
         },
         {
             "scc_rule_id": "rule-c97259ee-336d-4c5f-b436-1868107a9558",
