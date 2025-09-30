@@ -129,14 +129,6 @@
               }
             },
             {
-              "key": "code_engine_project_name",
-              "required": true
-            },
-            {
-              "key": "app_name",
-              "required": true
-            },
-            {
               "key": "region",
               "required": true,
               "options": [
@@ -181,6 +173,14 @@
                   "value": "us-east"
                 }
               ]
+            },
+            {
+              "key": "code_engine_project_name",
+              "required": true
+            },
+            {
+              "key": "app_name",
+              "required": true
             },
             {
               "key": "build_name"
