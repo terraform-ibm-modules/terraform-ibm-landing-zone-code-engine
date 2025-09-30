@@ -3,17 +3,17 @@
 ########################################################################################################################
 
 output "resource_group_name" {
-  description = "Name of the resource group."
+  description = "The name of the resource group."
   value       = module.resource_group.resource_group_name
 }
 
 output "code_engine_project_name" {
-  description = "Name of the code engine project."
+  description = "The name of the created code engine project."
   value       = module.project.name
 }
 
 output "code_engine_project_id" {
-  description = "Id of the code engine project."
+  description = "The ID of the created code engine project."
   value       = module.project.id
 }
 

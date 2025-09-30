@@ -22,6 +22,10 @@ locals {
   output_bucket_name    = "${local.prefix}output"
   output_bucket_crn     = module.cos_buckets.buckets[local.output_bucket_name].bucket_crn
   cos_key_name          = "${local.prefix}-hmac-key"
+
+  # needed for cloud logs
+  logs_data_bucket_name    = "${local.prefix}logs-data"
+  metrics_data_bucket_name = "${local.prefix}metrics-data"
 }
 
 module "cos" {
@@ -45,7 +49,7 @@ module "cos_buckets" {
   source  = "terraform-ibm-modules/cos/ibm//modules/buckets"
   version = "10.2.13"
 
-  bucket_configs = [
+  bucket_configs = concat([
     {
       bucket_name            = local.taskstore_bucket_name
       kms_encryption_enabled = false
@@ -67,7 +71,23 @@ module "cos_buckets" {
       region_location        = var.region
       add_bucket_name_suffix = false
     }
-  ]
+    ],
+    var.enable_cloud_logs ? [
+      {
+        bucket_name            = local.logs_data_bucket_name
+        kms_encryption_enabled = false
+        resource_instance_id   = module.cos.cos_instance_crn
+        region_location        = var.region
+        add_bucket_name_suffix = false
+      },
+      {
+        bucket_name            = local.metrics_data_bucket_name
+        kms_encryption_enabled = false
+        resource_instance_id   = module.cos.cos_instance_crn
+        region_location        = var.region
+        add_bucket_name_suffix = false
+      }
+  ] : [])
 }
 
 # custom bucket lifecycle
@@ -259,7 +279,7 @@ module "fleet_sg" {
   ]
 }
 
-resource "ibm_is_security_group_rule" "example" {
+resource "ibm_is_security_group_rule" "fleet_security_group_rule" {
   group     = module.fleet_sg.security_group_id
   direction = "inbound"
   remote    = module.fleet_sg.security_group_id
@@ -288,7 +308,7 @@ locals {
   )
 }
 
-module "vpe_logging" {
+module "vpe_observability" {
   count                = length(local.cloud_services) > 0 ? 1 : 0
   source               = "terraform-ibm-modules/vpe-gateway/ibm"
   version              = "4.7.6"
@@ -320,6 +340,19 @@ module "cloud_logs" {
   region            = var.region
   instance_name     = local.icl_name
   resource_tags     = var.resource_tags
+  data_storage = {
+    # logs and metrics buckets must be different
+    logs_data = {
+      enabled         = true
+      bucket_crn      = module.cos_buckets.buckets[local.logs_data_bucket_name].bucket_crn
+      bucket_endpoint = module.cos_buckets.buckets[local.logs_data_bucket_name].s3_endpoint_direct
+    },
+    metrics_data = {
+      enabled         = true
+      bucket_crn      = module.cos_buckets.buckets[local.metrics_data_bucket_name].bucket_crn
+      bucket_endpoint = module.cos_buckets.buckets[local.metrics_data_bucket_name].s3_endpoint_direct
+    }
+  }
 }
 
 resource "ibm_iam_service_id" "logs_service_id" {
@@ -330,10 +363,10 @@ resource "ibm_iam_service_id" "logs_service_id" {
 
 # Create IAM Service Policy granting "Sender" role to this service ID on the Cloud Logs instance
 resource "ibm_iam_service_policy" "logs_policy" {
-  count          = var.enable_cloud_logs ? 1 : 0
-  iam_service_id = ibm_iam_service_id.logs_service_id[0].id
-  roles          = ["Sender"]
-  description    = "Policy for ServiceID to send logs to IBM Cloud Logs instance"
+  count       = var.enable_cloud_logs ? 1 : 0
+  iam_id      = ibm_iam_service_id.logs_service_id[0].iam_id
+  roles       = ["Sender"]
+  description = "Policy for ServiceID to send logs to IBM Cloud Logs instance"
 
   resources {
     service              = "logs"
@@ -380,18 +413,7 @@ module "project" {
 # Code Engine Secret
 ##############################################################################
 locals {
-  fleet_cos_secret_name      = "fleet-cos-secret"
-  fleet_registry_secret_name = "fleet-registry-secret"
-  fleet_registry_secret = {
-    (local.fleet_registry_secret_name) = {
-      format = "registry"
-      "data" = {
-        password = var.ibmcloud_api_key,
-        username = "iamapikey",
-        server   = local.container_registry
-      }
-    }
-  }
+  fleet_cos_secret_name = "fleet-cos-secret"
 
   codeengine_fleet_defaults_name = "codeengine-fleet-defaults"
   codeengine_fleet_defaults = {
@@ -403,8 +425,14 @@ locals {
           "pool_subnet_crn_${idx + 1}" => subnet.crn
         },
         {
-          pool_security_group_crns_1 = data.ibm_is_security_group.example.crn
+          pool_security_group_crns_1 = data.ibm_is_security_group.fleet_security_group.crn
         },
+        var.vpc_zones >= 2 ? {
+          pool_security_group_crns_2 = data.ibm_is_security_group.fleet_security_group.crn
+        } : {},
+        var.vpc_zones >= 3 ? {
+          pool_security_group_crns_3 = data.ibm_is_security_group.fleet_security_group.crn
+        } : {},
         var.enable_cloud_logs ? {
           logging_ingress_endpoint = module.cloud_logs[0].ingress_private_endpoint
           logging_sender_api_key   = var.ibmcloud_api_key
@@ -418,8 +446,6 @@ locals {
       )
     }
   }
-
-  secrets = merge(local.fleet_registry_secret, local.codeengine_fleet_defaults)
 }
 
 # creation of hmac secret is not supported by code engine provider
@@ -441,7 +467,7 @@ resource "terraform_data" "create_cos_secret" {
   }
 }
 
-data "ibm_is_security_group" "example" {
+data "ibm_is_security_group" "fleet_security_group" {
   depends_on = [module.fleet_sg]
   name       = "${local.prefix}sg"
 }
@@ -449,36 +475,11 @@ data "ibm_is_security_group" "example" {
 module "secret" {
   source     = "terraform-ibm-modules/code-engine/ibm//modules/secret"
   version    = "4.5.13"
-  for_each   = nonsensitive(local.secrets)
+  for_each   = nonsensitive(local.codeengine_fleet_defaults)
   project_id = module.project.project_id
   name       = each.key
   data       = each.value.data
   format     = each.value.format
   # Issue with provider, service_access is not supported at the moment. https://github.com/IBM-Cloud/terraform-provider-ibm/issues/5232
   # service_access = each.value.service_access
-}
-
-##############################################################################
-# Container Registry
-##############################################################################
-locals {
-  registry_region_result = data.external.container_registry_region.result
-  registry               = lookup(local.registry_region_result, "registry", null)
-  container_registry     = local.registry != null ? "private.${local.registry}" : null
-  registry_region_error  = lookup(local.registry_region_result, "error", null)
-
-  # This will cause Terraform to fail if "error" is present in the external script output executed as a part of container_registry_region
-  # tflint-ignore: terraform_unused_declarations
-  fail_if_registry_region_error = local.registry_region_error != null ? tobool("Registry region script failed: ${local.registry_region_error}") : null
-}
-
-# get the container registry endpoint according to the region
-data "external" "container_registry_region" {
-  program = ["bash", "../../scripts/get-cr-region.sh"]
-
-  query = {
-    RESOURCE_GROUP_ID = module.resource_group.resource_group_id
-    REGION            = var.region
-    IBMCLOUD_API_KEY  = var.ibmcloud_api_key
-  }
 }
