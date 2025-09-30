@@ -26,8 +26,9 @@ module "project" {
 }
 
 ##############################################################################
-# Code Engine Build
+# Container Registry
 ##############################################################################
+
 locals {
   registry_region_result = data.external.container_registry_region.result
   registry               = lookup(local.registry_region_result, "registry", null)
@@ -37,14 +38,13 @@ locals {
   # This will cause Terraform to fail if "error" is present in the external script output executed as a part of container_registry_region
   # tflint-ignore: terraform_unused_declarations
   fail_if_registry_region_error = local.registry_region_error != null ? tobool("Registry region script failed: ${local.registry_region_error}") : null
-
-  image_container = local.container_registry != null ? "${local.container_registry}/${resource.ibm_cr_namespace.my_namespace[0].name}" : ""
-  output_image    = "${local.image_container}/${var.build_name}"
 }
 
-resource "ibm_cr_namespace" "my_namespace" {
-  count = var.container_registry_namespace != null ? 1 : 0
-  name  = "${local.prefix}${var.container_registry_namespace}"
+module "namespace" {
+  source            = "terraform-ibm-modules/container-registry/ibm"
+  version           = "2.0.12"
+  namespace_name    = "${local.prefix}${var.container_registry_namespace}"
+  resource_group_id = module.resource_group.resource_group_id
 }
 
 data "external" "container_registry_region" {
@@ -55,6 +55,15 @@ data "external" "container_registry_region" {
     REGION            = var.region
     IBMCLOUD_API_KEY  = var.ibmcloud_api_key
   }
+}
+
+##############################################################################
+# Code Engine Build
+##############################################################################
+
+locals {
+  image_container = local.container_registry != null ? "${local.container_registry}/${module.namespace.namespace_name}" : ""
+  output_image    = "${local.image_container}/${var.build_name}"
 }
 
 module "build" {
@@ -122,12 +131,12 @@ module "secret" {
 # Code Engine Apps
 ##############################################################################
 locals {
-  app_scale_cpu_limit    = tonumber(regex("^([0-9.]+)", var.app_scale_cpu_memory)[0])
-  app_scale_memory_limit = tonumber(regex("/ ([0-9.]+)", var.app_scale_cpu_memory)[0])
+  app_scale_cpu_limit    = regex("^([0-9.]+)", var.app_scale_cpu_memory)[0]
+  app_scale_memory_limit = "${regex("/ ([0-9.]+)", var.app_scale_cpu_memory)[0]}G"
 }
 
 module "app" {
-
+  depends_on      = [module.build]
   source          = "terraform-ibm-modules/code-engine/ibm//modules/app"
   version         = "4.5.13"
   name            = local.app_name

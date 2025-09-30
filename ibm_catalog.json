@@ -80,21 +80,21 @@
             "features": [
               {
                 "title": " ",
-                "description": "Ideal for users with existing container images who want to quickly deploy applications without rebuilding."
+                "description": "Ideal for users who want an end-to-end flow that builds from source, runs the image, and deploys the application."
               },
               {
                 "title": " ",
-                "description": "Enables fast, simple deployment by using pre-built images to speed up rollout."
+                "description": "Streamlines development with a single workflow for building, testing, and deploying applications quickly."
               }
             ],
             "diagrams": [
               {
                 "diagram": {
-                  "caption": "IBM Cloud Code Engine Application Topology",
+                  "caption": "IBM Cloud Code Engine Quickstart Topology",
                   "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/refs/heads/quickstart_2/reference-architectures/deployment-architecture-quickstart.svg",
                   "type": "image/svg+xml"
                 },
-                "description": "This architecture enables the deployment of serverless applications on IBM Cloud using [IBM Code Engine](https://www.ibm.com/products/code-engine). At its core, the setup includes a [Code Engine project](https://cloud.ibm.com/docs/codeengine?topic=codeengine-getting-started), a containerized application, and a [registry secret](https://www.ibm.com/products/container-registry) used for secure access to a private container registry.<br><br>The registry secret is configured to authenticate with the container registry, allowing Code Engine to pull container images securely during application deployment. Once deployed, the application runs in a fully managed, serverless environment—eliminating the need to manage infrastructure, scale manually, or handle runtime provisioning."
+                "description": "This architecture defines a streamlined environment within an IBM Cloud region that includes a Code Engine project with associated builds, an application, and a registry secret. It supports secure building and running of containerized workloads.<br><br>The setup also includes an IBM Cloud Container Registry for reliable storage and management of container images.<br><br>Designed for simplicity and flexibility, this setup enables efficient build processes and container image management to support scalable, event-driven workloads on IBM Cloud."
               }
             ]
           },
