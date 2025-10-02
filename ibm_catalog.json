@@ -9,8 +9,8 @@
         "target_terraform",
         "terraform",
         "solution",
-        "platform_engineering",
-        "containers"
+        "containers",
+        "platform_engineering"
       ],
       "keywords": [
         "code engine",
@@ -84,13 +84,6 @@
                 "crn:v1:bluemix:public:iam::::role:Editor"
               ],
               "notes": "Required to create Virtual Private Cloud (VPC)."
-            },
-            {
-              "role_crns": [
-                "crn:v1:bluemix:public:iam::::role:Administrator"
-              ],
-              "service_name": "iam-identity",
-              "notes": "[Optional] Required if Cloud automation for account configuration is enabled."
             },
             {
               "service_name": "sysdig-monitor",
