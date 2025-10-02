@@ -39,3 +39,33 @@ func TestRunFleetsSolutionInSchematics(t *testing.T) {
 	err := options.RunSchematicTest()
 	assert.Nil(t, err, "This should not have errored")
 }
+
+func TestRunUpgradeFleetsSolutionInSchematics(t *testing.T) {
+	t.Parallel()
+
+	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
+		Testing:        t,
+		TemplateFolder: fleetsSolutionsDir,
+		Prefix:         "ce-f-u",
+		TarIncludePatterns: []string{
+			"*.tf",
+			fleetsSolutionsDir + "/*.tf",
+			"scripts/*.sh",
+		},
+		ResourceGroup:              resourceGroup,
+		Tags:                       []string{"test-schematic"},
+		DeleteWorkspaceOnFail:      false,
+		WaitJobCompleteMinutes:     60,
+		TerraformVersion:           terraformVersion,
+		CheckApplyResultForUpgrade: true,
+	})
+	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
+		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
+		{Name: "prefix", Value: options.Prefix, DataType: "string"},
+	}
+
+	err := options.RunSchematicUpgradeTest()
+	if !options.UpgradeTestSkipped {
+		assert.Nil(t, err, "This should not have errored")
+	}
+}
