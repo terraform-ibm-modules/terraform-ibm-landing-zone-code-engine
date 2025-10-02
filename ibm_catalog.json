@@ -38,7 +38,7 @@
         },
         {
           "title": "IBM Cloud service integrations",
-          "description": "Seamless integration with [Container Registry](https://www.ibm.com/products/container-registry), Activity Tracker, [Cloud Logs](https://www.ibm.com/products/cloud-logs) and [Cloud Monitoring](https://www.ibm.com/products/cloud-monitoring)."
+          "description": "Seamless integration with [Container Registry](https://www.ibm.com/products/container-registry), Activity Tracker, [Cloud Logs](https://www.ibm.com/products/cloud-logs), [Cloud Monitoring](https://www.ibm.com/products/cloud-monitoring), SCC Workload Protection](https://www.ibm.com/products/security-and-compliance-center), and App Configuration."
         },
         {
           "title": "Simplified setup with guided inputs",
@@ -279,10 +279,6 @@
               ]
             },
             {
-              "key": "existing_cos_instance_crn",
-              "virtual": true
-            },
-            {
               "key": "logs_routing_tenant_regions",
               "type": "array",
               "default_value": [],
@@ -323,7 +319,7 @@
           "dependencies": [
             {
               "name": "deploy-arch-ibm-account-infra-base",
-              "description": "Organizes your IBM Cloud account with preconfigured resource groups. If not selected, the default resource group is used. Optionally, it can expand to apply recommended security controls via \"with Account Settings\" variation. ",
+              "description": "Organizes your IBM Cloud account with preconfigured resource groups. If not selected, the default resource group is used. Optionally, it can expand to apply recommended security controls via \"with Account Settings\" variation.",
               "catalog_id": "7a4d68b4-cf8b-40cd-a3d1-f49aff526eb3",
               "flavors": [
                 "resource-group-only",
@@ -406,16 +402,6 @@
                   "dependency_input": "region",
                   "version_input": "region",
                   "reference_version": true
-                },
-                {
-                  "dependency_input": "existing_cos_instance_crn",
-                  "version_input": "existing_cos_instance_crn",
-                  "reference_version": true
-                },
-                {
-                  "dependency_input": "existing_kms_instance_crn",
-                  "version_input": "existing_kms_instance_crn",
-                  "reference_version": true
                 }
               ]
             },
@@ -439,16 +425,6 @@
                 {
                   "dependency_input": "region",
                   "version_input": "region",
-                  "reference_version": true
-                },
-                {
-                  "dependency_input": "existing_cos_instance_crn",
-                  "version_input": "existing_cos_instance_crn",
-                  "reference_version": true
-                },
-                {
-                  "dependency_input": "existing_kms_instance_crn",
-                  "version_input": "existing_kms_instance_crn",
                   "reference_version": true
                 }
               ]
