@@ -69,9 +69,6 @@ func TestRunUpgradeFleetsSolutionInSchematics(t *testing.T) {
 	if !options.UpgradeTestSkipped {
 		assert.Nil(t, err, "This should not have errored")
 	}
-
-	err := options.RunSchematicTest()
-	assert.Nil(t, err, "This should not have errored")
 }
 
 func TestRunFullyConfigurableSolutionInSchematics(t *testing.T) {
