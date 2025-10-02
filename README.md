@@ -14,6 +14,7 @@ The architecture supports end-to-end deployment, from infrastructure provisionin
 
 This repository contains the following sample deployable architectures:
 - [Landing zone for serverless workloads with IBM Code Engine](./solutions/fleets-quickstart)
+- [Landing zone for serverless workloads with IBM Code Engine – Experimental setup with configurable services](./solutions/fully-configurable)
 
 :exclamation: **Important:** These solutions are not intended to be called by other modules because they contain provider configurations and are not compatible with the `for_each`, `count`, and `depends_on` Terraform arguments. For more information, see [Providers Within Modules](https://developer.hashicorp.com/terraform/language/modules/develop/providers).
 
