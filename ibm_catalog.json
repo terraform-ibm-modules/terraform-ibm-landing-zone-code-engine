@@ -9,8 +9,8 @@
         "target_terraform",
         "terraform",
         "solution",
-        "platform_engineering",
-        "containers"
+        "containers",
+        "platform_engineering"
       ],
       "keywords": [
         "code engine",
