@@ -1,4 +1,4 @@
-module github.com/terraform-ibm-modules/terraform-ibm-module-template
+module github.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine
 
 go 1.24.0
 
