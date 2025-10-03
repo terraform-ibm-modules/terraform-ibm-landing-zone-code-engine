@@ -23,7 +23,6 @@ variable "prefix" {
   type        = string
   nullable    = true
   description = "The prefix to be added to all resources created by this solution. To skip using a prefix, set this value to null or an empty string. The prefix must begin with a lowercase letter and may contain only lowercase letters, digits, and hyphens '-'. It should not exceed 16 characters, must not end with a hyphen('-'), and cannot contain consecutive hyphens ('--'). Example: prod-0205-ce. [Learn more](https://terraform-ibm-modules.github.io/documentation/#/prefix.md)."
-  default     = "quickstart"
   validation {
     # - null and empty string is allowed
     # - Must not contain consecutive hyphens (--): length(regexall("--", var.prefix)) == 0
@@ -55,11 +54,11 @@ variable "region" {
 variable "existing_resource_group_name" {
   type        = string
   description = "The name of an existing resource group to provision the resources."
-  default     = "Default"
+  default     = null
 }
 
 variable "code_engine_project_name" {
-  description = "The name of the project to add the IBM Cloud Code Engine. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<project_name>` format."
+  description = "The name of the project to add the IBM Cloud Code Engine. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<code_engine_project_name>` format."
   type        = string
   default     = "ce-project"
 }

@@ -9,8 +9,7 @@
         "target_terraform",
         "terraform",
         "solution",
-        "support_ibm",
-        "integration",
+        "containers",
         "platform_engineering"
       ],
       "keywords": [
@@ -18,362 +17,40 @@
         "IaC",
         "infrastructure as code",
         "terraform",
-        "solution"
+        "solution",
+        "fleets",
+        "serverless",
+        "workloads"
       ],
       "short_description": "Provision scalable, serverless workloads with integrated IBM Cloud services.",
       "long_description": "This solution enables the provisioning of [IBM Code Engine](https://www.ibm.com/products/code-engine) projects on IBM Cloud using a range of configurations tailored to various workloads — from lightweight experimentation to high-performance batch processing. Each variation offers a distinct balance of automation, integration with IBM Cloud services, and readiness for experimentation or production use.\n\nIt automates the setup of both Code Engine and the supporting IBM Cloud infrastructure to streamline end-to-end deployment. Whether you're exploring serverless computing or building cloud-native applications, this landing zone helps accelerate your journey.",
-      "offering_docs_url": "https://github.com/terraform-ibm-modules/terraform-ibm-code-engine/blob/refactor_da/solutions/app-from-binary/README.md",
+      "offering_docs_url": "https://github.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/blob/main/solutions/fleets-quickstart/README.md",
       "offering_icon_url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-code-engine/main/images/code-engine.svg",
       "provider_name": "IBM",
       "features": [
         {
-          "title": "Flexible Deployment Variations",
+          "title": "Flexible deployment variations",
           "description": "Supports a growing set of configurations tailored to specific workload types—from compute-intensive tasks to future support for event-driven jobs and transactional applications."
         },
         {
-          "title": "End-to-End Automation",
+          "title": "End-to-end automation",
           "description": "Provisions both IBM Code Engine components (applications, builds, secrets, access policies) and supporting IBM Cloud infrastructure for a complete deployment experience."
         },
         {
-          "title": "IBM Cloud Service Integrations",
-          "description": "Seamless integration with [Container Registry](https://www.ibm.com/products/container-registry), Activity Tracker, [Cloud Logs](https://www.ibm.com/products/cloud-logs), [Cloud Monitoring](https://www.ibm.com/products/cloud-monitoring), [SCC Workload Protection](https://www.ibm.com/products/security-and-compliance-center), and App Configuration."
+          "title": "IBM Cloud service integrations",
+          "description": "Seamless integration with [Container Registry](https://www.ibm.com/products/container-registry), Activity Tracker, [Cloud Logs](https://www.ibm.com/products/cloud-logs), [Cloud Monitoring](https://www.ibm.com/products/cloud-monitoring), SCC Workload Protection](https://www.ibm.com/products/security-and-compliance-center), and App Configuration."
         },
         {
-          "title": "Simplified Setup with Guided Inputs",
+          "title": "Simplified setup with guided inputs",
           "description": "Preconfigured defaults and guided parameter selection (e.g., region, availability zones, service plans) reduce manual setup and accelerate deployment."
         }
       ],
       "support_details": "This product is in the community registry, as such support is handled through the originated repo. If you experience issues please open an issue in that repository [https://github.com/terraform-ibm-modules/terraform-ibm-code-engine/issues](https://github.com/terraform-ibm-modules/terraform-ibm-code-engine/issues). Please note this product is not supported via the IBM Cloud Support Center.",
       "flavors": [
         {
-          "label": "QuickStart - Basic and simple",
-          "name": "quickstart",
-          "index": 1,
-          "install_type": "fullstack",
-          "working_directory": "solutions/quickstart",
-          "iam_permissions": [
-            {
-              "role_crns": [
-                "crn:v1:bluemix:public:iam::::role:Viewer"
-              ],
-              "service_name": "Resource group only",
-              "notes": "Viewer access is required in the resource group you want to provision in."
-            },
-            {
-              "role_crns": [
-                "crn:v1:bluemix:public:iam::::serviceRole:Writer",
-                "crn:v1:bluemix:public:iam::::role:Editor"
-              ],
-              "service_name": "codeengine",
-              "notes": "Required to create and manage Code Engine resources."
-            },
-            {
-              "role_crns": [
-                "crn:v1:bluemix:public:iam::::serviceRole:Writer",
-                "crn:v1:bluemix:public:iam::::role:Editor"
-              ],
-              "service_name": "container-registry",
-              "notes": "Required to create and manage Container Registry namespaces."
-            }
-          ],
-          "architecture": {
-            "features": [
-              {
-                "title": " ",
-                "description": "Ideal for users who want an end-to-end flow that builds from source, runs the image, and deploys the application."
-              },
-              {
-                "title": " ",
-                "description": "Streamlines development with a single workflow for building, testing, and deploying applications quickly."
-              }
-            ],
-            "diagrams": [
-              {
-                "diagram": {
-                  "caption": "IBM Cloud Code Engine Quickstart Topology",
-                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/refs/heads/quickstart_2/reference-architectures/deployment-architecture-quickstart.svg",
-                  "type": "image/svg+xml"
-                },
-                "description": "This architecture defines a streamlined environment within an IBM Cloud region that includes a Code Engine project with associated builds, an application, and a registry secret. It supports secure building and running of containerized workloads.<br><br>The setup also includes an IBM Cloud Container Registry for reliable storage and management of container images.<br><br>Designed for simplicity and flexibility, this setup enables efficient build processes and container image management to support scalable, event-driven workloads on IBM Cloud."
-              }
-            ]
-          },
-          "configuration": [
-            {
-              "key": "ibmcloud_api_key"
-            },
-            {
-              "key": "prefix",
-              "required": true,
-              "value_constraints": [
-                {
-                  "type": "regex",
-                  "description": "Prefix must begin with a lowercase letter and may contain only lowercase letters, digits, and hyphens '-'. It must not end with a hyphen('-'), and cannot contain consecutive hyphens ('--'). It should not exceed 16 characters",
-                  "value": "^$|^__NULL__$|^[a-z](?!.*--)(?:[a-z0-9-]{0,14}[a-z0-9])?$"
-                }
-              ]
-            },
-            {
-              "key": "existing_resource_group_name",
-              "required": true,
-              "display_name": "resource_group",
-              "default_value": "Default",
-              "description": "The name of an existing resource group to provision the resources.",
-              "custom_config": {
-                "type": "resource_group",
-                "grouping": "deployment",
-                "original_grouping": "deployment",
-                "config_constraints": {
-                  "identifier": "rg_name"
-                }
-              }
-            },
-            {
-              "key": "region",
-              "required": true,
-              "options": [
-                {
-                  "displayname": "Dallas (us-south)",
-                  "value": "us-south"
-                },
-                {
-                  "displayname": "Frankfurt (eu-de)",
-                  "value": "eu-de"
-                },
-                {
-                  "displayname": "London (eu-gb)",
-                  "value": "eu-gb"
-                },
-                {
-                  "displayname": "Osaka (jp-osa)",
-                  "value": "jp-osa"
-                },
-                {
-                  "displayname": "Sao Paulo (br-sao)",
-                  "value": "br-sao"
-                },
-                {
-                  "displayname": "Spain (us-es)",
-                  "value": "us-es"
-                },
-                {
-                  "displayname": "Sydney (au-syd)",
-                  "value": "au-syd"
-                },
-                {
-                  "displayname": "Tokyo (jp-tok)",
-                  "value": "jp-tok"
-                },
-                {
-                  "displayname": "Toronto (ca-tor)",
-                  "value": "ca-tor"
-                },
-                {
-                  "displayname": "Washington DC (us-east)",
-                  "value": "us-east"
-                }
-              ]
-            },
-            {
-              "key": "code_engine_project_name",
-              "required": true
-            },
-            {
-              "key": "app_name",
-              "required": true
-            },
-            {
-              "key": "build_name"
-            },
-            {
-              "key": "source_url",
-              "required": true
-            },
-            {
-              "key": "source_revision"
-            },
-            {
-              "key": "source_context_dir"
-            },
-            {
-              "key": "strategy_type"
-            },
-            {
-              "key": "container_registry_namespace"
-            },
-            {
-              "key": "container_registry_api_key"
-            },
-            {
-              "key": "github_password"
-            },
-            {
-              "key": "github_username"
-            },
-            {
-              "key": "timeout"
-            },
-            {
-              "key": "app_scale_cpu_memory",
-              "options": [
-                {
-                  "displayname": "0.125 vCPU / 0.25 GB",
-                  "value": "0.125 vCPU / 0.25 GB"
-                },
-                {
-                  "displayname": "0.125 vCPU / 0.5 GB",
-                  "value": "0.125 vCPU / 0.5 GB"
-                },
-                {
-                  "displayname": "0.125 vCPU / 1 GB",
-                  "value": "0.125 vCPU / 1 GB"
-                },
-                {
-                  "displayname": "0.25 vCPU / 0.5 GB",
-                  "value": "0.25 vCPU / 0.5 GB"
-                },
-                {
-                  "displayname": "0.25 vCPU / 1 GB",
-                  "value": "0.25 vCPU / 1 GB"
-                },
-                {
-                  "displayname": "0.25 vCPU / 2 GB",
-                  "value": "0.25 vCPU / 2 GB"
-                },
-                {
-                  "displayname": "0.5 vCPU / 1 GB",
-                  "value": "0.5 vCPU / 1 GB"
-                },
-                {
-                  "displayname": "0.5 vCPU / 2 GB",
-                  "value": "0.5 vCPU / 2 GB"
-                },
-                {
-                  "displayname": "0.5 vCPU / 4 GB",
-                  "value": "0.5 vCPU / 4 GB"
-                },
-                {
-                  "displayname": "1 vCPU / 2 GB",
-                  "value": "1 vCPU / 2 GB"
-                },
-                {
-                  "displayname": "1 vCPU / 4 GB",
-                  "value": "1 vCPU / 4 GB"
-                },
-                {
-                  "displayname": "1 vCPU / 8 GB",
-                  "value": "1 vCPU / 8 GB"
-                },
-                {
-                  "displayname": "2 vCPU / 4 GB",
-                  "value": "2 vCPU / 4 GB"
-                },
-                {
-                  "displayname": "2 vCPU / 8 GB",
-                  "value": "2 vCPU / 8 GB"
-                },
-                {
-                  "displayname": "2 vCPU / 16 GB",
-                  "value": "2 vCPU / 16 GB"
-                },
-                {
-                  "displayname": "4 vCPU / 8 GB",
-                  "value": "4 vCPU / 8 GB"
-                },
-                {
-                  "displayname": "4 vCPU / 16 GB",
-                  "value": "4 vCPU / 16 GB"
-                },
-                {
-                  "displayname": "4 vCPU / 32 GB",
-                  "value": "4 vCPU / 32 GB"
-                },
-                {
-                  "displayname": "6 vCPU / 12 GB",
-                  "value": "6 vCPU / 12 GB"
-                },
-                {
-                  "displayname": "6 vCPU / 24 GB",
-                  "value": "6 vCPU / 24 GB"
-                },
-                {
-                  "displayname": "6 vCPU / 48 GB",
-                  "value": "6 vCPU / 48 GB"
-                },
-                {
-                  "displayname": "8 vCPU / 16 GB",
-                  "value": "8 vCPU / 16 GB"
-                },
-                {
-                  "displayname": "8 vCPU / 32 GB",
-                  "value": "8 vCPU / 32 GB"
-                },
-                {
-                  "displayname": "10 vCPU / 20 GB",
-                  "value": "10 vCPU / 20 GB"
-                },
-                {
-                  "displayname": "10 vCPU / 40 GB",
-                  "value": "10 vCPU / 40 GB"
-                },
-                {
-                  "displayname": "12 vCPU / 24 GB",
-                  "value": "12 vCPU / 24 GB"
-                },
-                {
-                  "displayname": "12 vCPU / 48 GB",
-                  "value": "12 vCPU / 48 GB"
-                }
-              ]
-            },
-            {
-              "key": "app_scale_ephemeral_storage_limit"
-            },
-            {
-              "key": "app_image_port"
-            },
-            {
-              "key": "managed_domain_mappings",
-              "options": [
-                {
-                  "displayname": "Public",
-                  "value": "local_public"
-                },
-                {
-                  "displayname": "Private",
-                  "value": "local_private"
-                },
-                {
-                  "displayname": "Project-Only",
-                  "value": "local"
-                }
-              ]
-            },
-            {
-              "key": "provider_visibility",
-              "hidden": true,
-              "options": [
-                {
-                  "displayname": "private",
-                  "value": "private"
-                },
-                {
-                  "displayname": "public",
-                  "value": "public"
-                },
-                {
-                  "displayname": "public-and-private",
-                  "value": "public-and-private"
-                }
-              ]
-            }
-          ],
-          "terraform_version": "1.10.5"
-        },
-        {
           "label": "[Experimental] Standard - Integrated setup with configurable services",
           "name": "fully-configurable",
-          "index": 2,
+          "index": 1,
           "install_type": "fullstack",
           "working_directory": "solutions/fully-configurable",
           "iam_permissions": [
@@ -540,48 +217,15 @@
             },
             {
               "key": "region",
-              "options": [
-                {
-                  "displayname": "Dallas (us-south)",
-                  "value": "us-south"
+              "required": true,
+              "custom_config": {
+                "config_constraints": {
+                  "generationType": "2"
                 },
-                {
-                  "displayname": "Frankfurt (eu-de)",
-                  "value": "eu-de"
-                },
-                {
-                  "displayname": "London (eu-gb)",
-                  "value": "eu-gb"
-                },
-                {
-                  "displayname": "Osaka (jp-osa)",
-                  "value": "jp-osa"
-                },
-                {
-                  "displayname": "Sao Paulo (br-sao)",
-                  "value": "br-sao"
-                },
-                {
-                  "displayname": "Spain (us-es)",
-                  "value": "us-es"
-                },
-                {
-                  "displayname": "Sydney (au-syd)",
-                  "value": "au-syd"
-                },
-                {
-                  "displayname": "Tokyo (jp-tok)",
-                  "value": "jp-tok"
-                },
-                {
-                  "displayname": "Toronto (ca-tor)",
-                  "value": "ca-tor"
-                },
-                {
-                  "displayname": "Washington DC (us-east)",
-                  "value": "us-east"
-                }
-              ]
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "type": "vpc_region"
+              }
             },
             {
               "key": "provider_visibility",
@@ -602,15 +246,10 @@
               ]
             },
             {
-              "key": "existing_cos_instance_crn",
-              "virtual": true
-            },
-            {
               "key": "logs_routing_tenant_regions",
               "type": "array",
               "default_value": [],
               "description": "To manage platform logs that are generated by IBM Cloud services in a region of IBM Cloud, you must create a tenant in each region that you operate. Pass a list of regions to create a tenant in. [Learn more](https://cloud.ibm.com/docs/logs-router?topic=logs-router-about-platform-logs).",
-              "required": true,
               "virtual": true,
               "custom_config": {
                 "grouping": "deployment",
@@ -625,7 +264,6 @@
               "type": "boolean",
               "default_value": false,
               "description": "When set to `true`, the IBM Cloud Monitoring instance will be configured to collect platform metrics from the provided region. You can configure 1 instance only of the IBM Cloud Monitoring service per region to collect platform metrics in that location. Check with the account or service administrator if another monitoring instance has already been configured. You may not have permissions to see all monitoring instances in the region. [Learn more](https://cloud.ibm.com/docs/monitoring?topic=monitoring-platform_metrics_enabling).",
-              "required": true,
               "virtual": true,
               "options": [
                 {
@@ -646,7 +284,7 @@
           "dependencies": [
             {
               "name": "deploy-arch-ibm-account-infra-base",
-              "description": "Organizes your IBM Cloud account with preconfigured resource groups. If not selected, the default resource group is used. Optionally, it can expand to apply recommended security controls via \"with Account Settings\" variation. ",
+              "description": "Organizes your IBM Cloud account with preconfigured resource groups. If not selected, the default resource group is used. Optionally, it can expand to apply recommended security controls via \"with Account Settings\" variation.",
               "catalog_id": "7a4d68b4-cf8b-40cd-a3d1-f49aff526eb3",
               "flavors": [
                 "resource-group-only",
@@ -729,16 +367,6 @@
                   "dependency_input": "region",
                   "version_input": "region",
                   "reference_version": true
-                },
-                {
-                  "dependency_input": "existing_cos_instance_crn",
-                  "version_input": "existing_cos_instance_crn",
-                  "reference_version": true
-                },
-                {
-                  "dependency_input": "existing_kms_instance_crn",
-                  "version_input": "existing_kms_instance_crn",
-                  "reference_version": true
                 }
               ]
             },
@@ -762,16 +390,6 @@
                 {
                   "dependency_input": "region",
                   "version_input": "region",
-                  "reference_version": true
-                },
-                {
-                  "dependency_input": "existing_cos_instance_crn",
-                  "version_input": "existing_cos_instance_crn",
-                  "reference_version": true
-                },
-                {
-                  "dependency_input": "existing_kms_instance_crn",
-                  "version_input": "existing_kms_instance_crn",
                   "reference_version": true
                 }
               ]
@@ -805,11 +423,11 @@
           "terraform_version": "1.10.5"
         },
         {
-          "label": "Quickstart - Fleets Edition",
+          "label": "Quickstart - Fleets edition",
           "name": "quickstart-fleets",
-          "index": 3,
+          "index": 2,
           "install_type": "fullstack",
-          "working_directory": "solutions/fleets",
+          "working_directory": "solutions/fleets-quickstart",
           "iam_permissions": [
             {
               "role_crns": [
@@ -840,14 +458,7 @@
                 "crn:v1:bluemix:public:iam::::serviceRole:Manager",
                 "crn:v1:bluemix:public:iam::::role:Editor"
               ],
-              "notes": "Required to create Virtual Private Cloud(VPC)."
-            },
-            {
-              "role_crns": [
-                "crn:v1:bluemix:public:iam::::role:Administrator"
-              ],
-              "service_name": "iam-identity",
-              "notes": "[Optional] Required if Cloud automation for account configuration is enabled."
+              "notes": "Required to create Virtual Private Cloud (VPC)."
             },
             {
               "service_name": "sysdig-monitor",
@@ -881,7 +492,7 @@
               {
                 "diagram": {
                   "caption": "Fleet-Based Workload Topology with IBM Cloud Code Engine",
-                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/refs/heads/quickstart_2/reference-architectures/deployment-architecture-fleets.svg",
+                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/refs/heads/main/reference-architectures/deployment-architecture-fleets.svg",
                   "type": "image/svg+xml"
                 },
                 "description": "This architecture provides a streamlined setup within an IBM Cloud region to deploy and manage <b>fleet-based workloads using IBM Cloud Code Engine</b>. It introduces a Fleet managed by Code Engine as the core execution environment, with <b>worker instances (VSIs)</b> dynamically provisioned in Code Engine–managed accounts based on a customer-provided VSI image.<br><br><b>A Task State Store</b>, implemented using IBM Cloud Object Storage (COS), <b>handles task and data persistence</b>. Logs generated by the fleet workers are ingested into an IBM Cloud Logs instance, enabling centralized observability and simplified monitoring.<br><br>Designed for scalability and operational efficiency, this Quick Start automates the provisioning of required IBM Cloud services using well-chosen defaults. Users provide minimal input—such as region, availability zones, and service plans—while Code Engine handles the lifecycle of Fleets, Tasks, and Workers.<br><br>This solution accelerates deployment of distributed, container-based workloads without requiring manual setup of networking, storage, or observability components, making it ideal for rapid experimentation and workload execution on IBM Cloud."
@@ -898,7 +509,7 @@
               "value_constraints": [
                 {
                   "type": "regex",
-                  "description": "Prefix must begin with a lowercase letter and may contain only lowercase letters, digits, and hyphens '-'. It must not end with a hyphen('-'), and cannot contain consecutive hyphens ('--'). It should not exceed 16 characters",
+                  "description": "Prefix must begin with a lowercase letter and may contain only lowercase letters, digits, and hyphens '-'. It must not end with a hyphen ('-'), and cannot contain consecutive hyphens ('--'). It should not exceed 16 characters.",
                   "value": "^$|^__NULL__$|^[a-z](?!.*--)(?:[a-z0-9-]{0,14}[a-z0-9])?$"
                 }
               ]
@@ -995,10 +606,6 @@
                 {
                   "displayname": "Lite",
                   "value": "lite"
-                },
-                {
-                  "displayname": "Graduated tier Sysdig Secure plus Monitor",
-                  "value": "graduated-tier-sysdig-secure-plus-monitor"
                 }
               ]
             },

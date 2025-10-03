@@ -1,5 +1,5 @@
 locals {
-  prefix                   = var.prefix != null ? trimspace(var.prefix) != "" ? "${var.prefix}-" : "" : ""
+  prefix                   = var.prefix != null ? (trimspace(var.prefix) != "" ? "${var.prefix}-" : "") : ""
   code_engine_project_name = "${local.prefix}${var.code_engine_project_name}"
 }
 
@@ -9,7 +9,7 @@ locals {
 
 module "resource_group" {
   source                       = "terraform-ibm-modules/resource-group/ibm"
-  version                      = "1.2.1"
+  version                      = "1.3.0"
   existing_resource_group_name = var.existing_resource_group_name
 }
 

@@ -7,7 +7,7 @@ output "resource_group_name" {
   value       = module.resource_group.resource_group_name
 }
 
-output "project_id" {
+output "code_engine_project_name" {
   description = "The name of the created code engine project."
   value       = module.project.name
 }
@@ -18,7 +18,7 @@ output "code_engine_project_id" {
 }
 
 output "next_steps_text" {
-  value       = "Now, check your Code Engine project configuration."
+  value       = "Now, check your Code Engine project configuration"
   description = "Next steps text"
 }
 

@@ -10,7 +10,9 @@ import (
 
 // Use existing resource group
 const resourceGroup = "geretain-test-resources"
-const fleetsSolutionsDir = "solutions/fleets"
+const fleetsSolutionsDir = "solutions/fleets-quickstart"
+const fullyConfigurableSolutionsDir = "solutions/fully-configurable"
+const terraformVersion = "terraform_v1.10" // This should match the version in the ibm_catalog.json
 
 func TestRunFleetsSolutionInSchematics(t *testing.T) {
 	t.Parallel()
@@ -28,11 +30,101 @@ func TestRunFleetsSolutionInSchematics(t *testing.T) {
 		Tags:                   []string{"test-schematic"},
 		DeleteWorkspaceOnFail:  false,
 		WaitJobCompleteMinutes: 60,
+		TerraformVersion:       terraformVersion,
 	})
 	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
 		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
-		{Name: "existing_resource_group_name", Value: options.ResourceGroup, DataType: "string"},
 		{Name: "prefix", Value: options.Prefix, DataType: "string"},
+	}
+
+	err := options.RunSchematicTest()
+	assert.Nil(t, err, "This should not have errored")
+}
+
+func TestRunUpgradeFleetsSolutionInSchematics(t *testing.T) {
+	t.Parallel()
+
+	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
+		Testing:        t,
+		TemplateFolder: fleetsSolutionsDir,
+		Prefix:         "ce-f-u",
+		TarIncludePatterns: []string{
+			"*.tf",
+			fleetsSolutionsDir + "/*.tf",
+			"scripts/*.sh",
+		},
+		ResourceGroup:              resourceGroup,
+		Tags:                       []string{"test-schematic"},
+		DeleteWorkspaceOnFail:      false,
+		WaitJobCompleteMinutes:     60,
+		TerraformVersion:           terraformVersion,
+		CheckApplyResultForUpgrade: true,
+	})
+	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
+		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
+		{Name: "prefix", Value: options.Prefix, DataType: "string"},
+	}
+
+	err := options.RunSchematicUpgradeTest()
+	if !options.UpgradeTestSkipped {
+		assert.Nil(t, err, "This should not have errored")
+	}
+}
+
+func TestRunFullyConfigurableSolutionInSchematics(t *testing.T) {
+	t.Parallel()
+
+	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
+		Testing:        t,
+		TemplateFolder: fullyConfigurableSolutionsDir,
+		Prefix:         "ce-fconfig",
+		TarIncludePatterns: []string{
+			"*.tf",
+			fullyConfigurableSolutionsDir + "/*.tf",
+			"scripts/*.sh",
+		},
+		ResourceGroup:          resourceGroup,
+		Tags:                   []string{"test-schematic"},
+		DeleteWorkspaceOnFail:  false,
+		WaitJobCompleteMinutes: 60,
+		TerraformVersion:       terraformVersion,
+	})
+	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
+		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
+		{Name: "prefix", Value: options.Prefix, DataType: "string"},
+	}
+
+	err := options.RunSchematicTest()
+	assert.Nil(t, err, "This should not have errored")
+}
+
+func TestRunUpgradeFullyConfigurableSolutionInSchematics(t *testing.T) {
+	t.Parallel()
+
+	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
+		Testing:        t,
+		TemplateFolder: fullyConfigurableSolutionsDir,
+		Prefix:         "ce-fcfg-u",
+		TarIncludePatterns: []string{
+			"*.tf",
+			fullyConfigurableSolutionsDir + "/*.tf",
+			"scripts/*.sh",
+		},
+		ResourceGroup:              resourceGroup,
+		Tags:                       []string{"test-schematic"},
+		DeleteWorkspaceOnFail:      false,
+		WaitJobCompleteMinutes:     60,
+		TerraformVersion:           terraformVersion,
+		CheckApplyResultForUpgrade: true,
+	})
+	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
+		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
+		{Name: "prefix", Value: options.Prefix, DataType: "string"},
+	}
+
+	err := options.RunSchematicUpgradeTest()
+	if !options.UpgradeTestSkipped {
+		assert.Nil(t, err, "This should not have errored")
 	}
 
 	err := options.RunSchematicTest()
