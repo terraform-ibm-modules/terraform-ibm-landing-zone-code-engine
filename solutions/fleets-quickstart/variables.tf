@@ -59,7 +59,7 @@ variable "existing_resource_group_name" {
 }
 
 variable "code_engine_project_name" {
-  description = "The name of the project to add the IBM Cloud Code Engine. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<project_name>` format."
+  description = "The name of the project to add the IBM Cloud Code Engine. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<code_engine_project_name>` format."
   type        = string
   default     = "fleets-project"
 }
