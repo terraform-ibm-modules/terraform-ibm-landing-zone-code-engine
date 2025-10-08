@@ -149,8 +149,8 @@
             },
             {
               "role_crns": [
-                "crn:v1:bluemix:public:iam::::serviceRole:Writer",
-                "crn:v1:bluemix:public:iam::::role:Editor"
+                "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                "crn:v1:bluemix:public:iam::::role:Administrator"
               ],
               "service_name": "container-registry",
               "notes": "Required to create and manage Container Registry namespaces."
@@ -446,6 +446,34 @@
                   "reference_version": true
                 }
               ]
+            },
+            {
+              "name": "deploy-arch-ibm-container-registry",
+              "description": "Configure the IBM Container Registry by creating a namespace and setting a container registry retention policy.",
+              "catalog_id": "7df1e4ca-d54c-4fd0-82ce-3d13247308cd",
+              "flavors": [
+                "fully-configurable"
+              ],
+              "id": "5947efd7-d52a-4905-8052-45f1142f78a0-global",
+              "input_mapping": [
+                {
+                  "dependency_input": "prefix",
+                  "version_input": "prefix",
+                  "reference_version": true
+                },
+                {
+                  "dependency_input": "existing_resource_group_name",
+                  "version_input": "existing_resource_group_name",
+                  "reference_version": true
+                },
+                {
+                  "dependency_input": "namespace_region",
+                  "value": "global"
+                }
+              ],
+              "optional": true,
+              "on_by_default": false,
+              "version": "v2.1.0"
             }
           ],
           "dependency_version_2": true,
