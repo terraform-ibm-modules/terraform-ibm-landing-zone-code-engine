@@ -10,9 +10,9 @@
 
 This deployment architecture provisions an IBM Cloud Code Engine environment designed for scalable, serverless compute workloads. It automates the setup of Code Engine projects along with supporting services such as IBM VPC and Cloud Object Storage (COS), enabling high-performance tasks like Monte Carlo simulations, PDF conversion with Doclin, and batch data processing.
 
-The architecture supports end-to-end deployment, from infrastructure provisioning to workload execution, providing a robust foundation for experimentation, development, or production-grade serverless computing on IBM Cloud.
+This architecture supports end-to-end deployment, from infrastructure provisioning to workload execution. Thus it provides a robust foundation for experimentation, development, or production-grade serverless computing on IBM Cloud.
 
-This repository contains the following sample deployable architectures:
+This repository contains the following deployable architectures:
 - [Landing zone for serverless workloads with IBM Code Engine (Experimental Standard Setup with Configurable Services)](./solutions/fully-configurable)
 - [Landing zone for serverless workloads with IBM Code Engine (Quickstart - Fleets Edition)](./solutions/fleets-quickstart)
 

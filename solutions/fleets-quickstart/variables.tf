@@ -48,7 +48,7 @@ variable "prefix" {
 
 variable "region" {
   type        = string
-  description = "The region in which to provision all resources created by this solution."
+  description = "The region to provision all resources."
   default     = "us-south"
 }
 
@@ -59,7 +59,7 @@ variable "existing_resource_group_name" {
 }
 
 variable "code_engine_project_name" {
-  description = "The name of the project to add the IBM Cloud Code Engine. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<code_engine_project_name>` format."
+  description = "The name of the project to deploy the IBM Cloud Code Engine. If specified, the prefix leads the project name in the <prefix>-<code_engine_project_name> format."
   type        = string
   default     = "fleets-project"
 }
