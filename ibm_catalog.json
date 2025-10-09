@@ -76,14 +76,6 @@
               "notes": "[Optional] Required to create new resource groups with account settings when enabling the Account Configuration integration."
             },
             {
-              "service_name": "cloud-object-storage",
-              "role_crns": [
-                "crn:v1:bluemix:public:iam::::serviceRole:Manager",
-                "crn:v1:bluemix:public:iam::::role:Editor"
-              ],
-              "notes": "[Optional] Required if VPC Flow Logs are enabled."
-            },
-            {
               "role_crns": [
                 "crn:v1:bluemix:public:iam::::serviceRole:Manager",
                 "crn:v1:bluemix:public:iam::::role:Editor"
@@ -133,14 +125,6 @@
             },
             {
               "role_crns": [
-                "crn:v1:bluemix:public:iam::::role:Administrator",
-                "crn:v1:bluemix:public:iam::::serviceRole:Manager"
-              ],
-              "service_name": "apprapp",
-              "notes": "[Optional] Required to create the App Configuration instance."
-            },
-            {
-              "role_crns": [
                 "crn:v1:bluemix:public:iam::::serviceRole:Writer",
                 "crn:v1:bluemix:public:iam::::role:Editor"
               ],
@@ -178,7 +162,7 @@
                   "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/refs/heads/quickstart_2/reference-architectures/deployment-architecture-fully-configurable.svg",
                   "type": "image/svg+xml"
                 },
-                "description": "The architecture consists of a central [IBM Cloud Code Engine project](https://cloud.ibm.com/docs/codeengine?topic=codeengine-getting-started), which serves as the primary execution environment for the application. Surrounding this core component is the foundational IBM Cloud configuration, which includes the IBM Cloud account, resource group, account settings, and optionally a trusted profile for secure IAM access.<br><br>Encircling the Code Engine project are a set of optional service surrounds that can be integrated based on the specific use case. These include observability tools such as [Cloud Monitoring](https://www.ibm.com/products/cloud-monitoring), [Cloud Logs](https://www.ibm.com/products/cloud-logs), and Activity Tracker, which provide insight into application performance, logging, and user or system actions. Additional core services may also be incorporated, such as [Cloud Object Storage](https://www.ibm.com/products/cloud-object-storage) for data storage, [Key Protect](https://www.ibm.com/products/key-protect) for encryption key management, App Configuration for externalizing environment-specific settings, and [SCC Workload Protection](https://www.ibm.com/products/security-and-compliance-center) to enforce security and compliance policies at the workload level."
+                "description": "The architecture consists of a central [IBM Cloud Code Engine project](https://cloud.ibm.com/docs/codeengine?topic=codeengine-getting-started), which serves as the primary execution environment for the application. Surrounding this core component is the foundational IBM Cloud configuration, which includes the IBM Cloud account, resource group, account settings, and optionally a trusted profile for secure IAM access.<br><br>Encircling the Code Engine project are a set of optional service surrounds that can be integrated based on the specific use case. These include observability tools such as [Cloud Monitoring](https://www.ibm.com/products/cloud-monitoring), [Cloud Logs](https://www.ibm.com/products/cloud-logs), and Activity Tracker, which provide insight into application performance, logging, and user or system actions. Additionally, you can integrate core services such as [SCC Workload Protection](https://www.ibm.com/products/security-and-compliance-center) to enforce security and compliance policies at the workload level."
               }
             ]
           },
@@ -200,7 +184,7 @@
               "key": "existing_resource_group_name",
               "display_name": "resource_group",
               "default_value": "Default",
-              "description": "The name of an existing resource group to provision the resources.",
+              "description": "The name of an existing resource group to provision the resources. If not provided the default resource group will be used.",
               "custom_config": {
                 "type": "resource_group",
                 "grouping": "deployment",
@@ -239,7 +223,7 @@
                   "value": "br-sao"
                 },
                 {
-                  "displayname": "Spain (us-es)",
+                  "displayname": "Madrid (us-es)",
                   "value": "us-es"
                 },
                 {
@@ -566,7 +550,7 @@
               "key": "existing_resource_group_name",
               "display_name": "resource_group",
               "default_value": "Default",
-              "description": "The name of an existing resource group to provision the resources.",
+              "description": "The name of an existing resource group to provision the resources. If not provided the default resource group will be used.",
               "custom_config": {
                 "type": "resource_group",
                 "grouping": "deployment",
@@ -640,7 +624,7 @@
                   "value": "br-sao"
                 },
                 {
-                  "displayname": "Spain (us-es)",
+                  "displayname": "Madrid (us-es)",
                   "value": "us-es"
                 },
                 {
