@@ -434,7 +434,7 @@
             {
               "name": "deploy-arch-ibm-container-registry",
               "description": "Configure the IBM Container Registry by creating a namespace and setting a container registry retention policy.",
-              "catalog_id": "7df1e4ca-d54c-4fd0-82ce-3d13247308cd",
+              "catalog_id": "7a4d68b4-cf8b-40cd-a3d1-f49aff526eb3",
               "flavors": [
                 "fully-configurable"
               ],
