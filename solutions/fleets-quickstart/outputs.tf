@@ -3,17 +3,17 @@
 ########################################################################################################################
 
 output "resource_group_name" {
-  description = "The name of the resource group."
+  description = "Resource group name."
   value       = module.resource_group.resource_group_name
 }
 
 output "code_engine_project_name" {
-  description = "The name of the created code engine project."
+  description = "Code engine project name."
   value       = module.project.name
 }
 
 output "code_engine_project_id" {
-  description = "The ID of the created code engine project."
+  description = "Created code engine project identifier."
   value       = module.project.id
 }
 
@@ -58,7 +58,7 @@ output "vpc_name" {
 }
 
 output "next_steps_text" {
-  value       = "Now, visit the documentation to learn how to run a serverless fleet using Code Engine."
+  value       = "Visit the documentation to learn how to run a serverless fleet using Code Engine."
   description = "Next steps text"
 }
 
