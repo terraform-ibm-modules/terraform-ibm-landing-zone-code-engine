@@ -166,7 +166,7 @@ func TestAddonDefaultConfiguration(t *testing.T) {
 			OfferingName:   "deploy-arch-ibm-activity-tracker",
 			OfferingFlavor: "fully-configurable",
 			Inputs: map[string]interface{}{
-				"prefix": options.Prefix,
+				"enable_activity_tracker_event_routing_to_cloud_logs": false,
 			},
 			Enabled: core.BoolPtr(true),
 		},
@@ -174,7 +174,6 @@ func TestAddonDefaultConfiguration(t *testing.T) {
 			OfferingName:   "deploy-arch-ibm-container-registry",
 			OfferingFlavor: "fully-configurable",
 			Inputs: map[string]interface{}{
-				"prefix":           options.Prefix,
 				"namespace_region": "us-south",
 			},
 			Enabled: core.BoolPtr(true),
