@@ -312,7 +312,7 @@ locals {
 module "vpe_observability" {
   count                = length(local.cloud_services) > 0 ? 1 : 0
   source               = "terraform-ibm-modules/vpe-gateway/ibm"
-  version              = "4.7.8"
+  version              = "4.7.9"
   region               = var.region
   prefix               = "${local.prefix}log"
   resource_group_id    = module.resource_group.resource_group_id
@@ -336,7 +336,7 @@ module "cloud_logs" {
   count             = var.enable_cloud_logs ? 1 : 0
   depends_on        = [module.cos_buckets]
   source            = "terraform-ibm-modules/cloud-logs/ibm"
-  version           = "1.7.4"
+  version           = "1.8.2"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   instance_name     = local.icl_name
