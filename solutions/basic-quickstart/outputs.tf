@@ -3,17 +3,17 @@
 ########################################################################################################################
 
 output "resource_group_name" {
-  description = "The name of the resource group."
+  description = "Resource group name."
   value       = module.resource_group.resource_group_name
 }
 
 output "code_engine_project_name" {
-  description = "The name of the created code engine project."
+  description = "Code engine project name."
   value       = module.project.name
 }
 
 output "code_engine_project_id" {
-  description = "The ID of the created code engine project."
+  description = "Created code engine project identifier."
   value       = module.project.id
 }
 
@@ -27,8 +27,18 @@ output "app_name" {
   value       = module.app.name
 }
 
+output "next_step_secondary_label" {
+  value       = "Open application"
+  description = "Secondary label"
+}
+
+output "next_step_secondary_url" {
+  value       = module.app.endpoint
+  description = "Secondary url"
+}
+
 output "next_steps_text" {
-  value       = "Now, check your Code Engine project configuration"
+  value       = "Check your Code Engine project configuration"
   description = "Next steps text"
 }
 
@@ -40,14 +50,4 @@ output "next_step_primary_label" {
 output "next_step_primary_url" {
   value       = "https://cloud.ibm.com/containers/serverless/project/${var.region}/${module.project.id}/overview"
   description = "primary url"
-}
-
-output "next_step_secondary_label" {
-  value       = "Open the application"
-  description = "Secondary label"
-}
-
-output "next_step_secondary_url" {
-  value       = module.app.endpoint
-  description = "Secondary url"
 }
