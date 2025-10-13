@@ -222,7 +222,13 @@
               "key": "strategy_type"
             },
             {
+              "key": "build_timeout"
+            },
+            {
               "key": "container_registry_namespace"
+            },
+            {
+              "key": "container_registry_api_key"
             },
             {
               "key": "github_password"
@@ -367,12 +373,6 @@
               ]
             },
             {
-              "key": "build_timeout"
-            },
-            {
-              "key": "container_registry_api_key"
-            },
-            {
               "key": "enable_cloud_logs"
             },
             {
@@ -398,6 +398,7 @@
             {
               "key": "resource_tags",
               "custom_config": {
+                "type": "array",
                 "grouping": "deployment",
                 "original_grouping": "deployment",
                 "config_constraints": {
@@ -1055,6 +1056,7 @@
             {
               "key": "resource_tags",
               "custom_config": {
+                "type": "array",
                 "grouping": "deployment",
                 "original_grouping": "deployment",
                 "config_constraints": {
