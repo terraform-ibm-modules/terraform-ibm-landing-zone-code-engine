@@ -105,7 +105,7 @@
             "features": [
               {
                 "title": " ",
-                "description": "Ideal for users who want an end-to-end flow that builds from source, runs the image, and deploys the application."
+                "description": "Ideal for users who want an end-to-end flow that builds from source, runs the image, and deploys the application, with optional integration of Cloud Monitoring and Cloud Logs for observability."
               },
               {
                 "title": " ",
