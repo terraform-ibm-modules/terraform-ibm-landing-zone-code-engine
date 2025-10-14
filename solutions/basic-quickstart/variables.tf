@@ -115,7 +115,7 @@ variable "build_timeout" {
 ##############################################################################
 
 variable "github_password" {
-  description = "GitHub personal access token used as a password when accessing private repositories."
+  description = "A GitHub personal access token is used as the password to access a private repository specified in the 'source_url' field."
   type        = string
   sensitive   = true
   default     = null
@@ -127,7 +127,7 @@ variable "github_password" {
 }
 
 variable "github_username" {
-  description = "GitHub username used to authenticate when accessing private repositories.."
+  description = "A GitHub username is used to authenticate access to the private repository specified in the 'source_url' field."
   type        = string
   default     = null
 }
