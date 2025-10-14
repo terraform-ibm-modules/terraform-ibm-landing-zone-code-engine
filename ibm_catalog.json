@@ -115,11 +115,11 @@
             "diagrams": [
               {
                 "diagram": {
-                  "caption": "IBM Cloud Code Engine QuickStart Topology",
-                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-code-engine/refs/heads/refactor_da/reference-architecture/deployment-architecture-fleets.svg",
+                  "caption": "IBM Cloud Code Engine Basic QuickStart Topology",
+                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/refs/heads/main/reference-architectures/deployment-architecture-qs-basic.svg",
                   "type": "image/svg+xml"
                 },
-                "description": "This architecture defines a streamlined environment within an IBM Cloud region that includes a Code Engine project with associated builds, an application, and a registry secret. It supports secure building and running of containerized workloads.<br><br>The setup also includes an IBM Cloud Container Registry for reliable storage and management of container images.<br><br>Designed for simplicity and flexibility, this setup enables efficient build processes and container image management to support scalable, event-driven workloads on IBM Cloud."
+                "description": "This architecture automates the setup of an IBM Cloud Code Engine environment, streamlining the creation and management of containerized workloads. It provisions a [Code Engine project](https://cloud.ibm.com/docs/codeengine?topic=codeengine-getting-started), sets up a [Container Registry](https://www.ibm.com/products/container-registry) to securely store and manage container image, runs a build to create container image from source code, and deploys an **application** within the project.\n\nOptionally, the architecture integrates **observability components** including [Cloud Logs](https://www.ibm.com/products/cloud-logs) and [Cloud Monitoring](https://www.ibm.com/products/cloud-monitoring), enabling centralized log collection and performance metrics for enhanced monitoring and troubleshooting.\n\nDesigned for simplicity and rapid deployment, this solution reduces manual configuration by automating service provisioning with sensible defaults. Users provide minimal inputs such as region, resource configurations, and observability preferences, while the architecture orchestrates the full lifecycle of Code Engine resources—enabling faster development, deployment, and operational insights in IBM Cloud."
               }
             ]
           },
@@ -209,8 +209,7 @@
               "key": "build_name"
             },
             {
-              "key": "source_url",
-              "required": true
+              "key": "source_url"
             },
             {
               "key": "source_revision"
@@ -222,6 +221,12 @@
               "key": "strategy_type"
             },
             {
+              "key": "github_username"
+            },
+            {
+              "key": "github_password"
+            },
+            {
               "key": "build_timeout"
             },
             {
@@ -229,12 +234,6 @@
             },
             {
               "key": "container_registry_api_key"
-            },
-            {
-              "key": "github_password"
-            },
-            {
-              "key": "github_username"
             },
             {
               "key": "app_scale_cpu_memory",
