@@ -865,6 +865,14 @@
               "notes": "Required to create and manage Code Engine resources."
             },
             {
+              "role_crns": [
+                "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                "crn:v1:bluemix:public:iam::::role:Administrator"
+              ],
+              "service_name": "container-registry",
+              "notes": "Required to create and manage Container Registry namespaces."
+            },
+            {
               "service_name": "sysdig-monitor",
               "role_crns": [
                 "crn:v1:bluemix:public:iam::::serviceRole:Manager",
