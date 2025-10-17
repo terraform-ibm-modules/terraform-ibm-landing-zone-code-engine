@@ -454,13 +454,6 @@
               "role_crns": [
                 "crn:v1:bluemix:public:iam::::role:Administrator"
               ],
-              "service_name": "All Account Management services",
-              "notes": "[Optional] Required to create new resource groups when enabling the Account Configuration integration."
-            },
-            {
-              "role_crns": [
-                "crn:v1:bluemix:public:iam::::role:Administrator"
-              ],
               "service_name": "All Identity and Access enabled services",
               "notes": "[Optional] Required to create new resource groups with account settings when enabling the Account Configuration integration."
             },
@@ -572,6 +565,7 @@
             {
               "key": "existing_resource_group_name",
               "display_name": "resource_group",
+              "default_value": "Default",
               "description": "The name of an existing resource group to provision the resources.",
               "custom_config": {
                 "type": "resource_group",
