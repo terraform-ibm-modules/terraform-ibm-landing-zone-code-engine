@@ -48,11 +48,11 @@
       "support_details": "This product is in the community registry, as such support is handled through the originated repo. If you experience issues please open an issue in that repository [https://github.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/issues](https://github.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/issues). Please note this product is not supported via the IBM Cloud Support Center.",
       "flavors": [
         {
-          "label": "Standard - Integrated setup with configurable services",
-          "name": "fully-configurable",
+          "label": "QuickStart - Basic and simple",
+          "name": "quickstart-basic",
           "index": 1,
           "install_type": "fullstack",
-          "working_directory": "solutions/fully-configurable",
+          "working_directory": "solutions/basic-quickstart",
           "iam_permissions": [
             {
               "role_crns": [
@@ -67,6 +67,388 @@
               ],
               "service_name": "All Account Management services",
               "notes": "[Optional] Required to create new resource groups when enabling the Account Configuration integration."
+            },
+            {
+              "role_crns": [
+                "crn:v1:bluemix:public:iam::::serviceRole:Writer",
+                "crn:v1:bluemix:public:iam::::role:Editor"
+              ],
+              "service_name": "codeengine",
+              "notes": "Required to create and manage Code Engine resources."
+            },
+            {
+              "role_crns": [
+                "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                "crn:v1:bluemix:public:iam::::role:Administrator"
+              ],
+              "service_name": "container-registry",
+              "notes": "Required to create and manage Container Registry namespaces."
+            },
+            {
+              "service_name": "sysdig-monitor",
+              "role_crns": [
+                "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                "crn:v1:bluemix:public:iam::::role:Editor"
+              ],
+              "notes": "[Optional] Required to create an instance of Cloud Monitoring."
+            },
+            {
+              "service_name": "logs",
+              "role_crns": [
+                "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+                "crn:v1:bluemix:public:iam::::role:Editor"
+              ],
+              "notes": "[Optional] Required to create an instance of Cloud Logs."
+            }
+          ],
+          "architecture": {
+            "features": [
+              {
+                "title": " ",
+                "description": "Ideal for users who want an end-to-end flow that builds from source, runs the image, and deploys the application, with optional integration of Cloud Monitoring and Cloud Logs for observability."
+              },
+              {
+                "title": " ",
+                "description": "Streamlines development with a single workflow for building, testing, and deploying applications quickly."
+              }
+            ],
+            "diagrams": [
+              {
+                "diagram": {
+                  "caption": "IBM Cloud Code Engine Basic QuickStart Topology",
+                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/refs/heads/main/reference-architectures/deployment-architecture-qs-basic.svg",
+                  "type": "image/svg+xml"
+                },
+                "description": "This architecture automates the setup of an IBM Cloud Code Engine environment, streamlining the creation and management of containerized workloads. It provisions a [Code Engine project](https://cloud.ibm.com/docs/codeengine?topic=codeengine-getting-started), sets up a [Container Registry](https://www.ibm.com/products/container-registry) to securely store and manage container image, runs a build to create container image from source code, and deploys an [application](https://cloud.ibm.com/docs/codeengine?topic=codeengine-getting-started) within the project. It also creates a <strong>Code Engine registry secret</strong> to securely authenticate with the container registry, allowing the platform to publish and pull container images as needed.<br><br>Optionally, the architecture integrates <strong>observability components</strong> including [Cloud Logs](https://www.ibm.com/products/cloud-logs) and [Cloud Monitoring](https://www.ibm.com/products/cloud-monitoring), enabling centralized log collection and performance metrics for enhanced monitoring and troubleshooting.<br><br>Designed for simplicity and rapid deployment, this solution reduces manual configuration by automating service provisioning with sensible defaults. Users provide minimal inputs such as region, resource configurations, and observability preferences, while the architecture orchestrates the full lifecycle of Code Engine resources—enabling faster development, deployment, and operational insights in IBM Cloud."
+              }
+            ]
+          },
+          "configuration": [
+            {
+              "key": "ibmcloud_api_key"
+            },
+            {
+              "key": "prefix",
+              "required": true,
+              "default_value": "dev",
+              "random_string": {
+                "length": 4
+              },
+              "value_constraints": [
+                {
+                  "type": "regex",
+                  "description": "Prefix must begin with a lowercase letter and may contain only lowercase letters, digits, and hyphens '-'. It must not end with a hyphen ('-'), and cannot contain consecutive hyphens ('--'). It should not exceed 16 characters.",
+                  "value": "^$|^__NULL__$|^[a-z](?!.*--)(?:[a-z0-9-]{0,14}[a-z0-9])?$"
+                }
+              ]
+            },
+            {
+              "key": "existing_resource_group_name",
+              "display_name": "resource_group",
+              "custom_config": {
+                "type": "resource_group",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "identifier": "rg_name"
+                }
+              }
+            },
+            {
+              "key": "code_engine_project_name",
+              "required": true
+            },
+            {
+              "key": "app_name",
+              "required": true
+            },
+            {
+              "key": "region",
+              "required": true,
+              "options": [
+                {
+                  "displayname": "Dallas (us-south)",
+                  "value": "us-south"
+                },
+                {
+                  "displayname": "Frankfurt (eu-de)",
+                  "value": "eu-de"
+                },
+                {
+                  "displayname": "London (eu-gb)",
+                  "value": "eu-gb"
+                },
+                {
+                  "displayname": "Osaka (jp-osa)",
+                  "value": "jp-osa"
+                },
+                {
+                  "displayname": "Sao Paulo (br-sao)",
+                  "value": "br-sao"
+                },
+                {
+                  "displayname": "Madrid (us-es)",
+                  "value": "us-es"
+                },
+                {
+                  "displayname": "Sydney (au-syd)",
+                  "value": "au-syd"
+                },
+                {
+                  "displayname": "Tokyo (jp-tok)",
+                  "value": "jp-tok"
+                },
+                {
+                  "displayname": "Toronto (ca-tor)",
+                  "value": "ca-tor"
+                },
+                {
+                  "displayname": "Washington DC (us-east)",
+                  "value": "us-east"
+                }
+              ]
+            },
+            {
+              "key": "build_name"
+            },
+            {
+              "key": "source_url"
+            },
+            {
+              "key": "source_revision"
+            },
+            {
+              "key": "source_context_dir"
+            },
+            {
+              "key": "strategy_type"
+            },
+            {
+              "key": "github_username"
+            },
+            {
+              "key": "github_password"
+            },
+            {
+              "key": "build_timeout"
+            },
+            {
+              "key": "container_registry_namespace"
+            },
+            {
+              "key": "container_registry_api_key"
+            },
+            {
+              "key": "app_scale_cpu_memory",
+              "options": [
+                {
+                  "displayname": "0.125 vCPU / 0.25 GB",
+                  "value": "0.125 vCPU / 0.25 GB"
+                },
+                {
+                  "displayname": "0.125 vCPU / 0.5 GB",
+                  "value": "0.125 vCPU / 0.5 GB"
+                },
+                {
+                  "displayname": "0.125 vCPU / 1 GB",
+                  "value": "0.125 vCPU / 1 GB"
+                },
+                {
+                  "displayname": "0.25 vCPU / 0.5 GB",
+                  "value": "0.25 vCPU / 0.5 GB"
+                },
+                {
+                  "displayname": "0.25 vCPU / 1 GB",
+                  "value": "0.25 vCPU / 1 GB"
+                },
+                {
+                  "displayname": "0.25 vCPU / 2 GB",
+                  "value": "0.25 vCPU / 2 GB"
+                },
+                {
+                  "displayname": "0.5 vCPU / 1 GB",
+                  "value": "0.5 vCPU / 1 GB"
+                },
+                {
+                  "displayname": "0.5 vCPU / 2 GB",
+                  "value": "0.5 vCPU / 2 GB"
+                },
+                {
+                  "displayname": "0.5 vCPU / 4 GB",
+                  "value": "0.5 vCPU / 4 GB"
+                },
+                {
+                  "displayname": "1 vCPU / 2 GB",
+                  "value": "1 vCPU / 2 GB"
+                },
+                {
+                  "displayname": "1 vCPU / 4 GB",
+                  "value": "1 vCPU / 4 GB"
+                },
+                {
+                  "displayname": "1 vCPU / 8 GB",
+                  "value": "1 vCPU / 8 GB"
+                },
+                {
+                  "displayname": "2 vCPU / 4 GB",
+                  "value": "2 vCPU / 4 GB"
+                },
+                {
+                  "displayname": "2 vCPU / 8 GB",
+                  "value": "2 vCPU / 8 GB"
+                },
+                {
+                  "displayname": "2 vCPU / 16 GB",
+                  "value": "2 vCPU / 16 GB"
+                },
+                {
+                  "displayname": "4 vCPU / 8 GB",
+                  "value": "4 vCPU / 8 GB"
+                },
+                {
+                  "displayname": "4 vCPU / 16 GB",
+                  "value": "4 vCPU / 16 GB"
+                },
+                {
+                  "displayname": "4 vCPU / 32 GB",
+                  "value": "4 vCPU / 32 GB"
+                },
+                {
+                  "displayname": "6 vCPU / 12 GB",
+                  "value": "6 vCPU / 12 GB"
+                },
+                {
+                  "displayname": "6 vCPU / 24 GB",
+                  "value": "6 vCPU / 24 GB"
+                },
+                {
+                  "displayname": "6 vCPU / 48 GB",
+                  "value": "6 vCPU / 48 GB"
+                },
+                {
+                  "displayname": "8 vCPU / 16 GB",
+                  "value": "8 vCPU / 16 GB"
+                },
+                {
+                  "displayname": "8 vCPU / 32 GB",
+                  "value": "8 vCPU / 32 GB"
+                },
+                {
+                  "displayname": "10 vCPU / 20 GB",
+                  "value": "10 vCPU / 20 GB"
+                },
+                {
+                  "displayname": "10 vCPU / 40 GB",
+                  "value": "10 vCPU / 40 GB"
+                },
+                {
+                  "displayname": "12 vCPU / 24 GB",
+                  "value": "12 vCPU / 24 GB"
+                },
+                {
+                  "displayname": "12 vCPU / 48 GB",
+                  "value": "12 vCPU / 48 GB"
+                }
+              ]
+            },
+            {
+              "key": "app_scale_ephemeral_storage_limit",
+              "value_constraints": [
+                {
+                  "type": "regex",
+                  "description": "Scale ephemeral storage limit must be a numeric value optionally followed by a valid unit (e.g., '400M', '1G', '1T').",
+                  "value": "^([0-9.]+)([eEinumkKMGTPB]*)$"
+                }
+              ]
+            },
+            {
+              "key": "app_image_port"
+            },
+            {
+              "key": "managed_domain_mappings",
+              "options": [
+                {
+                  "displayname": "Public",
+                  "value": "local_public"
+                },
+                {
+                  "displayname": "Private",
+                  "value": "local_private"
+                },
+                {
+                  "displayname": "Project-Only",
+                  "value": "local"
+                }
+              ]
+            },
+            {
+              "key": "enable_cloud_logs"
+            },
+            {
+              "key": "cloud_monitoring_plan",
+              "options": [
+                {
+                  "displayname": "None",
+                  "value": "none"
+                },
+                {
+                  "displayname": "Graduated tier",
+                  "value": "graduated-tier"
+                },
+                {
+                  "displayname": "Lite",
+                  "value": "lite"
+                }
+              ]
+            },
+            {
+              "key": "enable_platform_metrics"
+            },
+            {
+              "key": "resource_tags",
+              "custom_config": {
+                "type": "array",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "type": "string"
+                }
+              }
+            },
+            {
+              "key": "provider_visibility",
+              "hidden": true,
+              "options": [
+                {
+                  "displayname": "private",
+                  "value": "private"
+                },
+                {
+                  "displayname": "public",
+                  "value": "public"
+                },
+                {
+                  "displayname": "public-and-private",
+                  "value": "public-and-private"
+                }
+              ]
+            }
+          ],
+          "terraform_version": "1.10.5"
+        },
+        {
+          "label": "Standard - Integrated setup with configurable services",
+          "name": "fully-configurable",
+          "index": 2,
+          "install_type": "fullstack",
+          "working_directory": "solutions/fully-configurable",
+          "iam_permissions": [
+            {
+              "role_crns": [
+                "crn:v1:bluemix:public:iam::::role:Viewer"
+              ],
+              "service_name": "Resource group only",
+              "notes": "Viewer access is required in the resource group you want to provision in."
             },
             {
               "role_crns": [
@@ -458,7 +840,7 @@
         {
           "label": "Quickstart - Fleets edition",
           "name": "quickstart-fleets",
-          "index": 2,
+          "index": 3,
           "install_type": "fullstack",
           "working_directory": "solutions/fleets-quickstart",
           "iam_permissions": [
@@ -680,6 +1062,7 @@
             {
               "key": "resource_tags",
               "custom_config": {
+                "type": "array",
                 "grouping": "deployment",
                 "original_grouping": "deployment",
                 "config_constraints": {
