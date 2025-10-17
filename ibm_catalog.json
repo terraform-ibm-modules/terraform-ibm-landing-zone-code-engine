@@ -129,6 +129,11 @@
             },
             {
               "key": "prefix",
+              "required": true,
+              "default_value": "dev",
+              "random_string": {
+                "length": 4
+              },
               "value_constraints": [
                 {
                   "type": "regex",
@@ -140,8 +145,6 @@
             {
               "key": "existing_resource_group_name",
               "display_name": "resource_group",
-              "default_value": "Default",
-              "description": "The name of an existing resource group to provision the resources.",
               "custom_config": {
                 "type": "resource_group",
                 "grouping": "deployment",
@@ -349,7 +352,14 @@
               ]
             },
             {
-              "key": "app_scale_ephemeral_storage_limit"
+              "key": "app_scale_ephemeral_storage_limit",
+              "value_constraints": [
+                {
+                  "type": "regex",
+                  "description": "Scale ephemeral storage limit must be a numeric value optionally followed by a valid unit (e.g., '400M', '1G', '1T').",
+                  "value": "^([0-9.]+)([eEinumkKMGTPB]*)$"
+                }
+              ]
             },
             {
               "key": "app_image_port"
@@ -562,7 +572,6 @@
             {
               "key": "existing_resource_group_name",
               "display_name": "resource_group",
-              "default_value": "Default",
               "description": "The name of an existing resource group to provision the resources.",
               "custom_config": {
                 "type": "resource_group",

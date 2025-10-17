@@ -54,14 +54,14 @@ variable "region" {
 
 variable "existing_resource_group_name" {
   type        = string
-  description = "The name of an existing resource group to provision the resources. If not provided the default resource group will be used."
-  default     = null
+  description = "The name of an existing resource group to provision the resources."
+  default     = "Default"
 }
 
 variable "code_engine_project_name" {
   description = "The name of the IBM Cloud Code Engine project to be deployed. If specified, the prefix leads the project name in the <prefix>-<code_engine_project_name> format."
   type        = string
-  default     = "quickstart-project"
+  default     = "project"
 }
 
 variable "resource_tags" {
@@ -181,7 +181,7 @@ EOT
 ##############################################################################
 
 variable "container_registry_api_key" {
-  description = "The API key of the container registry in the target account. If this key is not provided, the IBM Cloud API key will be used instead."
+  description = "The API key for the container registry in the target IBM Cloud account. This key will be stored in the Code Engine secret used to authenticate when pushing and pulling the image built by the project. If not provided, the default IBM Cloud API key will be used instead."
   type        = string
   sensitive   = true
   default     = null
