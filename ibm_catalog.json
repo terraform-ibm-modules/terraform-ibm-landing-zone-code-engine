@@ -687,7 +687,7 @@
                 "fully-configurable"
               ],
               "id": "63d8ae58-fbf3-41ce-b844-0fb5b85882ab-global",
-              "version": "TBC",
+              "version": "v1.9.0",
               "optional": true,
               "on_by_default": true,
               "input_mapping": [
@@ -751,7 +751,7 @@
               "name": "deploy-arch-ibm-activity-tracker",
               "description": "Configure Activity Tracker Event Routing to route the auditing events.",
               "id": "918453c3-4f97-4583-8c4a-83ef12fc7916-global",
-              "version": "TBC",
+              "version": "v1.4.3",
               "flavors": [
                 "fully-configurable"
               ],
@@ -780,7 +780,7 @@
               "name": "deploy-arch-ibm-scc-workload-protection",
               "description": "Configure an IBM Cloud Security and Compliance Center Workload Protection instance to help you manage security and compliance for your organization.",
               "id": "4322cf44-2289-49aa-a719-dd79e39b14dc-global",
-              "version": "TBC",
+              "version": "v1.14.0",
               "flavors": [
                 "fully-configurable"
               ],
