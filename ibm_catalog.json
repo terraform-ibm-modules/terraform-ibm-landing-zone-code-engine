@@ -554,6 +554,10 @@
             },
             {
               "key": "prefix",
+              "default_value": "dev",
+              "random_string": {
+                "length": 4
+              },
               "value_constraints": [
                 {
                   "type": "regex",
@@ -565,8 +569,6 @@
             {
               "key": "existing_resource_group_name",
               "display_name": "resource_group",
-              "default_value": "Default",
-              "description": "The name of an existing resource group to provision the resources.",
               "custom_config": {
                 "type": "resource_group",
                 "grouping": "deployment",
@@ -678,31 +680,6 @@
           ],
           "dependencies": [
             {
-              "name": "deploy-arch-ibm-account-infra-base",
-              "description": "Organizes your IBM Cloud account with preconfigured resource groups. If not selected, the default resource group is used. Optionally, it can expand to apply recommended security controls via \"with Account Settings\" variation.",
-              "catalog_id": "7a4d68b4-cf8b-40cd-a3d1-f49aff526eb3",
-              "flavors": [
-                "resource-group-only",
-                "resource-groups-with-account-settings"
-              ],
-              "default_flavor": "resource-group-only",
-              "id": "63641cec-6093-4b4f-b7b0-98d2f4185cd6-global",
-              "input_mapping": [
-                {
-                  "dependency_input": "prefix",
-                  "version_input": "prefix",
-                  "reference_version": true
-                },
-                {
-                  "dependency_output": "workload_resource_group_name",
-                  "version_input": "existing_resource_group_name"
-                }
-              ],
-              "optional": true,
-              "on_by_default": false,
-              "version": "v3.0.23"
-            },
-            {
               "name": "deploy-arch-ibm-cloud-logs",
               "description": "Configure an IBM Cloud Logs instance to analyse the platform logs.",
               "catalog_id": "7a4d68b4-cf8b-40cd-a3d1-f49aff526eb3",
@@ -710,7 +687,7 @@
                 "fully-configurable"
               ],
               "id": "63d8ae58-fbf3-41ce-b844-0fb5b85882ab-global",
-              "version": "v1.6.28",
+              "version": "v1.9.0",
               "optional": true,
               "on_by_default": true,
               "input_mapping": [
@@ -740,7 +717,7 @@
               "name": "deploy-arch-ibm-cloud-monitoring",
               "description": "Configure an IBM Cloud Monitoring instance to collect the platform metrics.",
               "id": "73debdbf-894f-4c14-81c7-5ece3a70b67d-global",
-              "version": "v1.7.2",
+              "version": "v1.9.0",
               "flavors": [
                 "fully-configurable"
               ],
@@ -759,6 +736,11 @@
                   "reference_version": true
                 },
                 {
+                  "dependency_input": "existing_resource_group_name",
+                  "version_input": "existing_resource_group_name",
+                  "reference_version": true
+                },
+                {
                   "dependency_input": "region",
                   "version_input": "region",
                   "reference_version": true
@@ -769,7 +751,7 @@
               "name": "deploy-arch-ibm-activity-tracker",
               "description": "Configure Activity Tracker Event Routing to route the auditing events.",
               "id": "918453c3-4f97-4583-8c4a-83ef12fc7916-global",
-              "version": "v1.2.34",
+              "version": "v1.4.3",
               "flavors": [
                 "fully-configurable"
               ],
@@ -785,6 +767,11 @@
                 {
                   "dependency_input": "region",
                   "version_input": "region",
+                  "reference_version": true
+                },
+                {
+                  "dependency_input": "existing_resource_group_name",
+                  "version_input": "existing_resource_group_name",
                   "reference_version": true
                 }
               ]
@@ -793,7 +780,7 @@
               "name": "deploy-arch-ibm-scc-workload-protection",
               "description": "Configure an IBM Cloud Security and Compliance Center Workload Protection instance to help you manage security and compliance for your organization.",
               "id": "4322cf44-2289-49aa-a719-dd79e39b14dc-global",
-              "version": "v1.12.3",
+              "version": "v1.14.0",
               "flavors": [
                 "fully-configurable"
               ],
@@ -809,6 +796,11 @@
                 {
                   "dependency_input": "region",
                   "version_input": "region",
+                  "reference_version": true
+                },
+                {
+                  "dependency_input": "existing_resource_group_name",
+                  "version_input": "existing_resource_group_name",
                   "reference_version": true
                 }
               ]
@@ -838,8 +830,8 @@
                 }
               ],
               "optional": true,
-              "on_by_default": false,
-              "version": "v2.1.1"
+              "on_by_default": true,
+              "version": "v2.2.0"
             }
           ],
           "dependency_version_2": true,
@@ -920,6 +912,10 @@
             },
             {
               "key": "prefix",
+              "default_value": "dev",
+              "random_string": {
+                "length": 4
+              },
               "value_constraints": [
                 {
                   "type": "regex",
