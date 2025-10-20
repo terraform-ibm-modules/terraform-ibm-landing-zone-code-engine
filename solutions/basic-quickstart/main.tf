@@ -22,7 +22,7 @@ locals {
 
 module "project" {
   source            = "terraform-ibm-modules/code-engine/ibm//modules/project"
-  version           = "4.5.13"
+  version           = "4.6.6"
   name              = local.code_engine_project_name
   resource_group_id = module.resource_group.resource_group_id
 }
@@ -33,14 +33,14 @@ module "project" {
 
 module "cr_namespace" {
   source            = "terraform-ibm-modules/container-registry/ibm"
-  version           = "2.1.0"
+  version           = "2.2.0"
   namespace_name    = "${local.prefix}${var.container_registry_namespace}"
   resource_group_id = module.resource_group.resource_group_id
 }
 
 module "cr_endpoint" {
   source  = "terraform-ibm-modules/container-registry/ibm//modules/endpoint"
-  version = "2.1.0"
+  version = "2.2.0"
   region  = var.region
 }
 
@@ -56,7 +56,7 @@ locals {
 module "build" {
   depends_on                 = [module.secret]
   source                     = "terraform-ibm-modules/code-engine/ibm//modules/build"
-  version                    = "4.5.13"
+  version                    = "4.6.6"
   ibmcloud_api_key           = var.ibmcloud_api_key
   project_id                 = module.project.project_id
   name                       = var.build_name
@@ -104,7 +104,7 @@ locals {
 
 module "secret" {
   source     = "terraform-ibm-modules/code-engine/ibm//modules/secret"
-  version    = "4.5.13"
+  version    = "4.6.6"
   for_each   = nonsensitive(local.secrets)
   project_id = module.project.project_id
   name       = each.key
@@ -124,7 +124,7 @@ locals {
 module "app" {
   depends_on      = [module.build]
   source          = "terraform-ibm-modules/code-engine/ibm//modules/app"
-  version         = "4.5.13"
+  version         = "4.6.6"
   name            = local.app_name
   image_reference = module.build.output_image
   image_secret    = local.registry_secret_name
@@ -149,7 +149,7 @@ locals {
 module "cos" {
   count               = var.enable_cloud_logs ? 1 : 0
   source              = "terraform-ibm-modules/cos/ibm"
-  version             = "10.2.13"
+  version             = "10.5.0"
   create_cos_instance = true
   resource_group_id   = module.resource_group.resource_group_id
   region              = var.region
@@ -162,7 +162,7 @@ module "cos" {
 module "cos_buckets" {
   count   = var.enable_cloud_logs ? 1 : 0
   source  = "terraform-ibm-modules/cos/ibm//modules/buckets"
-  version = "10.2.13"
+  version = "10.5.0"
 
   bucket_configs = [
     {
@@ -187,7 +187,7 @@ module "cos_buckets" {
 module "cloud_logs" {
   count             = var.enable_cloud_logs ? 1 : 0
   source            = "terraform-ibm-modules/cloud-logs/ibm"
-  version           = "1.6.21"
+  version           = "1.9.2"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   instance_name     = "${local.prefix}-cloud-logs"
@@ -219,7 +219,7 @@ locals {
 module "cloud_monitoring" {
   count                   = local.enable_cloud_monitoring ? 1 : 0
   source                  = "terraform-ibm-modules/cloud-monitoring/ibm"
-  version                 = "1.7.1"
+  version                 = "1.9.2"
   region                  = var.region
   resource_group_id       = module.resource_group.resource_group_id
   instance_name           = local.monitoring_name
