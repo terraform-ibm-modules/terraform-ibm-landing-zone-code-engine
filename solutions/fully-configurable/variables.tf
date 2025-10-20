@@ -61,5 +61,5 @@ variable "existing_resource_group_name" {
 variable "code_engine_project_name" {
   description = "The name of the IBM Cloud Code Engine project to be deployed. If specified, the prefix leads the project name in the <prefix>-<code_engine_project_name> format."
   type        = string
-  default     = "ce-project"
+  default     = "project"
 }

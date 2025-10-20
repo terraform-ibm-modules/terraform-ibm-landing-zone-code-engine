@@ -54,7 +54,7 @@ locals {
 }
 
 module "build" {
-  depends_on                 = [module.secret]
+  depends_on                 = [module.cr_secret]
   source                     = "terraform-ibm-modules/code-engine/ibm//modules/build"
   version                    = "4.6.6"
   ibmcloud_api_key           = var.ibmcloud_api_key
@@ -66,8 +66,6 @@ module "build" {
   strategy_type              = var.strategy_type
   source_context_dir         = var.source_context_dir
   source_revision            = var.source_revision
-  source_secret              = var.github_password != null && var.github_username != null ? local.github_secret_name : null
-  timeout                    = var.build_timeout
   region                     = var.region
   existing_resource_group_id = module.resource_group.resource_group_id
 }
@@ -76,40 +74,20 @@ module "build" {
 # Code Engine Secret
 ##############################################################################
 locals {
-  github_secret_name = "${local.prefix}github-secret"
-  github_secret = var.github_password != null && var.github_username != null ? {
-    (local.github_secret_name) = {
-      format = "generic"
-      "data" = {
-        "password" = var.github_password,
-        username   = var.github_username
-      }
-    }
-  } : {}
-
   registry_secret_name = "${local.prefix}registry-secret"
-  registry_secret = {
-    (local.registry_secret_name) = {
-      format = "registry"
-      "data" = {
-        password = var.container_registry_api_key != null ? var.container_registry_api_key : var.ibmcloud_api_key,
-        username = "iamapikey",
-        server   = module.cr_endpoint.container_registry_endpoint_private
-      }
-    }
-  }
-
-  secrets = merge(local.registry_secret, local.github_secret)
 }
 
-module "secret" {
+module "cr_secret" {
   source     = "terraform-ibm-modules/code-engine/ibm//modules/secret"
   version    = "4.6.6"
-  for_each   = nonsensitive(local.secrets)
   project_id = module.project.project_id
-  name       = each.key
-  data       = each.value.data
-  format     = each.value.format
+  name       = local.registry_secret_name
+  data = {
+    password = var.ibmcloud_api_key,
+    username = "iamapikey",
+    server   = module.cr_endpoint.container_registry_endpoint_private
+  }
+  format = "registry"
 }
 
 ##############################################################################
@@ -122,16 +100,13 @@ locals {
 }
 
 module "app" {
-  depends_on      = [module.build]
-  source          = "terraform-ibm-modules/code-engine/ibm//modules/app"
-  version         = "4.6.6"
-  name            = local.app_name
-  image_reference = module.build.output_image
-  image_secret    = local.registry_secret_name
-  project_id      = module.project.project_id
-
-  image_port                    = var.app_image_port
-  managed_domain_mappings       = var.managed_domain_mappings
+  depends_on                    = [module.build]
+  source                        = "terraform-ibm-modules/code-engine/ibm//modules/app"
+  version                       = "4.6.6"
+  name                          = local.app_name
+  image_reference               = module.build.output_image
+  image_secret                  = local.registry_secret_name
+  project_id                    = module.project.project_id
   scale_cpu_limit               = local.app_scale_cpu_limit
   scale_ephemeral_storage_limit = var.app_scale_ephemeral_storage_limit
   scale_memory_limit            = local.app_scale_memory_limit
@@ -225,7 +200,7 @@ module "cloud_monitoring" {
   instance_name           = local.monitoring_name
   plan                    = var.cloud_monitoring_plan
   service_endpoints       = "public-and-private"
-  enable_platform_metrics = var.enable_platform_metrics
+  enable_platform_metrics = "false"
   manager_key_name        = local.monitoring_key_name
   resource_tags           = var.resource_tags
 }
