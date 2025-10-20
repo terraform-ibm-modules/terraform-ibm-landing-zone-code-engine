@@ -139,7 +139,7 @@ EOT
 variable "container_registry_namespace" {
   description = "The name of the namespace to create in IBM Cloud Container Registry for organizing container images. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<container_registry_namespace>` format."
   type        = string
-  default     = "ce-cr-namespace"
+  default     = "namespace"
 }
 
 ##############################################################################
