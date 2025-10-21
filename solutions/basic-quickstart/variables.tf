@@ -81,19 +81,19 @@ variable "build_name" {
 }
 
 variable "source_context_dir" {
-  description = "The directory in the repository that contains the buildpacks file or the Dockerfile."
+  description = "The directory in the repository that contains the Cloud Native Buildpack (buildpacks) file or the Dockerfile."
   type        = string
-  default     = "hello"
+  default     = null
 }
 
 variable "source_revision" {
-  description = "Commit, tag, or branch in the source repository to pull."
+  description = "The branch for the source repository."
   type        = string
   default     = "main"
 }
 
 variable "source_url" {
-  description = "The URL of the code repository. If the repository is private, you must also provide 'github_username' and 'github_password'."
+  description = "Code repository URL of the source code."
   type        = string
   default     = "https://github.com/IBM/CodeEngine"
 }
@@ -104,34 +104,6 @@ variable "strategy_type" {
   default     = "dockerfile"
 }
 
-variable "build_timeout" {
-  description = "The maximum amount of time, in seconds, that can pass before the build must succeed or fail."
-  type        = number
-  default     = 600
-}
-
-##############################################################################
-# Github Secret
-##############################################################################
-
-variable "github_password" {
-  description = "A GitHub personal access token is used as the password to access a private repository specified in the 'source_url' field."
-  type        = string
-  sensitive   = true
-  default     = null
-
-  validation {
-    condition     = (var.github_username == null && var.github_password == null) || (var.github_username != null && var.github_password != null)
-    error_message = "Either both 'github_password' and 'github_username' must be set, or neither."
-  }
-}
-
-variable "github_username" {
-  description = "A GitHub username is used to authenticate access to the private repository specified in the 'source_url' field."
-  type        = string
-  default     = null
-}
-
 ##############################################################################
 # Code Engine App
 ##############################################################################
@@ -139,29 +111,13 @@ variable "github_username" {
 variable "app_name" {
   description = "The name of the application to be created and managed. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<app_name>` format. [Learn more](https://cloud.ibm.com/docs/codeengine?topic=codeengine-application-workloads)"
   type        = string
-  default     = "my-ce-app"
+  default     = "app"
 }
 
 variable "app_scale_cpu_memory" {
   description = "Define the amount of CPU and memory resources for each instance. [Learn more](https://cloud.ibm.com/docs/codeengine?topic=codeengine-mem-cpu-combo)"
   type        = string
-  default     = "1 vCPU / 4 GB"
-}
-
-variable "app_image_port" {
-  description = "The port which is used to connect to the port that is exposed by the container image."
-  type        = number
-  default     = 8080
-}
-
-variable "managed_domain_mappings" {
-  description = "Define which of the following values for the system-managed domain mappings to set up for the application. [Learn more](https://cloud.ibm.com/docs/codeengine?topic=codeengine-application-workloads#optionsvisibility)"
-  type        = string
-  default     = "local_public"
-  validation {
-    condition     = var.managed_domain_mappings == null || can(regex("local_public|local_private|local", var.managed_domain_mappings))
-    error_message = "Valid values are 'local_public', 'local_private', or 'local'."
-  }
+  default     = "0.125 vCPU / 0.25 GB"
 }
 
 variable "app_scale_ephemeral_storage_limit" {
@@ -180,17 +136,10 @@ EOT
 # Container Registry
 ##############################################################################
 
-variable "container_registry_api_key" {
-  description = "The API key for the container registry in the target IBM Cloud account. This key will be stored in the Code Engine secret used to authenticate when pushing and pulling the image built by the project. If not provided, the default IBM Cloud API key will be used instead."
-  type        = string
-  sensitive   = true
-  default     = null
-}
-
 variable "container_registry_namespace" {
   description = "The name of the namespace to create in IBM Cloud Container Registry for organizing container images. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<container_registry_namespace>` format."
   type        = string
-  default     = "ce-cr-namespace"
+  default     = "namespace"
 }
 
 ##############################################################################
@@ -217,10 +166,4 @@ variable "cloud_monitoring_plan" {
     condition     = can(regex("^none$|^lite$|^graduated-tier$", var.cloud_monitoring_plan))
     error_message = "The plan value must be one of the following: none, lite and graduated-tier."
   }
-}
-
-variable "enable_platform_metrics" {
-  type        = bool
-  description = "Receive platform metrics in the provisioned IBM Cloud Monitoring instance. Only 1 instance in a given region can be enabled for platform metrics."
-  default     = false
 }

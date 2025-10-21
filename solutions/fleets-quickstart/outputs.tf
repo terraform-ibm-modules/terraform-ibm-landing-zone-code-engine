@@ -58,17 +58,17 @@ output "vpc_name" {
 }
 
 output "next_steps_text" {
-  value       = "Visit the documentation to learn how to run a serverless fleet using Code Engine."
+  value       = "Check your Code Engine project configuration."
   description = "Next steps text"
 }
 
 output "next_step_secondary_label" {
-  value       = "Learn how to run a serverless fleet"
+  value       = "Get Started – Serverless Fleet Docs"
   description = "Secondary label"
 }
 
 output "next_step_secondary_url" {
-  value       = "https://github.com/IBM/CodeEngine/blob/main/beta/serverless-fleets/README.md#launch-a-fleet"
+  value       = "https://cloud.ibm.com/docs/codeengine?topic=codeengine-cefleets"
   description = "Secondary url"
 }
 
