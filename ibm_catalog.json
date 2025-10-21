@@ -846,6 +846,14 @@
             "diagrams": [
               {
                 "diagram": {
+                  "caption": "IBM Cloud Code Engine Fleets Edition Topology",
+                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/refs/heads/main/reference-architectures/deployment-architecture-fleets-1.svg",
+                  "type": "image/svg+xml"
+                },
+                "description": "This architecture provides a modular and secure setup within an IBM Cloud region to deploy and manage <b>fleet-based workloads using IBM Cloud Code Engine</b>. It integrates a Code Engine Project as the central execution environment, connected to a user-managed <b>Virtual Private Cloud (VPC)</b> for controlled network access and isolation.<br><br><b>Subnets and Security Groups</b> within the VPC define the compute boundaries and enforce traffic control policies for workloads. These VPC resources are referenced by Code Engine via securely injected secrets, enabling <b>container workloads to run in a private network context</b>.<br><br>A <b>Persistent Task Store</b> is implemented using IBM Cloud Object Storage (COS) with separate buckets for task metadata, input data, and output results. Lifecycle policies manage data retention for efficiency. The deployment also includes <b>private observability integration</b>: Code Engine logs and metrics are routed through <b>VPC Endpoint Gateways (VPEs)</b> to IBM Cloud Logs and Monitoring instances, ensuring secure and centralized observability.<br><br>This solution automates provisioning of networking, storage, and monitoring components with Terraform modules, promoting consistency and scalability. It is designed to <b>securely run distributed workloads</b> in private infrastructure, while still leveraging Code Engine's serverless execution model and automation benefits."
+              },
+              {
+                "diagram": {
                   "caption": "Fleet-Based Workload Topology with IBM Cloud Code Engine",
                   "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/refs/heads/main/reference-architectures/deployment-architecture-fleets.svg",
                   "type": "image/svg+xml"
