@@ -18,7 +18,7 @@ const resourceGroup = "geretain-test-resources"
 const fleetsSolutionsDir = "solutions/fleets-quickstart"
 const fullyConfigurableSolutionsDir = "solutions/fully-configurable"
 const quickstartSolutionsDir = "solutions/basic-quickstart"
-const terraformVersion = "terraform_v1.10" // This should match the version in the ibm_catalog.json
+const terraformVersion = "terraform_v1.12.2" // This should match the version in the ibm_catalog.json
 
 func setupOptions(t *testing.T, prefix string, terraformDir string) *testschematic.TestSchematicOptions {
 	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
