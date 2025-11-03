@@ -419,7 +419,8 @@
               ]
             }
           ],
-          "terraform_version": "1.12.2"
+          "terraform_version": "1.12.2",
+          "ignore_readme": true
         },
         {
           "label": "Standard - Integrated setup with configurable services",
@@ -783,7 +784,8 @@
             }
           ],
           "dependency_version_2": true,
-          "terraform_version": "1.12.2"
+          "terraform_version": "1.12.2",
+          "ignore_readme": true
         },
         {
           "label": "Quickstart - Fleets edition",
@@ -1028,7 +1030,8 @@
             }
           ],
           "dependency_version_2": true,
-          "terraform_version": "1.12.2"
+          "terraform_version": "1.12.2",
+          "ignore_readme": true
         }
       ]
     }
