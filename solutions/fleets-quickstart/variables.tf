@@ -84,7 +84,7 @@ variable "enable_cloud_logs" {
 
 variable "vpc_zones" {
   type        = list(string)
-  description = "List of VPC zones to use (length must be 1, 2, or 3)"
+  description = "List of VPC zones to use (must be combination of 1, 2, and 3)"
   default     = ["1", "2", "3"]
 
   validation {
