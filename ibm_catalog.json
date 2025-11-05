@@ -422,7 +422,7 @@
         {
           "label": "Standard - Integrated setup with configurable services",
           "name": "fully-configurable",
-          "short_description": "Ideal for users who want to quickly provision a fully configurable IBM Cloud Code Engine project without deploying an app.",
+          "short_description": "Ideal for users who want to quickly provision a fully configurable IBM Cloud Code Engine project with built-in security and observability.",
           "index": 2,
           "install_type": "fullstack",
           "working_directory": "solutions/fully-configurable",
