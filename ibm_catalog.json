@@ -50,6 +50,7 @@
         {
           "label": "QuickStart - Basic and simple",
           "name": "quickstart-basic",
+          "short_description": "Ideal for users who want an end-to-end flow that builds from source, runs the image, and deploys the application, with optional integration of Cloud Monitoring and Cloud Logs for observability.",
           "index": 1,
           "install_type": "fullstack",
           "working_directory": "solutions/basic-quickstart",
@@ -103,10 +104,6 @@
           ],
           "architecture": {
             "features": [
-              {
-                "title": " ",
-                "description": "Ideal for users who want an end-to-end flow that builds from source, runs the image, and deploys the application, with optional integration of Cloud Monitoring and Cloud Logs for observability."
-              },
               {
                 "title": " ",
                 "description": "Streamlines development with a single workflow for building, testing, and deploying applications quickly."
@@ -425,6 +422,7 @@
         {
           "label": "Standard - Integrated setup with configurable services",
           "name": "fully-configurable",
+          "short_description": "Ideal for users who want to quickly provision a fully configurable IBM Cloud Code Engine project with built-in security and observability.",
           "index": 2,
           "install_type": "fullstack",
           "working_directory": "solutions/fully-configurable",
@@ -510,10 +508,6 @@
           ],
           "architecture": {
             "features": [
-              {
-                "title": " ",
-                "description": "Ideal for users who want to quickly provision a fully configurable IBM Cloud Code Engine project without deploying an app."
-              },
               {
                 "title": " ",
                 "description": "Focuses on provisioning the IBM Cloud infrastructure around Code Engine—such as IAM, observability, storage, encryption, and security—while giving users the flexibility to integrate only what they need."
@@ -790,6 +784,7 @@
         {
           "label": "Quickstart - Fleets edition",
           "name": "quickstart-fleets",
+          "short_description": "Ideal for users running distributed container-based tasks with minimal setup, such as Monte Carlo simulations, PDF conversion with Doclin, or batch processing with VPC and COS integration.",
           "index": 3,
           "install_type": "fullstack",
           "working_directory": "solutions/fleets-quickstart",
@@ -836,10 +831,6 @@
           ],
           "architecture": {
             "features": [
-              {
-                "title": " ",
-                "description": "Ideal for users running distributed container-based tasks with minimal setup, such as Monte Carlo simulations, PDF conversion with Doclin, or batch processing with VPC and COS integration."
-              },
               {
                 "title": " ",
                 "description": "Automates deployment of a scalable Code Engine Fleet with integrated IBM Cloud services. Guided inputs for region, zones, and service plans—plus preconfigured defaults—enable a ready-to-run environment for execution, storage, and observability, without manual networking or service setup."
