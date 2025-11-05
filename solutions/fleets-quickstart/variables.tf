@@ -83,13 +83,18 @@ variable "enable_cloud_logs" {
 }
 
 variable "vpc_zones" {
-  type        = number
-  description = "Number of VPC zones to use (must be 1, 2, or 3)"
-  default     = 3
+  type        = list(string)
+  description = "List of VPC zones to use (length must be 1, 2, or 3)"
+  default     = ["1", "2", "3"]
 
   validation {
-    condition     = contains([1, 2, 3], var.vpc_zones)
-    error_message = "zones must be 1, 2, or 3 only."
+    condition     = length(var.vpc_zones) >= 1 && length(var.vpc_zones) <= 3
+    error_message = "You must specify between 1 and 3 zones."
+  }
+
+  validation {
+    condition     = alltrue([for z in var.vpc_zones : contains(["1", "2", "3"], z)])
+    error_message = "Each zone must be one of '1', '2', or '3'."
   }
 }
 
