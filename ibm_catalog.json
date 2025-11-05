@@ -2,7 +2,7 @@
   "products": [
     {
       "name": "deploy-arch-landing-zone-code-engine",
-      "label": "Landing zone for serverless workloads with IBM Code Engine",
+      "label": "Landing zone for serverless applications with Code Engine",
       "product_kind": "solution",
       "tags": [
         "ibm_created",
@@ -22,7 +22,7 @@
         "serverless",
         "workloads"
       ],
-      "short_description": "Provision scalable, serverless application with integrated IBM Cloud services.",
+      "short_description": "Provision scalable, serverless workloads with integrated IBM Cloud services.",
       "long_description": "This solution enables the provisioning of [IBM Code Engine](https://www.ibm.com/products/code-engine) projects on IBM Cloud using a range of configurations tailored to various workloads — from lightweight experimentation to high-performance batch processing. Each variation offers a distinct balance of automation, integration with IBM Cloud services, and readiness for experimentation or production use.\n\nIt automates the setup of both Code Engine and the supporting IBM Cloud infrastructure to streamline end-to-end deployment. Whether you're exploring serverless computing or building cloud-native applications, this landing zone helps accelerate your journey.",
       "offering_docs_url": "https://github.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/blob/main/solutions/fleets-quickstart/README.md",
       "offering_icon_url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/main/images/code-engine.svg",
