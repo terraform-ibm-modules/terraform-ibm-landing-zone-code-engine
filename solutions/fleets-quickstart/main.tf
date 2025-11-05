@@ -181,7 +181,10 @@ resource "ibm_iam_authorization_policy" "codeengine_to_cos" {
 # VPC
 ########################################################################################################################
 locals {
-  vpc_id = data.ibm_is_vpc.vpc.id
+  vpc_id     = data.ibm_is_vpc.vpc.id
+  has_zone_1 = contains(var.vpc_zones, "1")
+  has_zone_2 = contains(var.vpc_zones, "2")
+  has_zone_3 = contains(var.vpc_zones, "3")
 }
 
 module "vpc" {
@@ -196,13 +199,13 @@ module "vpc" {
   enable_vpc_flow_logs = false
 
   use_public_gateways = {
-    zone-1 = true
-    zone-2 = var.vpc_zones >= 2 ? true : false
-    zone-3 = var.vpc_zones >= 3 ? true : false
+    zone-1 = local.has_zone_1 ? true : false
+    zone-2 = local.has_zone_2 ? true : false
+    zone-3 = local.has_zone_3 ? true : false
   }
 
   subnets = merge(
-    {
+    local.has_zone_1 ? {
       zone-1 = [
         {
           name           = "${local.prefix}subnet-a"
@@ -210,8 +213,9 @@ module "vpc" {
           public_gateway = true
           acl_name       = "${local.prefix}acl"
         }
-    ] },
-    var.vpc_zones >= 2 ? {
+      ]
+    } : {},
+    local.has_zone_2 ? {
       zone-2 = [
         {
           name           = "${local.prefix}subnet-b"
@@ -221,7 +225,7 @@ module "vpc" {
         }
       ]
     } : {},
-    var.vpc_zones >= 3 ? {
+    local.has_zone_3 ? {
       zone-3 = [
         {
           name           = "${local.prefix}subnet-c"
@@ -433,13 +437,13 @@ locals {
           for idx, subnet in module.vpc.subnet_zone_list :
           "pool_subnet_crn_${idx + 1}" => subnet.crn
         },
-        {
+        local.has_zone_1 ? {
           pool_security_group_crns_1 = data.ibm_is_security_group.fleet_security_group.crn
-        },
-        var.vpc_zones >= 2 ? {
+        } : {},
+        local.has_zone_2 ? {
           pool_security_group_crns_2 = data.ibm_is_security_group.fleet_security_group.crn
         } : {},
-        var.vpc_zones >= 3 ? {
+        local.has_zone_3 ? {
           pool_security_group_crns_3 = data.ibm_is_security_group.fleet_security_group.crn
         } : {},
         var.enable_cloud_logs ? {

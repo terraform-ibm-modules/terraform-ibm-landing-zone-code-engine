@@ -2,7 +2,7 @@
   "products": [
     {
       "name": "deploy-arch-landing-zone-code-engine",
-      "label": "Landing zone for serverless workloads with IBM Code Engine",
+      "label": "Landing zone for serverless applications with Code Engine",
       "product_kind": "solution",
       "tags": [
         "ibm_created",
@@ -420,7 +420,7 @@
           "ignore_readme": true
         },
         {
-          "label": "Standard - Integrated setup with configurable services",
+          "label": "Quickstart with security and observability",
           "name": "fully-configurable",
           "short_description": "Ideal for users who want to quickly provision a fully configurable IBM Cloud Code Engine project with built-in security and observability.",
           "index": 2,
@@ -782,7 +782,7 @@
           "ignore_readme": true
         },
         {
-          "label": "Quickstart - Fleets edition",
+          "label": "Quickstart for serverless fleets with VPC, storage and observability",
           "name": "quickstart-fleets",
           "short_description": "Ideal for users running distributed container-based tasks with minimal setup, such as Monte Carlo simulations, PDF conversion with Doclin, or batch processing with VPC and COS integration.",
           "index": 3,
@@ -893,20 +893,14 @@
             },
             {
               "key": "vpc_zones",
-              "options": [
-                {
-                  "displayname": "1",
-                  "value": 1
-                },
-                {
-                  "displayname": "2",
-                  "value": 2
-                },
-                {
-                  "displayname": "3",
-                  "value": 3
+              "custom_config": {
+                "type": "array",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "type": "string"
                 }
-              ]
+              }
             },
             {
               "key": "provider_visibility",

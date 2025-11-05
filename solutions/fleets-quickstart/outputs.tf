@@ -58,26 +58,26 @@ output "vpc_name" {
 }
 
 output "next_steps_text" {
-  value       = "Check your Code Engine project configuration."
+  value       = "You can now create your first fleet to start running workloads."
   description = "Next steps text"
 }
 
 output "next_step_secondary_label" {
-  value       = "Get Started – Serverless Fleet Docs"
+  value       = "Go to Code Engine Project"
   description = "Secondary label"
 }
 
 output "next_step_secondary_url" {
-  value       = "https://cloud.ibm.com/docs/codeengine?topic=codeengine-cefleets"
+  value       = "https://cloud.ibm.com/containers/serverless/project/${var.region}/${module.project.id}/overview"
   description = "Secondary url"
 }
 
 output "next_step_primary_label" {
-  value       = "Go to Code Engine Project"
+  value       = "Go to Fleets"
   description = "Primary label"
 }
 
 output "next_step_primary_url" {
-  value       = "https://cloud.ibm.com/containers/serverless/project/${var.region}/${module.project.id}/overview"
+  value       = "https://cloud.ibm.com/containers/serverless/project/${var.region}/${module.project.id}/fleets"
   description = "primary url"
 }
