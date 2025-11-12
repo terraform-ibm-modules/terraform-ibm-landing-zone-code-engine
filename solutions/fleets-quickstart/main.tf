@@ -145,12 +145,15 @@ resource "ibm_cos_bucket_lifecycle_configuration" "output_bucket_lifecycle" {
 # Persistent Data Store
 ########################################################################################################################
 locals {
+  # construct base map without suffixes
   bucket_store_map_base = {
     (local.taskstore_bucket_name) = "fleet-task-store"
     (local.input_bucket_name)     = "fleet-input-store"
     (local.output_bucket_name)    = "fleet-output-store"
   }
+  # get actual bucket names with suffixes
   bucket_names_with_suffix = [for b in values(module.cos_buckets.buckets) : b.bucket_name]
+  # construct map with actual bucket names including suffixes
   bucket_store_map = tomap({
     for k, v in local.bucket_store_map_base :
     one([for b in local.bucket_names_with_suffix : b if startswith(b, k)]) => v
