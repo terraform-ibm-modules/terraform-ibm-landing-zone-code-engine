@@ -55,21 +55,21 @@ module "cos_buckets" {
       kms_encryption_enabled = false
       resource_instance_id   = module.cos.cos_instance_crn
       region_location        = var.region
-      add_bucket_name_suffix = false
+      add_bucket_name_suffix = true
     },
     {
       bucket_name            = local.input_bucket_name
       kms_encryption_enabled = false
       resource_instance_id   = module.cos.cos_instance_crn
       region_location        = var.region
-      add_bucket_name_suffix = false
+      add_bucket_name_suffix = true
     },
     {
       bucket_name            = local.output_bucket_name
       kms_encryption_enabled = false
       resource_instance_id   = module.cos.cos_instance_crn
       region_location        = var.region
-      add_bucket_name_suffix = false
+      add_bucket_name_suffix = true
     }
     ],
     var.enable_cloud_logs ? [
@@ -78,14 +78,14 @@ module "cos_buckets" {
         kms_encryption_enabled = false
         resource_instance_id   = module.cos.cos_instance_crn
         region_location        = var.region
-        add_bucket_name_suffix = false
+        add_bucket_name_suffix = true
       },
       {
         bucket_name            = local.metrics_data_bucket_name
         kms_encryption_enabled = false
         resource_instance_id   = module.cos.cos_instance_crn
         region_location        = var.region
-        add_bucket_name_suffix = false
+        add_bucket_name_suffix = true
       }
   ] : [])
 }
@@ -145,11 +145,19 @@ resource "ibm_cos_bucket_lifecycle_configuration" "output_bucket_lifecycle" {
 # Persistent Data Store
 ########################################################################################################################
 locals {
-  bucket_store_map = {
+  # construct base map without suffixes
+  bucket_store_map_base = {
     (local.taskstore_bucket_name) = "fleet-task-store"
     (local.input_bucket_name)     = "fleet-input-store"
     (local.output_bucket_name)    = "fleet-output-store"
   }
+  # get actual bucket names with suffixes
+  bucket_names_with_suffix = [for b in values(module.cos_buckets.buckets) : b.bucket_name]
+  # construct map with actual bucket names including suffixes
+  bucket_store_map = tomap({
+    for k, v in local.bucket_store_map_base :
+    one([for b in local.bucket_names_with_suffix : b if startswith(b, k)]) => v
+  })
 }
 
 # at the moment terraform provider doesn't support PDS https://github.ibm.com/GoldenEye/issues/issues/16264
