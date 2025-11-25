@@ -222,9 +222,7 @@
             },
             {
               "key": "strategy_type",
-              "type": "string",
               "type_metadata": "string",
-              "description": "The strategy to use for building the image.",
               "options": [
                 {
                   "description": "Build using a Dockerfile in your repository.",
@@ -376,10 +374,7 @@
             },
             {
               "key": "cloud_monitoring_plan",
-              "type": "string",
               "type_metadata": "string",
-              "default_value": "none",
-              "description": "The IBM Cloud Monitoring plan to provision.",
               "options": [
                 {
                   "description": "No monitoring instance provisioned",
@@ -980,10 +975,7 @@
             },
             {
               "key": "cos_plan",
-              "type": "string",
               "type_metadata": "string",
-              "default_value": "standard",
-              "description": "Cloud Object Storage pricing plan for storing task data, inputs, and outputs.",
               "options": [
                 {
                   "description": "The Free Tier allows you to evaluate the Cloud Object Storage service at no cost. You can seamlessly scale up for production use. This includes 5GB of free monthly usage for up to 12 months from the sign-up date. After 12 months or if you exceed the Free Tier limits, you will be billed at standard pay-as-you-go rates.",
@@ -999,10 +991,7 @@
             },
             {
               "key": "cloud_monitoring_plan",
-              "type": "string",
               "type_metadata": "string",
-              "default_value": "none",
-              "description": "The IBM Cloud Monitoring plan to provision.",
               "options": [
                 {
                   "description": "No monitoring instance provisioned",
