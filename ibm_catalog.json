@@ -230,7 +230,7 @@
                   "value": "dockerfile"
                 },
                 {
-                  "description": "Automatically detect and build using Cloud Native Buildpacks.",
+                  "description": "Automatically detects the runtime and builds a container image from source using Paketo Buildpacks.",
                   "displayname": "Cloud Native Buildpack",
                   "value": "buildpacks"
                 }
