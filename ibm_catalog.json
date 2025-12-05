@@ -226,12 +226,15 @@
             },
             {
               "key": "strategy_type",
+              "type_metadata": "string",
               "options": [
                 {
+                  "description": "Build using a Dockerfile in your repository.",
                   "displayname": "Dockerfile",
                   "value": "dockerfile"
                 },
                 {
+                  "description": "Automatically detects the runtime and builds a container image from source using Paketo Buildpacks.",
                   "displayname": "Cloud Native Buildpack",
                   "value": "buildpacks"
                 }
@@ -375,16 +378,20 @@
             },
             {
               "key": "cloud_monitoring_plan",
+              "type_metadata": "string",
               "options": [
                 {
+                  "description": "No monitoring instance provisioned",
                   "displayname": "None",
                   "value": "none"
                 },
                 {
-                  "displayname": "Graduated tier",
+                  "description": "Pay-as-you-go pricing based on usage.",
+                  "displayname": "Graduated Tier",
                   "value": "graduated-tier"
                 },
                 {
+                  "description": "Free tier with limited features.",
                   "displayname": "Lite",
                   "value": "lite"
                 }
@@ -972,12 +979,15 @@
             },
             {
               "key": "cos_plan",
+              "type_metadata": "string",
               "options": [
                 {
+                  "description": "The Free Tier allows you to evaluate the Cloud Object Storage service at no cost. You can seamlessly scale up for production use. This includes 5GB of free monthly usage for up to 12 months from the sign-up date. After 12 months or if you exceed the Free Tier limits, you will be billed at standard pay-as-you-go rates.",
                   "displayname": "Standard",
                   "value": "standard"
                 },
                 {
+                  "description": "One-Rate plan instances should be used for workloads that involve large volumes of outbound bandwidth (data transferred on public networks outside of IBM Cloud) relative to the amount of total storage capacity.",
                   "displayname": "One Rate",
                   "value": "cos-one-rate-plan"
                 }
@@ -985,16 +995,20 @@
             },
             {
               "key": "cloud_monitoring_plan",
+              "type_metadata": "string",
               "options": [
                 {
+                  "description": "No monitoring instance provisioned",
                   "displayname": "None",
                   "value": "none"
                 },
                 {
-                  "displayname": "Graduated tier",
+                  "description": "Pay-as-you-go pricing based on usage.",
+                  "displayname": "Graduated Tier",
                   "value": "graduated-tier"
                 },
                 {
+                  "description": "Free tier with limited features.",
                   "displayname": "Lite",
                   "value": "lite"
                 }
