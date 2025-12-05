@@ -131,7 +131,6 @@ module "cos" {
   cos_instance_name   = "${local.prefix}cos"
   create_cos_bucket   = false
   cos_plan            = "standard"
-  cos_location        = "global"
 }
 
 module "cos_buckets" {
@@ -188,7 +187,7 @@ module "cloud_logs" {
 locals {
   enable_cloud_monitoring = var.cloud_monitoring_plan == "none" ? false : true
   monitoring_name         = "${local.prefix}sysdig"
-  monitoring_key_name     = "${local.prefix}sysdig-key"
+  access_key_name         = "${local.prefix}sysdig-key"
 }
 
 module "cloud_monitoring" {
@@ -201,6 +200,6 @@ module "cloud_monitoring" {
   plan                    = var.cloud_monitoring_plan
   service_endpoints       = "public-and-private"
   enable_platform_metrics = "false"
-  manager_key_name        = local.monitoring_key_name
+  access_key_name         = local.access_key_name
   resource_tags           = var.resource_tags
 }

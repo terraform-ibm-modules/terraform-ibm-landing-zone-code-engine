@@ -37,7 +37,6 @@ module "cos" {
   cos_instance_name   = "${local.prefix}cos"
   create_cos_bucket   = false
   cos_plan            = var.cos_plan
-  cos_location        = "global"
   resource_keys = [{
     name                      = local.cos_key_name
     generate_hmac_credentials = true
@@ -401,7 +400,7 @@ resource "ibm_iam_service_api_key" "cloud_logs_api_key" {
 locals {
   enable_cloud_monitoring = var.cloud_monitoring_plan == "none" ? false : true
   monitoring_name         = "${local.prefix}sysdig"
-  monitoring_key_name     = "${local.prefix}sysdig-key"
+  access_key_name         = "${local.prefix}sysdig-key"
 }
 
 module "cloud_monitoring" {
@@ -414,7 +413,7 @@ module "cloud_monitoring" {
   plan                    = var.cloud_monitoring_plan
   service_endpoints       = "public-and-private"
   enable_platform_metrics = var.enable_platform_metrics
-  manager_key_name        = local.monitoring_key_name
+  access_key_name         = local.access_key_name
   resource_tags           = var.resource_tags
 }
 
