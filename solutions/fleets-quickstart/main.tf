@@ -347,7 +347,7 @@ module "cloud_logs" {
   count             = var.enable_cloud_logs ? 1 : 0
   depends_on        = [module.cos_buckets]
   source            = "terraform-ibm-modules/cloud-logs/ibm"
-  version           = "1.10.4"
+  version           = "1.10.5"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   instance_name     = local.icl_name
@@ -424,7 +424,7 @@ module "cloud_monitoring" {
 
 module "project" {
   source            = "terraform-ibm-modules/code-engine/ibm//modules/project"
-  version           = "4.7.8"
+  version           = "4.7.9"
   name              = local.code_engine_project_name
   resource_group_id = module.resource_group.resource_group_id
 }
@@ -495,7 +495,7 @@ data "ibm_is_security_group" "fleet_security_group" {
 
 module "secret" {
   source     = "terraform-ibm-modules/code-engine/ibm//modules/secret"
-  version    = "4.7.8"
+  version    = "4.7.9"
   for_each   = nonsensitive(local.codeengine_fleet_defaults)
   project_id = module.project.project_id
   name       = each.key
