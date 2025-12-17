@@ -22,7 +22,7 @@ locals {
 
 module "project" {
   source            = "terraform-ibm-modules/code-engine/ibm//modules/project"
-  version           = "4.7.8"
+  version           = "4.7.9"
   name              = local.code_engine_project_name
   resource_group_id = module.resource_group.resource_group_id
 }
@@ -56,7 +56,7 @@ locals {
 module "build" {
   depends_on                 = [module.cr_secret]
   source                     = "terraform-ibm-modules/code-engine/ibm//modules/build"
-  version                    = "4.7.8"
+  version                    = "4.7.9"
   ibmcloud_api_key           = var.ibmcloud_api_key
   project_id                 = module.project.project_id
   name                       = var.build_name
@@ -79,7 +79,7 @@ locals {
 
 module "cr_secret" {
   source     = "terraform-ibm-modules/code-engine/ibm//modules/secret"
-  version    = "4.7.8"
+  version    = "4.7.9"
   project_id = module.project.project_id
   name       = local.registry_secret_name
   data = {
@@ -102,7 +102,7 @@ locals {
 module "app" {
   depends_on                    = [module.build]
   source                        = "terraform-ibm-modules/code-engine/ibm//modules/app"
-  version                       = "4.7.8"
+  version                       = "4.7.9"
   name                          = local.app_name
   image_reference               = module.build.output_image
   image_secret                  = local.registry_secret_name
@@ -161,7 +161,7 @@ module "cos_buckets" {
 module "cloud_logs" {
   count             = var.enable_cloud_logs ? 1 : 0
   source            = "terraform-ibm-modules/cloud-logs/ibm"
-  version           = "1.10.4"
+  version           = "1.10.5"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   instance_name     = "${local.prefix}-cloud-logs"
