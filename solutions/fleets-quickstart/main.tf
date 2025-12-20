@@ -9,7 +9,7 @@ locals {
 
 module "resource_group" {
   source                       = "terraform-ibm-modules/resource-group/ibm"
-  version                      = "1.4.6"
+  version                      = "1.4.7"
   existing_resource_group_name = var.existing_resource_group_name
 }
 
@@ -196,7 +196,7 @@ locals {
 
 module "vpc" {
   source            = "terraform-ibm-modules/landing-zone-vpc/ibm"
-  version           = "8.10.1"
+  version           = "8.10.4"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   name              = "vpc"
@@ -277,7 +277,7 @@ data "ibm_is_vpc" "vpc" {
 
 module "fleet_sg" {
   source  = "terraform-ibm-modules/security-group/ibm"
-  version = "2.8.6"
+  version = "2.8.7"
 
   security_group_name = "${local.prefix}sg"
   vpc_id              = local.vpc_id
@@ -323,7 +323,7 @@ locals {
 module "vpe_observability" {
   count                = length(local.cloud_services) > 0 ? 1 : 0
   source               = "terraform-ibm-modules/vpe-gateway/ibm"
-  version              = "4.8.5"
+  version              = "4.8.6"
   region               = var.region
   prefix               = "${local.prefix}log"
   resource_group_id    = module.resource_group.resource_group_id
@@ -347,7 +347,7 @@ module "cloud_logs" {
   count             = var.enable_cloud_logs ? 1 : 0
   depends_on        = [module.cos_buckets]
   source            = "terraform-ibm-modules/cloud-logs/ibm"
-  version           = "1.10.5"
+  version           = "1.10.6"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   instance_name     = local.icl_name
@@ -406,7 +406,7 @@ locals {
 module "cloud_monitoring" {
   count                   = local.enable_cloud_monitoring ? 1 : 0
   source                  = "terraform-ibm-modules/cloud-monitoring/ibm"
-  version                 = "1.11.0"
+  version                 = "1.12.1"
   region                  = var.region
   resource_group_id       = module.resource_group.resource_group_id
   instance_name           = local.monitoring_name
