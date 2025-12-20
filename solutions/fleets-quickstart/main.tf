@@ -30,7 +30,7 @@ locals {
 
 module "cos" {
   source              = "terraform-ibm-modules/cos/ibm"
-  version             = "10.7.3"
+  version             = "10.7.4"
   create_cos_instance = true
   resource_group_id   = module.resource_group.resource_group_id
   region              = var.region
@@ -46,7 +46,7 @@ module "cos" {
 
 module "cos_buckets" {
   source  = "terraform-ibm-modules/cos/ibm//modules/buckets"
-  version = "10.7.3"
+  version = "10.7.4"
 
   bucket_configs = concat([
     {
@@ -323,7 +323,7 @@ locals {
 module "vpe_observability" {
   count                = length(local.cloud_services) > 0 ? 1 : 0
   source               = "terraform-ibm-modules/vpe-gateway/ibm"
-  version              = "4.8.7"
+  version              = "4.8.8"
   region               = var.region
   prefix               = "${local.prefix}log"
   resource_group_id    = module.resource_group.resource_group_id
@@ -347,7 +347,7 @@ module "cloud_logs" {
   count             = var.enable_cloud_logs ? 1 : 0
   depends_on        = [module.cos_buckets]
   source            = "terraform-ibm-modules/cloud-logs/ibm"
-  version           = "1.10.6"
+  version           = "1.10.7"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   instance_name     = local.icl_name
@@ -406,7 +406,7 @@ locals {
 module "cloud_monitoring" {
   count                   = local.enable_cloud_monitoring ? 1 : 0
   source                  = "terraform-ibm-modules/cloud-monitoring/ibm"
-  version                 = "1.12.2"
+  version                 = "1.12.3"
   region                  = var.region
   resource_group_id       = module.resource_group.resource_group_id
   instance_name           = local.monitoring_name
