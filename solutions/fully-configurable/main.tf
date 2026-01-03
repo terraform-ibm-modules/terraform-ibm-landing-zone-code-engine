@@ -19,7 +19,7 @@ module "resource_group" {
 
 module "project" {
   source            = "terraform-ibm-modules/code-engine/ibm//modules/project"
-  version           = "4.7.20"
+  version           = "4.7.21"
   name              = local.code_engine_project_name
   resource_group_id = module.resource_group.resource_group_id
 }
