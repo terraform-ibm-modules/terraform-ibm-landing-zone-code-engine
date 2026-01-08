@@ -166,48 +166,17 @@
             {
               "key": "region",
               "required": true,
-              "options": [
-                {
-                  "displayname": "Dallas (us-south)",
-                  "value": "us-south"
-                },
-                {
-                  "displayname": "Frankfurt (eu-de)",
-                  "value": "eu-de"
-                },
-                {
-                  "displayname": "London (eu-gb)",
-                  "value": "eu-gb"
-                },
-                {
-                  "displayname": "Osaka (jp-osa)",
-                  "value": "jp-osa"
-                },
-                {
-                  "displayname": "Sao Paulo (br-sao)",
-                  "value": "br-sao"
-                },
-                {
-                  "displayname": "Madrid (us-es)",
-                  "value": "us-es"
-                },
-                {
-                  "displayname": "Sydney (au-syd)",
-                  "value": "au-syd"
-                },
-                {
-                  "displayname": "Tokyo (jp-tok)",
-                  "value": "jp-tok"
-                },
-                {
-                  "displayname": "Toronto (ca-tor)",
-                  "value": "ca-tor"
-                },
-                {
-                  "displayname": "Washington DC (us-east)",
-                  "value": "us-east"
+              "custom_config": {
+                "type": "region",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "filterString": "service:codeengine",
+                  "showKinds": [
+                    "region"
+                  ]
                 }
-              ]
+              }
             },
             {
               "key": "build_name"
@@ -576,48 +545,17 @@
             {
               "key": "region",
               "required": true,
-              "options": [
-                {
-                  "displayname": "Dallas (us-south)",
-                  "value": "us-south"
-                },
-                {
-                  "displayname": "Frankfurt (eu-de)",
-                  "value": "eu-de"
-                },
-                {
-                  "displayname": "London (eu-gb)",
-                  "value": "eu-gb"
-                },
-                {
-                  "displayname": "Osaka (jp-osa)",
-                  "value": "jp-osa"
-                },
-                {
-                  "displayname": "Sao Paulo (br-sao)",
-                  "value": "br-sao"
-                },
-                {
-                  "displayname": "Madrid (us-es)",
-                  "value": "us-es"
-                },
-                {
-                  "displayname": "Sydney (au-syd)",
-                  "value": "au-syd"
-                },
-                {
-                  "displayname": "Tokyo (jp-tok)",
-                  "value": "jp-tok"
-                },
-                {
-                  "displayname": "Toronto (ca-tor)",
-                  "value": "ca-tor"
-                },
-                {
-                  "displayname": "Washington DC (us-east)",
-                  "value": "us-east"
+              "custom_config": {
+                "type": "region",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "filterString": "service:codeengine",
+                  "showKinds": [
+                    "region"
+                  ]
                 }
-              ]
+              }
             },
             {
               "key": "provider_visibility",
@@ -934,48 +872,17 @@
             {
               "key": "region",
               "required": true,
-              "options": [
-                {
-                  "displayname": "Dallas (us-south)",
-                  "value": "us-south"
-                },
-                {
-                  "displayname": "Frankfurt (eu-de)",
-                  "value": "eu-de"
-                },
-                {
-                  "displayname": "London (eu-gb)",
-                  "value": "eu-gb"
-                },
-                {
-                  "displayname": "Osaka (jp-osa)",
-                  "value": "jp-osa"
-                },
-                {
-                  "displayname": "Sao Paulo (br-sao)",
-                  "value": "br-sao"
-                },
-                {
-                  "displayname": "Madrid (us-es)",
-                  "value": "us-es"
-                },
-                {
-                  "displayname": "Sydney (au-syd)",
-                  "value": "au-syd"
-                },
-                {
-                  "displayname": "Tokyo (jp-tok)",
-                  "value": "jp-tok"
-                },
-                {
-                  "displayname": "Toronto (ca-tor)",
-                  "value": "ca-tor"
-                },
-                {
-                  "displayname": "Washington DC (us-east)",
-                  "value": "us-east"
+              "custom_config": {
+                "type": "region",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "filterString": "service:codeengine",
+                  "showKinds": [
+                    "region"
+                  ]
                 }
-              ]
+              }
             },
             {
               "key": "cos_plan",
