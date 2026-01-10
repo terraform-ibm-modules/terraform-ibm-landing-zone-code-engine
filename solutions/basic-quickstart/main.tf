@@ -33,14 +33,14 @@ module "project" {
 
 module "cr_namespace" {
   source            = "terraform-ibm-modules/container-registry/ibm"
-  version           = "2.6.1"
+  version           = "2.6.2"
   namespace_name    = "${local.prefix}${var.container_registry_namespace}"
   resource_group_id = module.resource_group.resource_group_id
 }
 
 module "cr_endpoint" {
   source  = "terraform-ibm-modules/container-registry/ibm//modules/endpoint"
-  version = "2.6.1"
+  version = "2.6.2"
   region  = var.region
 }
 
@@ -161,7 +161,7 @@ module "cos_buckets" {
 module "cloud_logs" {
   count             = var.enable_cloud_logs ? 1 : 0
   source            = "terraform-ibm-modules/cloud-logs/ibm"
-  version           = "1.10.19"
+  version           = "1.10.20"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   instance_name     = "${local.prefix}-cloud-logs"
@@ -193,7 +193,7 @@ locals {
 module "cloud_monitoring" {
   count                   = local.enable_cloud_monitoring ? 1 : 0
   source                  = "terraform-ibm-modules/cloud-monitoring/ibm"
-  version                 = "1.12.15"
+  version                 = "1.12.16"
   region                  = var.region
   resource_group_id       = module.resource_group.resource_group_id
   instance_name           = local.monitoring_name
