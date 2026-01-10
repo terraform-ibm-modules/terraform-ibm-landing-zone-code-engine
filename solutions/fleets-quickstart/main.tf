@@ -424,7 +424,7 @@ module "cloud_monitoring" {
 
 module "project" {
   source            = "terraform-ibm-modules/code-engine/ibm//modules/project"
-  version           = "4.7.21"
+  version           = "4.7.22"
   name              = local.code_engine_project_name
   resource_group_id = module.resource_group.resource_group_id
 }
@@ -495,7 +495,7 @@ data "ibm_is_security_group" "fleet_security_group" {
 
 module "secret" {
   source     = "terraform-ibm-modules/code-engine/ibm//modules/secret"
-  version    = "4.7.21"
+  version    = "4.7.22"
   for_each   = nonsensitive(local.codeengine_fleet_defaults)
   project_id = module.project.project_id
   name       = each.key
