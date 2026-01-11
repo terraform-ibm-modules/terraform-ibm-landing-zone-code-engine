@@ -161,7 +161,7 @@ module "cos_buckets" {
 module "cloud_logs" {
   count             = var.enable_cloud_logs ? 1 : 0
   source            = "terraform-ibm-modules/cloud-logs/ibm"
-  version           = "1.10.20"
+  version           = "1.10.21"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   instance_name     = "${local.prefix}-cloud-logs"
