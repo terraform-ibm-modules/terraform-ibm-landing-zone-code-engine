@@ -128,3 +128,10 @@ variable "enable_platform_metrics" {
   description = "Receive platform metrics in the provisioned IBM Cloud Monitoring instance. Only 1 instance in a given region can be enabled for platform metrics."
   default     = false
 }
+
+variable "install_required_binaries" {
+    type        = bool  
+    default     = true  
+    description = "When set to true, a script will run to check if `jq` exist on the runtime and if not attempt to download it from the public internet and install it to /tmp. Set to false to skip running this script."  
+    nullable    = false
+}
