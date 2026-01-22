@@ -1031,6 +1031,9 @@
                   "type": "string"
                 }
               }
+            },
+            {
+              "key": "install_required_binaries"
             }
           ],
           "dependency_version_2": true,
