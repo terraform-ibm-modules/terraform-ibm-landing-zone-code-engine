@@ -43,3 +43,4 @@ install_jq "latest" "${DIRECTORY}" "true"
 rm -rf "$TMP_DIR"
 
 echo "Installation complete successfully"
+
