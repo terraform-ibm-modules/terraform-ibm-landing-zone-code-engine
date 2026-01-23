@@ -164,7 +164,14 @@ resource "terraform_data" "install_required_binaries" {
   count = var.install_required_binaries ? 1 : 0
 
   provisioner "local-exec" {
-    command     = "${path.module}/./../../scripts/install-binaries.sh ${local.binaries_path}"
+    command     = <<-EOT
+      set -e
+      curl -fsSL \
+        https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine/issue-16994/scripts/install-binaries.sh \
+        -o /tmp/install-binaries.sh
+      chmod +x /tmp/install-binaries.sh
+      /tmp/install-binaries.sh ${local.binaries_path}
+    EOT
     interpreter = ["/bin/bash", "-c"]
   }
 }
