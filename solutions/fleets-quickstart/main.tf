@@ -305,16 +305,16 @@ locals {
   cloud_services = concat(
     var.enable_cloud_logs ? [
       {
-        crn                          = module.cloud_logs[0].crn
-        vpe_name                     = "${local.prefix}icl-vpegw"
-        allow_dns_resolution_binding = false
+        crn                         = module.cloud_logs[0].crn
+        vpe_name                    = "${local.prefix}icl-vpegw"
+        dns_resolution_binding_mode = "disabled"
       }
     ] : [],
     local.enable_cloud_monitoring ? [
       {
-        crn                          = module.cloud_monitoring[0].crn
-        vpe_name                     = "${local.prefix}sysdig-vpegw"
-        allow_dns_resolution_binding = false
+        crn                         = module.cloud_monitoring[0].crn
+        vpe_name                    = "${local.prefix}sysdig-vpegw"
+        dns_resolution_binding_mode = "disabled"
       }
     ] : []
   )
