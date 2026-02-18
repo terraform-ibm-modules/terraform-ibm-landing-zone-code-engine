@@ -157,14 +157,23 @@ locals {
     for k, v in local.bucket_store_map_base :
     one([for b in local.bucket_names_with_suffix : b if startswith(b, k)]) => v
   })
+  binaries_path = "/tmp"
 }
 
+resource "terraform_data" "install_required_binaries" {
+  count = var.install_required_binaries ? 1 : 0
+
+  provisioner "local-exec" {
+    command     = "${path.module}/./../../scripts/install-binaries.sh ${local.binaries_path}"
+    interpreter = ["/bin/bash", "-c"]
+  }
+}
 # at the moment terraform provider doesn't support PDS https://github.ibm.com/GoldenEye/issues/issues/16264
 resource "terraform_data" "create_pds" {
-  depends_on = [module.project, terraform_data.create_cos_secret, module.cos_buckets]
+  depends_on = [module.project, terraform_data.create_cos_secret, module.cos_buckets, terraform_data.install_required_binaries]
   provisioner "local-exec" {
     interpreter = ["/bin/bash"]
-    command     = "../../scripts/persistent_data_store.sh"
+    command     = "../../scripts/persistent_data_store.sh ${local.binaries_path}"
     environment = {
       IBMCLOUD_API_KEY  = var.ibmcloud_api_key
       RESOURCE_GROUP_ID = module.resource_group.resource_group_id
