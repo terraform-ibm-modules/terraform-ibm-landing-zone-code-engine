@@ -480,11 +480,11 @@ locals {
 # creation of hmac secret is not supported by code engine provider
 # https://github.com/IBM-Cloud/terraform-provider-ibm/issues/6485
 resource "terraform_data" "create_cos_secret" {
-  depends_on = [module.project, module.cos]
+  depends_on = [module.project, module.cos, terraform_data.install_required_binaries]
   provisioner "local-exec" {
     interpreter = ["/bin/bash"]
     when        = create
-    command     = "../../scripts/create_secrets.sh"
+    command     = "../../scripts/create_secrets.sh ${local.binaries_path}"
     environment = {
       IBMCLOUD_API_KEY      = var.ibmcloud_api_key
       RESOURCE_GROUP_ID     = module.resource_group.resource_group_id
