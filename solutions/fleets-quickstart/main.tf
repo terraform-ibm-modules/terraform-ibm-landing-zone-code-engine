@@ -9,7 +9,7 @@ locals {
 
 module "resource_group" {
   source                       = "terraform-ibm-modules/resource-group/ibm"
-  version                      = "1.4.7"
+  version                      = "1.4.8"
   existing_resource_group_name = var.existing_resource_group_name
 }
 
@@ -30,7 +30,7 @@ locals {
 
 module "cos" {
   source              = "terraform-ibm-modules/cos/ibm"
-  version             = "10.9.9"
+  version             = "10.14.1"
   create_cos_instance = true
   resource_group_id   = module.resource_group.resource_group_id
   region              = var.region
@@ -46,7 +46,7 @@ module "cos" {
 
 module "cos_buckets" {
   source  = "terraform-ibm-modules/cos/ibm//modules/buckets"
-  version = "10.9.9"
+  version = "10.14.1"
 
   bucket_configs = concat([
     {
@@ -196,7 +196,7 @@ locals {
 
 module "vpc" {
   source            = "terraform-ibm-modules/landing-zone-vpc/ibm"
-  version           = "8.13.2"
+  version           = "8.15.3"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   name              = "vpc"
@@ -277,7 +277,7 @@ data "ibm_is_vpc" "vpc" {
 
 module "fleet_sg" {
   source  = "terraform-ibm-modules/security-group/ibm"
-  version = "2.8.8"
+  version = "2.8.9"
 
   security_group_name = "${local.prefix}sg"
   vpc_id              = local.vpc_id
@@ -323,7 +323,7 @@ locals {
 module "vpe_observability" {
   count                = length(local.cloud_services) > 0 ? 1 : 0
   source               = "terraform-ibm-modules/vpe-gateway/ibm"
-  version              = "5.0.3"
+  version              = "5.0.4"
   region               = var.region
   prefix               = "${local.prefix}log"
   resource_group_id    = module.resource_group.resource_group_id
@@ -347,7 +347,7 @@ module "cloud_logs" {
   count             = var.enable_cloud_logs ? 1 : 0
   depends_on        = [module.cos_buckets]
   source            = "terraform-ibm-modules/cloud-logs/ibm"
-  version           = "1.10.35"
+  version           = "1.12.2"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   instance_name     = local.icl_name
@@ -406,7 +406,7 @@ locals {
 module "cloud_monitoring" {
   count                   = local.enable_cloud_monitoring ? 1 : 0
   source                  = "terraform-ibm-modules/cloud-monitoring/ibm"
-  version                 = "1.13.3"
+  version                 = "1.13.6"
   region                  = var.region
   resource_group_id       = module.resource_group.resource_group_id
   instance_name           = local.monitoring_name
@@ -424,7 +424,7 @@ module "cloud_monitoring" {
 
 module "project" {
   source            = "terraform-ibm-modules/code-engine/ibm//modules/project"
-  version           = "4.7.26"
+  version           = "4.7.29"
   name              = local.code_engine_project_name
   resource_group_id = module.resource_group.resource_group_id
 }
@@ -495,7 +495,7 @@ data "ibm_is_security_group" "fleet_security_group" {
 
 module "secret" {
   source     = "terraform-ibm-modules/code-engine/ibm//modules/secret"
-  version    = "4.7.26"
+  version    = "4.7.29"
   for_each   = nonsensitive(local.codeengine_fleet_defaults)
   project_id = module.project.project_id
   name       = each.key
