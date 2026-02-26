@@ -1,6 +1,6 @@
 module github.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine
 
-go 1.25.5
+go 1.26.0
 
 require (
 	github.com/IBM/go-sdk-core/v5 v5.21.2
