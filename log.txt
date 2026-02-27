@@ -21,7 +21,7 @@ cd tests && go test -run TestRunFleetsSolutionInSchematics -count=1 -v -timeout 
     tests.go:101: [SCHEMATICS] Creating Test Workspace
     schematics.go:208: [SCHEMATICS] Created workspace: ce-fleets-cz9 (ID: eu-de.workspace.ce-fleets-cz9.6961f6ff)
     tests.go:107: [SCHEMATICS] Workspace Created: ce-fleets-cz9 (eu-de.workspace.ce-fleets-cz9.6961f6ff)
-    tests.go:124: Starting with variable validation for branch: issue-16994 
+    tests.go:124: Starting with variable validation for branch: issue-16994
     schematics.go:216: [SCHEMATICS] Creating TAR file
     schematics.go:222: [SCHEMATICS] Uploading TAR file
     schematics.go:310: [SCHEMATICS] Uploaded TAR to workspace: eu-de.workspace.ce-fleets-cz9.6961f6ff
