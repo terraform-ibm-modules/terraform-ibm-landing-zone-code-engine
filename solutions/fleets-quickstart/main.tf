@@ -172,7 +172,7 @@ resource "terraform_data" "install_required_binaries" {
 resource "terraform_data" "create_pds" {
   depends_on = [module.project, terraform_data.create_cos_secret, module.cos_buckets, terraform_data.install_required_binaries]
   provisioner "local-exec" {
-    interpreter = ["/bin/bash"]
+    interpreter = ["/bin/bash", "-c"]
     command     = "../../scripts/persistent_data_store.sh ${local.binaries_path}"
     environment = {
       IBMCLOUD_API_KEY  = var.ibmcloud_api_key
@@ -482,7 +482,7 @@ locals {
 resource "terraform_data" "create_cos_secret" {
   depends_on = [module.project, module.cos, terraform_data.install_required_binaries]
   provisioner "local-exec" {
-    interpreter = ["/bin/bash"]
+    interpreter = ["/bin/bash", "-c"]
     when        = create
     command     = "../../scripts/create_secrets.sh ${local.binaries_path}"
     environment = {

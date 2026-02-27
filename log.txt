@@ -1,0 +1,69 @@
+cd tests && go test -run TestRunFleetsSolutionInSchematics -count=1 -v -timeout 600m
+=== RUN   TestRunFleetsSolutionInSchematics
+=== PAUSE TestRunFleetsSolutionInSchematics
+=== CONT  TestRunFleetsSolutionInSchematics
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 API cache disabled
+2026/02/27 12:21:13 Region au-syd VPC count: 4
+2026/02/27 12:21:13 --- new best region is au-syd
+2026/02/27 12:21:15 Region ca-tor VPC count: 4
+2026/02/27 12:21:18 Region br-sao VPC count: 5
+2026/02/27 12:21:21 Region eu-de VPC count: 9
+2026/02/27 12:21:26 Region eu-es VPC count: 4
+2026/02/27 12:21:28 Region eu-gb VPC count: 4
+2026/02/27 12:21:31 Region us-east VPC count: 10
+2026/02/27 12:21:34 Region us-south VPC count: 32
+2026/02/27 12:21:37 Region jp-osa VPC count: 4
+2026/02/27 12:21:40 Region jp-tok VPC count: 5
+2026/02/27 12:21:40 Best region was found!: au-syd
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 API cache disabled
+    tests.go:347: [SCHEMATICS] Random Workspace region chosen: eu
+    schematics.go:123: [SCHEMATICS] Schematics API for region eu: https://eu.schematics.cloud.ibm.com
+    tests.go:101: [SCHEMATICS] Creating Test Workspace
+    schematics.go:208: [SCHEMATICS] Created workspace: ce-fleets-cz9 (ID: eu-de.workspace.ce-fleets-cz9.6961f6ff)
+    tests.go:107: [SCHEMATICS] Workspace Created: ce-fleets-cz9 (eu-de.workspace.ce-fleets-cz9.6961f6ff)
+    tests.go:124: Starting with variable validation for branch: issue-16994 
+    schematics.go:216: [SCHEMATICS] Creating TAR file
+    schematics.go:222: [SCHEMATICS] Uploading TAR file
+    schematics.go:310: [SCHEMATICS] Uploaded TAR to workspace: eu-de.workspace.ce-fleets-cz9.6961f6ff
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] ... still waiting for job TAR_WORKSPACE_UPLOAD to complete: 1 minutes
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] The status of job TAR_WORKSPACE_UPLOAD is: COMPLETED
+    tests.go:146: [SCHEMATICS] Updating Workspace Variablestore
+    schematics.go:284: [SCHEMATICS] Updated variables for workspace: eu-de.workspace.ce-fleets-cz9.6961f6ff
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] Created plan job: 8ecf6226578673e357d82af9b1cdbcfe for workspace: eu-de.workspace.ce-fleets-cz9.6961f6ff
+    tests.go:162: [SCHEMATICS] Starting PLAN job ...
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] ... still waiting for job PLAN to complete: 1 minutes
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] ... still waiting for job PLAN to complete: 2 minutes
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] The status of job PLAN is: COMPLETED
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] Created apply job: c0057a5b24927c1eb605e81b5f0d6dbd for workspace: eu-de.workspace.ce-fleets-cz9.6961f6ff
+    tests.go:196: [SCHEMATICS] Starting APPLY job ...
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] ... still waiting for job APPLY to complete: 1 minutes
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] ... still waiting for job APPLY to complete: 2 minutes
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] ... still waiting for job APPLY to complete: 3 minutes
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] ... still waiting for job APPLY to complete: 4 minutes
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] ... still waiting for job APPLY to complete: 5 minutes
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] ... still waiting for job APPLY to complete: 6 minutes
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] ... still waiting for job APPLY to complete: 7 minutes
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] ... still waiting for job APPLY to complete: 8 minutes
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] The status of job APPLY is: COMPLETED
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] Retrieved 16 outputs from workspace: eu-de.workspace.ce-fleets-cz9.6961f6ff
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] Created plan job: 3376411c1341c6027fff1d9f4ac0d86f for workspace: eu-de.workspace.ce-fleets-cz9.6961f6ff
+    tests.go:262: [SCHEMATICS] Starting CONSISTENCY PLAN job ...
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] ... still waiting for job PLAN to complete: 1 minutes
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] ... still waiting for job PLAN to complete: 2 minutes
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] The status of job PLAN is: COMPLETED
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] Retrieved 16 outputs from workspace: eu-de.workspace.ce-fleets-cz9.6961f6ff
+    tests.go:451: Preforming Teardown
+    tests.go:452: Test Passed: true
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] Created destroy job: 5055a6b235a6027452e516c8385f1aa0 for workspace: eu-de.workspace.ce-fleets-cz9.6961f6ff
+    tests.go:457: [SCHEMATICS] Starting DESTROY job ...
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] ... still waiting for job DESTROY to complete: 1 minutes
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] ... still waiting for job DESTROY to complete: 2 minutes
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] ... still waiting for job DESTROY to complete: 3 minutes
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] ... still waiting for job DESTROY to complete: 4 minutes
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] ... still waiting for job DESTROY to complete: 5 minutes
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] The status of job DESTROY is: COMPLETED
+    tests.go:484: [SCHEMATICS] Deleting Workspace
+[32mINFO[0m: [32m[CloudInfoService][0m logger.go:937 [SCHEMATICS] Deleted workspace: eu-de.workspace.ce-fleets-cz9.6961f6ff
+--- PASS: TestRunFleetsSolutionInSchematics (1153.21s)
+PASS
+ok  	github.com/terraform-ibm-modules/terraform-ibm-landing-zone-code-engine	1153.838s
