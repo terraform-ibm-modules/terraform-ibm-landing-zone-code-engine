@@ -940,6 +940,10 @@
                   "type": "string"
                 }
               }
+            },
+            {
+              "key": "install_required_binaries",
+              "hidden": true
             }
           ],
           "dependency_version_2": true,
