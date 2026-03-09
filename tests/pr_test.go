@@ -39,6 +39,7 @@ func setupOptions(t *testing.T, prefix string, terraformDir string) *testschemat
 	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
 		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
 		{Name: "prefix", Value: options.Prefix, DataType: "string"},
+		{Name: "region", Value: "au-syd", DataType: "string"},
 	}
 
 	return options
