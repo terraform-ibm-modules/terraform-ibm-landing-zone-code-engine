@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/cloudinfo"
+	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/common"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testaddons"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testschematic"
@@ -20,11 +21,25 @@ const fullyConfigurableSolutionsDir = "solutions/fully-configurable"
 const quickstartSolutionsDir = "solutions/basic-quickstart"
 const terraformVersion = "terraform_v1.12.2" // This should match the version in the ibm_catalog.json
 
-func setupOptions(t *testing.T, prefix string, terraformDir string) *testschematic.TestSchematicOptions {
+var validRegions = []string{
+	"us-south",
+	"us-east",
+	"ca-tor",
+	"eu-de",
+	"eu-gb",
+	"eu-es",
+	"jp-tok",
+	"jp-osa",
+	"au-syd",
+	"br-sao",
+}
+
+func setupOptions(t *testing.T, prefix string, terraformDir string, region string) *testschematic.TestSchematicOptions {
 	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
 		Testing:        t,
 		TemplateFolder: terraformDir,
 		Prefix:         prefix,
+		Region:         region,
 		TarIncludePatterns: []string{
 			"*.tf",
 			terraformDir + "/*.tf",
@@ -39,7 +54,7 @@ func setupOptions(t *testing.T, prefix string, terraformDir string) *testschemat
 	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
 		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
 		{Name: "prefix", Value: options.Prefix, DataType: "string"},
-		{Name: "region", Value: "au-syd", DataType: "string"},
+		{Name: "region", Value: options.Region, DataType: "string"},
 	}
 
 	return options
@@ -47,14 +62,16 @@ func setupOptions(t *testing.T, prefix string, terraformDir string) *testschemat
 
 func TestRunFleetsSolutionInSchematics(t *testing.T) {
 	t.Parallel()
-	options := setupOptions(t, "ce-fleets", fleetsSolutionsDir)
+	region := validRegions[common.CryptoIntn(len(validRegions))]
+	options := setupOptions(t, "ce-fleets", fleetsSolutionsDir, region)
 	err := options.RunSchematicTest()
 	assert.Nil(t, err, "This should not have errored")
 }
 
 func TestRunUpgradeFleetsSolutionInSchematics(t *testing.T) {
 	t.Parallel()
-	options := setupOptions(t, "ce-f-u", fleetsSolutionsDir)
+	region := validRegions[common.CryptoIntn(len(validRegions))]
+	options := setupOptions(t, "ce-f-u", fleetsSolutionsDir, region)
 	options.CheckApplyResultForUpgrade = false
 	err := options.RunSchematicUpgradeTest()
 	if !options.UpgradeTestSkipped {
@@ -64,14 +81,16 @@ func TestRunUpgradeFleetsSolutionInSchematics(t *testing.T) {
 
 func TestRunFullyConfigurableSolutionInSchematics(t *testing.T) {
 	t.Parallel()
-	options := setupOptions(t, "ce-fcfg", fullyConfigurableSolutionsDir)
+	region := validRegions[common.CryptoIntn(len(validRegions))]
+	options := setupOptions(t, "ce-fcfg", fullyConfigurableSolutionsDir, region)
 	err := options.RunSchematicTest()
 	assert.Nil(t, err, "This should not have errored")
 }
 
 func TestRunUpgradeFullyConfigurableSolutionInSchematics(t *testing.T) {
 	t.Parallel()
-	options := setupOptions(t, "ce-fcfg-u", fullyConfigurableSolutionsDir)
+	region := validRegions[common.CryptoIntn(len(validRegions))]
+	options := setupOptions(t, "ce-fcfg-u", fullyConfigurableSolutionsDir, region)
 	options.CheckApplyResultForUpgrade = false
 	err := options.RunSchematicUpgradeTest()
 	if !options.UpgradeTestSkipped {
@@ -124,7 +143,8 @@ func TestAddonDefaultConfiguration(t *testing.T) {
 
 func TestRunQuickstartSolutionInSchematics(t *testing.T) {
 	t.Parallel()
-	options := setupOptions(t, "ce-qs", quickstartSolutionsDir)
+	region := validRegions[common.CryptoIntn(len(validRegions))]
+	options := setupOptions(t, "ce-qs", quickstartSolutionsDir, region)
 	// need to ignore because of a provider issue: https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4719
 	options.IgnoreUpdates = testhelper.Exemptions{
 		List: []string{
@@ -137,8 +157,8 @@ func TestRunQuickstartSolutionInSchematics(t *testing.T) {
 
 func TestRunUpgradeQuickstartSolutionInSchematics(t *testing.T) {
 	t.Parallel()
-
-	options := setupOptions(t, "ce-qs", quickstartSolutionsDir)
+	region := validRegions[common.CryptoIntn(len(validRegions))]
+	options := setupOptions(t, "ce-qs", quickstartSolutionsDir, region)
 	options.CheckApplyResultForUpgrade = false
 	// need to ignore because of a provider issue: https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4719
 	options.IgnoreUpdates = testhelper.Exemptions{
