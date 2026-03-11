@@ -21,7 +21,16 @@ const fullyConfigurableSolutionsDir = "solutions/fully-configurable"
 const quickstartSolutionsDir = "solutions/basic-quickstart"
 const terraformVersion = "terraform_v1.12.2" // This should match the version in the ibm_catalog.json
 
-func setupOptions(t *testing.T, prefix string, terraformDir string, region string) *testschematic.TestSchematicOptions {
+func setupOptions(t *testing.T, prefix string, terraformDir string) *testschematic.TestSchematicOptions {
+	// Verify ibmcloud_api_key variable is set
+	checkVariable := "TF_VAR_ibmcloud_api_key"
+	val, present := os.LookupEnv(checkVariable)
+	require.True(t, present, checkVariable+" environment variable not set")
+	require.NotEqual(t, "", val, checkVariable+" environment variable is empty")
+
+	// Programmatically determine region to use based on availability
+	region, _ := testhelper.GetBestVpcRegion(val, "../common-dev-assets/common-go-assets/cloudinfo-region-vpc-gen2-prefs.yaml", "eu-de")
+
 	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
 		Testing:        t,
 		TemplateFolder: terraformDir,
@@ -50,16 +59,7 @@ func setupOptions(t *testing.T, prefix string, terraformDir string, region strin
 func TestRunFleetsSolutionInSchematics(t *testing.T) {
 	t.Parallel()
 
-	// Verify ibmcloud_api_key variable is set
-	checkVariable := "TF_VAR_ibmcloud_api_key"
-	val, present := os.LookupEnv(checkVariable)
-	require.True(t, present, checkVariable+" environment variable not set")
-	require.NotEqual(t, "", val, checkVariable+" environment variable is empty")
-
-	// Programmatically determine region to use based on availability
-	region, _ := testhelper.GetBestVpcRegion(val, "../common-dev-assets/common-go-assets/cloudinfo-region-vpc-gen2-prefs.yaml", "eu-de")
-
-	options := setupOptions(t, "ce-fleets", fleetsSolutionsDir, region)
+	options := setupOptions(t, "ce-fleets", fleetsSolutionsDir)
 	err := options.RunSchematicTest()
 	assert.Nil(t, err, "This should not have errored")
 }
@@ -67,16 +67,7 @@ func TestRunFleetsSolutionInSchematics(t *testing.T) {
 func TestRunUpgradeFleetsSolutionInSchematics(t *testing.T) {
 	t.Parallel()
 
-	// Verify ibmcloud_api_key variable is set
-	checkVariable := "TF_VAR_ibmcloud_api_key"
-	val, present := os.LookupEnv(checkVariable)
-	require.True(t, present, checkVariable+" environment variable not set")
-	require.NotEqual(t, "", val, checkVariable+" environment variable is empty")
-
-	// Programmatically determine region to use based on availability
-	region, _ := testhelper.GetBestVpcRegion(val, "../common-dev-assets/common-go-assets/cloudinfo-region-vpc-gen2-prefs.yaml", "au-syd")
-
-	options := setupOptions(t, "ce-f-u", fleetsSolutionsDir, region)
+	options := setupOptions(t, "ce-f-u", fleetsSolutionsDir)
 	options.CheckApplyResultForUpgrade = false
 	err := options.RunSchematicUpgradeTest()
 	if !options.UpgradeTestSkipped {
@@ -87,16 +78,7 @@ func TestRunUpgradeFleetsSolutionInSchematics(t *testing.T) {
 func TestRunFullyConfigurableSolutionInSchematics(t *testing.T) {
 	t.Parallel()
 
-	// Verify ibmcloud_api_key variable is set
-	checkVariable := "TF_VAR_ibmcloud_api_key"
-	val, present := os.LookupEnv(checkVariable)
-	require.True(t, present, checkVariable+" environment variable not set")
-	require.NotEqual(t, "", val, checkVariable+" environment variable is empty")
-
-	// Programmatically determine region to use based on availability
-	region, _ := testhelper.GetBestVpcRegion(val, "../common-dev-assets/common-go-assets/cloudinfo-region-vpc-gen2-prefs.yaml", "ca-tor")
-
-	options := setupOptions(t, "ce-fcfg", fullyConfigurableSolutionsDir, region)
+	options := setupOptions(t, "ce-fcfg", fullyConfigurableSolutionsDir)
 	err := options.RunSchematicTest()
 	assert.Nil(t, err, "This should not have errored")
 }
@@ -104,16 +86,7 @@ func TestRunFullyConfigurableSolutionInSchematics(t *testing.T) {
 func TestRunUpgradeFullyConfigurableSolutionInSchematics(t *testing.T) {
 	t.Parallel()
 
-	// Verify ibmcloud_api_key variable is set
-	checkVariable := "TF_VAR_ibmcloud_api_key"
-	val, present := os.LookupEnv(checkVariable)
-	require.True(t, present, checkVariable+" environment variable not set")
-	require.NotEqual(t, "", val, checkVariable+" environment variable is empty")
-
-	// Programmatically determine region to use based on availability
-	region, _ := testhelper.GetBestVpcRegion(val, "../common-dev-assets/common-go-assets/cloudinfo-region-vpc-gen2-prefs.yaml", "jp-tok")
-
-	options := setupOptions(t, "ce-fcfg-u", fullyConfigurableSolutionsDir, region)
+	options := setupOptions(t, "ce-fcfg-u", fullyConfigurableSolutionsDir)
 	options.CheckApplyResultForUpgrade = false
 	err := options.RunSchematicUpgradeTest()
 	if !options.UpgradeTestSkipped {
@@ -167,16 +140,7 @@ func TestAddonDefaultConfiguration(t *testing.T) {
 func TestRunQuickstartSolutionInSchematics(t *testing.T) {
 	t.Parallel()
 
-	// Verify ibmcloud_api_key variable is set
-	checkVariable := "TF_VAR_ibmcloud_api_key"
-	val, present := os.LookupEnv(checkVariable)
-	require.True(t, present, checkVariable+" environment variable not set")
-	require.NotEqual(t, "", val, checkVariable+" environment variable is empty")
-
-	// Programmatically determine region to use based on availability
-	region, _ := testhelper.GetBestVpcRegion(val, "../common-dev-assets/common-go-assets/cloudinfo-region-vpc-gen2-prefs.yaml", "br-sao")
-
-	options := setupOptions(t, "ce-qs", quickstartSolutionsDir, region)
+	options := setupOptions(t, "ce-qs", quickstartSolutionsDir)
 	// need to ignore because of a provider issue: https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4719
 	options.IgnoreUpdates = testhelper.Exemptions{
 		List: []string{
@@ -190,16 +154,7 @@ func TestRunQuickstartSolutionInSchematics(t *testing.T) {
 func TestRunUpgradeQuickstartSolutionInSchematics(t *testing.T) {
 	t.Parallel()
 
-	// Verify ibmcloud_api_key variable is set
-	checkVariable := "TF_VAR_ibmcloud_api_key"
-	val, present := os.LookupEnv(checkVariable)
-	require.True(t, present, checkVariable+" environment variable not set")
-	require.NotEqual(t, "", val, checkVariable+" environment variable is empty")
-
-	// Programmatically determine region to use based on availability
-	region, _ := testhelper.GetBestVpcRegion(val, "../common-dev-assets/common-go-assets/cloudinfo-region-vpc-gen2-prefs.yaml", "eu-de")
-
-	options := setupOptions(t, "ce-qs", quickstartSolutionsDir, region)
+	options := setupOptions(t, "ce-qs", quickstartSolutionsDir)
 	options.CheckApplyResultForUpgrade = false
 	// need to ignore because of a provider issue: https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4719
 	options.IgnoreUpdates = testhelper.Exemptions{
