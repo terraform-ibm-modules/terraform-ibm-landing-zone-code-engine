@@ -9,7 +9,7 @@ locals {
 
 module "resource_group" {
   source                       = "terraform-ibm-modules/resource-group/ibm"
-  version                      = "1.5.0"
+  version                      = "1.6.0"
   existing_resource_group_name = var.existing_resource_group_name
 }
 
@@ -19,7 +19,7 @@ module "resource_group" {
 
 module "project" {
   source            = "terraform-ibm-modules/code-engine/ibm//modules/project"
-  version           = "4.8.3"
+  version           = "4.9.1"
   name              = local.code_engine_project_name
   resource_group_id = module.resource_group.resource_group_id
 }
