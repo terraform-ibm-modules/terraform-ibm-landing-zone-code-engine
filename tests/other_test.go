@@ -47,6 +47,11 @@ func TestAddonDefaultConfiguration(t *testing.T) {
 			},
 			Enabled: core.BoolPtr(true),
 		},
+		{
+			OfferingName:   "deploy-arch-ibm-scc-workload-protection",
+			OfferingFlavor: "fully-configurable",
+			Enabled:        core.BoolPtr(false),
+		},
 	}
 
 	err := options.RunAddonTest()
