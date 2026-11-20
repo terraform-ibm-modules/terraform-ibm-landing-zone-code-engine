@@ -40,10 +40,11 @@ func TestAddonDefaultConfiguration(t *testing.T) {
 	t.Parallel()
 
 	options := testaddons.TestAddonsOptionsDefault(&testaddons.TestAddonOptions{
-		Testing:       t,
-		Prefix:        "ce-ad",
-		ResourceGroup: resourceGroup,
-		QuietMode:     false, // Suppress logs except on failure
+		Testing:               t,
+		Prefix:                "ce-ad",
+		ResourceGroup:         resourceGroup,
+		QuietMode:             false, // Suppress logs except on failure
+		OverrideInputMappings: core.BoolPtr(true),
 	})
 
 	options.AddonConfig = cloudinfo.NewAddonConfigTerraform(
@@ -72,6 +73,11 @@ func TestAddonDefaultConfiguration(t *testing.T) {
 				"enable_activity_tracker_event_routing_to_cloud_logs": false,
 			},
 			Enabled: core.BoolPtr(true),
+		},
+		{
+			OfferingName:   "deploy-arch-ibm-apprapp",
+			OfferingFlavor: "fully-configurable",
+			Enabled:        core.BoolPtr(false),
 		},
 		{
 			OfferingName:   "deploy-arch-ibm-scc-workload-protection",
