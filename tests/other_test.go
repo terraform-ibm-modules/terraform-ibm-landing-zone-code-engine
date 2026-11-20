@@ -2,13 +2,39 @@
 package test
 
 import (
+	"log"
+	"os"
 	"testing"
 
 	"github.com/IBM/go-sdk-core/v5/core"
 	"github.com/stretchr/testify/require"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/cloudinfo"
+	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/common"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testaddons"
 )
+
+var permanentResources map[string]interface{}
+
+var sharedInfoSvc *cloudinfo.CloudInfoService
+
+// Define a struct with fields that match the structure of the YAML data
+const yamlLocation = "../common-dev-assets/common-go-assets/common-permanent-resources.yaml"
+
+// TestMain will be run before any parallel tests, used to read data from yaml for use with tests
+func TestMain(m *testing.M) {
+	var err error
+	sharedInfoSvc, err = cloudinfo.NewCloudInfoServiceFromEnv("TF_VAR_ibmcloud_api_key", cloudinfo.CloudInfoServiceOptions{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	permanentResources, err = common.LoadMapFromYaml(yamlLocation)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	os.Exit(m.Run())
+}
 
 func TestAddonDefaultConfiguration(t *testing.T) {
 	t.Parallel()
@@ -50,7 +76,10 @@ func TestAddonDefaultConfiguration(t *testing.T) {
 		{
 			OfferingName:   "deploy-arch-ibm-scc-workload-protection",
 			OfferingFlavor: "fully-configurable",
-			Enabled:        core.BoolPtr(false),
+			Inputs: map[string]interface{}{
+				"app_config_crn": permanentResources["app_config_crn"],
+			},
+			Enabled: core.BoolPtr(true),
 		},
 	}
 
