@@ -2,11 +2,14 @@
 package test
 
 import (
+	"log"
 	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/cloudinfo"
+	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/common"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testschematic"
 )
@@ -17,6 +20,29 @@ const fleetsSolutionsDir = "solutions/fleets-quickstart"
 const fullyConfigurableSolutionsDir = "solutions/fully-configurable"
 const quickstartSolutionsDir = "solutions/basic-quickstart"
 const terraformVersion = "terraform_v1.12.2" // This should match the version in the ibm_catalog.json
+
+var permanentResources map[string]interface{}
+
+var sharedInfoSvc *cloudinfo.CloudInfoService
+
+// Define a struct with fields that match the structure of the YAML data
+const yamlLocation = "../common-dev-assets/common-go-assets/common-permanent-resources.yaml"
+
+// TestMain will be run before any parallel tests, used to read data from yaml for use with tests
+func TestMain(m *testing.M) {
+	var err error
+	sharedInfoSvc, err = cloudinfo.NewCloudInfoServiceFromEnv("TF_VAR_ibmcloud_api_key", cloudinfo.CloudInfoServiceOptions{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	permanentResources, err = common.LoadMapFromYaml(yamlLocation)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	os.Exit(m.Run())
+}
 
 func setupOptions(t *testing.T, prefix string, terraformDir string) *testschematic.TestSchematicOptions {
 	// Verify ibmcloud_api_key variable is set
