@@ -210,7 +210,7 @@ module "vpc" {
   region            = var.region
   name              = "vpc"
   prefix            = local.prefix
-  tags              = var.resource_tags
+  resource_tags     = var.resource_tags
 
   enable_vpc_flow_logs = false
 
