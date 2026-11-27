@@ -142,6 +142,12 @@ func TestRunUpgradeQuickstartSolutionInSchematics(t *testing.T) {
 			"module.app.ibm_code_engine_app.ce_app",
 		},
 	}
+	// expected replace: code-engine build module (>= v4.9.10) hashes its bundled install-binaries.sh, which only runs a local-exec CLI install
+	options.IgnoreDestroys = testhelper.Exemptions{
+		List: []string{
+			"module.build.terraform_data.install_required_binaries[0]",
+		},
+	}
 	err := options.RunSchematicUpgradeTest()
 	if !options.UpgradeTestSkipped {
 		assert.Nil(t, err, "This should not have errored")
